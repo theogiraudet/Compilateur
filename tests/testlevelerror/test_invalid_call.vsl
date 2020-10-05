@@ -1,0 +1,12 @@
+FUNC VOID f(i) {
+  INT j
+  j := i
+}
+
+FUNC INT main() {
+  INT i
+  i := 0
+  i := f(i)
+	RETURN 0
+}
+

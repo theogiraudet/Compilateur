@@ -1,0 +1,10 @@
+FUNC INT main() {
+  {
+    INT i
+    i := 3
+    PRINT i
+  }
+  PRINT i
+	RETURN 0
+}
+

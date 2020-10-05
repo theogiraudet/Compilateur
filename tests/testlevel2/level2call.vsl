@@ -1,0 +1,4 @@
+PROTO INT one()
+FUNC VOID main() { PRINT "one() = ", one() }
+FUNC INT one() RETURN 1
+

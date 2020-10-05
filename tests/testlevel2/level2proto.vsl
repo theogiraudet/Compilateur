@@ -1,0 +1,5 @@
+PROTO INT plus(x,y)
+
+FUNC VOID main() PRINT "1+3 = ", plus(1,3)
+
+FUNC INT plus(x,y) RETURN x+y

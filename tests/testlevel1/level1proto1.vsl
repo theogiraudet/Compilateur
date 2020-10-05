@@ -1,0 +1,2 @@
+PROTO INT main()
+FUNC INT main() RETURN 1

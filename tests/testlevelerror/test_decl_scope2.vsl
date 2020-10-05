@@ -1,0 +1,11 @@
+FUNC VOID f() {
+  INT i
+  i := 2
+}
+
+FUNC INT main() {
+  f()
+  PRINT i
+	RETURN 0
+}
+

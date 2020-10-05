@@ -1,0 +1,9 @@
+FUNC VOID main() {
+	INT y
+	READ y
+	{ INT y
+	  READ y
+	  PRINT "y a l'interieur vaut ",y
+	}
+	PRINT ", mais a l'exterieur du bloc il vaut ",y
+}

@@ -1,0 +1,35 @@
+PROTO INT fact(k)
+FUNC VOID main()
+{
+  INT i, t[11]
+  i := 0
+
+  WHILE 11 -i
+  DO
+   {
+     t[i] := fact(i)
+     i := i+1
+   }
+  DONE
+  i := 0
+  WHILE 11 -i
+  DO
+   {
+     PRINT "f(", i, ") = ", t[i], "\n"
+     i := i+1
+   }
+  DONE
+}
+
+FUNC INT fact(n)
+{
+  INT res
+  IF n
+  THEN
+    res := n* fact(n-1)
+  ELSE
+    res := 1
+  FI
+  RETURN res
+}
+

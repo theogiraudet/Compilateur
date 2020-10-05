@@ -1,0 +1,5 @@
+FUNC VOID main() {
+	INT x
+	READ x
+	PRINT "Le nombre lu est ", x
+}

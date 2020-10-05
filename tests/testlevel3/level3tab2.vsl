@@ -1,0 +1,8 @@
+FUNC VOID main() {
+	INT x,y,z, t[3]
+	READ x,y,z
+	t[0] := x
+	t[1] := y
+	t[2] := z
+	PRINT "t[0] = ", t[0],"\nt[1] = ", t[1],"\nt[2] = ",t[2]
+}

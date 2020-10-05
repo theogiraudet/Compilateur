@@ -1,0 +1,12 @@
+FUNC INT f() {
+  INT t[1]
+  t[0] := 1
+  RETURN t
+}
+
+FUNC INT main() {
+  INT i
+  i := f()
+	RETURN 0
+}
+

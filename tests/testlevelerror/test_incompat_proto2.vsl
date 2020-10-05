@@ -1,0 +1,10 @@
+PROTO VOID fact()
+
+FUNC INT main() {
+  INT i, j
+	RETURN 0
+}
+
+FUNC INT fact() {
+  RETURN 1
+}

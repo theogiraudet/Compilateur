@@ -1,0 +1,122 @@
+PROTO INT plusgrandstrict(n,m)
+PROTO INT plusgrand(n,m)
+PROTO VOID heapsort(t[], n)
+
+// Ce programme lit un tableau de 10 entiers et imprime
+// le tableau trie par heapsort.
+//=====================================================
+FUNC VOID main()
+{
+  INT a[10], i, j
+
+  i := 0
+  WHILE 10-i DO
+    {
+	PRINT "\n Entrer le",i,"eme:  "
+        READ j
+        a[i] := j
+	i := i+1
+	PRINT "   i=", i, "  j=",j
+    }
+  DONE
+  heapsort(a,10)
+  i := 0
+  WHILE 10-i DO
+    {
+	PRINT "\n t[",i,"] = ",a[i]
+        i:= i+1
+    }
+  DONE
+}
+
+
+// Implementation du heapsort
+//===========================
+FUNC VOID heapsort(t[], n ) // n: nombre d'elements a trier
+{
+  INT l,r,j,s, test
+
+  l := n/2+1
+  r := n
+
+  WHILE plusgrand(r,2) DO
+    {
+      IF plusgrandstrict(l,1)
+         THEN  // agrandissement t[l..r] -> t[l-1..r] heap
+          {
+           l := l-1
+           j := l
+          }
+         ELSE  // selection : t[0] est le + grand et echange avec t[r-1]
+               // rearrangement de t[0..r-2]
+          {
+           INT ex
+           ex := t[0]
+           t[0] := t[r-1]
+           t[r-1] := ex
+           r := r-1
+           j := 1
+          }
+      FI
+      s := t[j-1]
+      test := plusgrand(r, 2*j)
+      WHILE test DO
+          {
+           INT k
+           k := 2*j // indice du premier fils de t[~j]
+       // on choisit le plus grand des deux
+           IF plusgrandstrict(r,k)*plusgrandstrict(t[k], t[k-1]) THEN k:=k+1 FI
+       // si le plus grand des deux est plus grand que s on echange avec s    
+           IF plusgrandstrict(t[k-1],s) 
+              THEN
+               {
+                t[j-1] := t[k-1]
+                j := k
+                test := plusgrand(r, 2*j)
+               }
+              ELSE  test := 0  // une facon de faire un break
+           FI 
+          }
+      DONE
+      t[j-1] := s
+    }
+ DONE
+}
+
+// fonctions de comparaison entre entiers
+//=======================================
+FUNC INT plusgrandstrict(n,m )
+{
+  INT continue, nn, mm
+
+  continue := n*m
+  nn := n
+  mm := m
+  WHILE continue
+    DO
+	{ 
+	  mm := mm-1
+          nn := nn-1
+          continue := nn*mm
+	}
+    DONE
+  IF nn THEN RETURN 1 ELSE RETURN 0 FI
+}
+
+FUNC INT plusgrand(n,m )
+{
+  INT continue, nn, mm
+
+  continue := n*m
+  nn := n
+  mm := m
+  WHILE continue
+    DO
+	{ 
+	  mm := mm-1
+          nn := nn-1
+          continue := nn*mm
+	}
+    DONE
+  IF nn THEN RETURN 1 ELSE IF mm THEN RETURN 0 ELSE RETURN 1 FI FI
+}

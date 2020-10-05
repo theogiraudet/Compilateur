@@ -1,0 +1,5 @@
+FUNC VOID main() {
+	PRINT "Toto"
+	WHILE 1 DO {	INT x
+			x := 1 } DONE
+	}

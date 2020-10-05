@@ -1,0 +1,12 @@
+PROTO VOID expr(x,y)
+FUNC VOID main() { expr(1,3) expr(5,2) }
+FUNC VOID expr(x,y) {
+	PRINT x,"+",y," = ", x+y ,"\n"
+	PRINT x,"-",y," = ", x-y ,"\n"
+	PRINT x,"*",y," = ", x*y ,"\n"
+	PRINT x,"/",y," = ", x/y ,"\n"
+	PRINT x,"+",1," = ", x+1 ,"\n"
+	PRINT x,"* (",x,"+",y,") = ", x*(x+y) ,"\n"
+	PRINT x,"*  ",x,"+",y,"  = ", x * x + y  ,"\n"
+	}
+

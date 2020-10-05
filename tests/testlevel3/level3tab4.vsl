@@ -1,0 +1,24 @@
+PROTO VOID printtab(s,t[])
+
+FUNC VOID main() {
+		INT i, t[8],x
+	i := 0
+	WHILE 8-i DO {
+		READ x
+		t[i] := x
+		i:= i+1
+		} DONE
+	printtab(8,t)
+}
+
+FUNC VOID printtab(size,t[]) {
+	INT i
+	PRINT "Tableau de taille ", size," = ["
+	i := 0
+	WHILE size-i DO {
+		IF i THEN PRINT "," FI
+		PRINT t[i]
+		i:= i+1
+		} DONE
+	PRINT "]\n"
+	}

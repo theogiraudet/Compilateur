@@ -1,0 +1,80 @@
+PROTO INT plusgrandstrict(n,m)
+PROTO VOID naivesort(t[], index)
+
+// Ce programme lit un tableau de 10 entiers et imprime
+// le tableau trie. Illustre le passage de tableaux en parametres
+//===============================================================
+FUNC VOID main()
+{
+  INT a[10], i, j
+
+  i := 0
+  WHILE 10-i DO
+    {
+	PRINT "\n Entrer le ",i,"eme:  "
+        READ j
+        a[i] := j
+	i := i+1
+    }
+  DONE
+  naivesort(a,9)
+  i := 0
+  WHILE 10-i DO
+    {
+	PRINT "\n t[",i,"] = ",a[i]
+        i:= i+1
+    }
+  DONE
+}
+
+
+// Tri naif: cherche le +grand elem du tableau et le met
+// a la fin. Recommence avec le sous tableau terminant a index-1
+//==============================================================
+FUNC VOID naivesort(t[], index )
+{
+  INT max , maxpos, i
+
+  IF index THEN  // il y a au moins deux elements
+    {
+     max := t[index]
+     i:= index
+     maxpos := index
+
+     WHILE i+1 DO
+       {
+        IF plusgrandstrict(t[i], max) THEN
+           {
+             max := t[i]
+             maxpos := i
+           }
+        FI
+        i := i-1
+       }
+     DONE
+     t[maxpos] := t[index]
+     t[index] := max
+     naivesort(t,index-1)
+    }
+   FI
+}
+
+// fonction de comparaison entre entiers
+//======================================
+FUNC INT plusgrandstrict(n,m )
+{
+  INT continue, nn, mm
+
+  continue := n*m
+  nn := n
+  mm := m
+  WHILE continue
+    DO
+	{ 
+	  mm := mm-1
+          nn := nn-1
+          continue := nn*mm
+	}
+    DONE
+  IF nn THEN RETURN 1 ELSE RETURN 0 FI
+}

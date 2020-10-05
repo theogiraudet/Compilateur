@@ -1,0 +1,7 @@
+PROTO VOID compare(x,y)
+FUNC VOID main() { compare(2,1) compare(1,2) compare(1,1) }
+FUNC VOID compare(x,y) IF x-y	THEN PRINT x, " est different de ",y,"\n"
+				ELSE PRINT x, " est egal a ",y,"\n"
+				FI
+
+

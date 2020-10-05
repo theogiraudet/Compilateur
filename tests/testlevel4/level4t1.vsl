@@ -1,0 +1,18 @@
+FUNC VOID main()
+{
+  INT i,j,k,l
+  i := 0
+  j := 0
+  k := 0
+  l := 0
+ { INT i,j,k
+     l := 1
+    { INT i,j
+       k:= 2
+       { INT i
+          j:= 3
+       }
+    }
+ }
+  PRINT "Et voila: ", i,j,k,l
+}

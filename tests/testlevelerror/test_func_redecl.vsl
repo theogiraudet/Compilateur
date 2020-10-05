@@ -1,0 +1,10 @@
+FUNC INT main() {
+  PRINT "a"
+	RETURN 0
+}
+
+FUNC INT main() {
+  PRINT "a"
+	RETURN 0
+}
+

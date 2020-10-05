@@ -1,0 +1,6 @@
+FUNC INT main() {
+  INT i, j
+  j := func()
+	RETURN 0
+}
+

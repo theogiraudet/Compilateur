@@ -1,0 +1,11 @@
+PROTO INT fact(t[], i)
+
+FUNC INT main() {
+  INT i, j
+	RETURN 0
+}
+
+FUNC INT fact(i, j) {
+  RETURN i
+}
+

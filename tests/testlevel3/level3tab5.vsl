@@ -1,0 +1,37 @@
+PROTO VOID readprinttab(s,t[])
+
+FUNC VOID main() {
+	INT i,s,t[2]
+	s := 2
+	readprinttab(s,t)
+	PRINT "Main: Tableau de taille ",s," = ["
+	i := 0
+	WHILE s-i DO {
+		IF i THEN PRINT "," FI
+		PRINT t[i]
+		i:= i+1
+	} 
+	DONE
+	PRINT "]\n"
+	PRINT "Fini"
+}
+
+FUNC VOID readprinttab(size,t[]) {
+	INT i
+	i := 0
+	WHILE size-i DO {
+	        PRINT "entrezno :",i,"  "
+		READ t[i]
+		i:= i+1
+	} 
+	DONE
+	PRINT "Tableau de taille ",size," = ["
+	i := 0
+	WHILE size-i DO {
+		IF i THEN PRINT "," FI
+		PRINT t[i]
+		i:= i+1
+	} 
+	DONE
+	PRINT "]\n"
+}

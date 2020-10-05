@@ -1,0 +1,30 @@
+PROTO INT hanoi(n,delatour,alatour,parlatour)
+
+FUNC VOID main()
+{
+  INT ndisque,a
+
+  ndisque := 3
+  PRINT "\n Hanoi avec ", ndisque, " disques\n\n"
+  a := hanoi(ndisque,1,3,2)
+
+  ndisque := 4
+  PRINT "\n\nHanoi avec ", ndisque, " disques\n\n"
+  a := hanoi(ndisque,1,3,2)
+}
+
+
+FUNC INT hanoi(n,delatour,alatour,parlatour)
+{
+  INT b
+  IF n
+  THEN
+  {
+    b := hanoi( n-1, delatour, parlatour, alatour )
+    PRINT "Deplacer un disque de ",delatour," a ",alatour,"\n"
+    b := hanoi( n-1, parlatour, alatour, delatour )
+  }
+  FI
+  RETURN 1
+}
+

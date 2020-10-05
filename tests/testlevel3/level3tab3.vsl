@@ -1,0 +1,19 @@
+FUNC VOID main() {
+	INT i, t[8],x
+	i := 0
+	WHILE 8-i DO {
+		READ x
+		t[i] := x
+		i:= i+1
+		} DONE
+	i := 0
+	WHILE 8-i DO {
+		PRINT "t[",i,"] = ",t[i],"\n"
+		i:= i+1
+		} DONE
+	}
+
+
+
+
+

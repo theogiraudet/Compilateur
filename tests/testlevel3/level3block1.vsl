@@ -1,0 +1,5 @@
+FUNC VOID main(f) {
+	INT f
+	f:=100
+	PRINT f 
+}
