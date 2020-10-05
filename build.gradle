@@ -1,0 +1,25 @@
+apply plugin: 'java'
+apply plugin: 'antlr'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  antlr 'org.antlr:antlr4:4.7.1'
+  testCompile 'junit:junit:4.12'
+}
+
+generateGrammarSource {
+  arguments += ['-no-visitor', '-no-listener']
+  outputDirectory = new File(buildDir.toString() + "/generated-src/antlr/main/TP2/")
+}
+
+jar {
+  manifest {
+    attributes (
+      'Main-Class': 'TP2.Main',
+      'Class-Path': configurations.runtimeClasspath.files.join(' ')
+    )
+  }
+}
