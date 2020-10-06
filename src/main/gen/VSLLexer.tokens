@@ -1,0 +1,11 @@
+WS=1
+COMMENT=2
+LP=3
+RP=4
+PLUS=5
+IDENT=6
+TEXT=7
+INTEGER=8
+'('=3
+')'=4
+'+'=5
