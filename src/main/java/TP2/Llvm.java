@@ -108,6 +108,42 @@ public class Llvm {
     }
   }
 
+  static public class Div extends Instruction {
+    Type type;
+    String left;
+    String right;
+    String lvalue;
+
+    public Div(Type type, String left, String right, String lvalue) {
+      this.type = type;
+      this.left = left;
+      this.right = right;
+      this.lvalue = lvalue;
+    }
+
+    public String toString() {
+      return lvalue + " = div " + type + " " + left + ", " + right +  "\n";
+    }
+  }
+
+  static public class Mul extends Instruction {
+    Type type;
+    String left;
+    String right;
+    String lvalue;
+
+    public Mul(Type type, String left, String right, String lvalue) {
+      this.type = type;
+      this.left = left;
+      this.right = right;
+      this.lvalue = lvalue;
+    }
+
+    public String toString() {
+      return lvalue + " = mul " + type + " " + left + ", " + right +  "\n";
+    }
+  }
+
   static public class Sub extends Instruction {
     Type type;
     String left;
