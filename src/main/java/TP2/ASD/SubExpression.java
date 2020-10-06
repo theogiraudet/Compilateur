@@ -16,7 +16,7 @@ public class SubExpression extends Expression {
 
     @Override
     public String pp() {
-        return "(" + left.pp() + " + " + right.pp() + ")";
+        return "(" + left.pp() + " - " + right.pp() + ")";
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SubExpression extends Expression {
         String result = Utils.newtmp();
 
         // new add instruction result = left + right
-        Llvm.Instruction sub = new Llvm.Add(leftRet.type.toLlvmType(), leftRet.result, rightRet.result, result);
+        Llvm.Instruction sub = new Llvm.Sub(leftRet.type.toLlvmType(), leftRet.result, rightRet.result, result);
 
         // append this instruction
         leftRet.ir.appendCode(sub);
