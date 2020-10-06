@@ -23,6 +23,8 @@ LP    : '(' ; // Left parenthesis
 RP    : ')' ;
 PLUS      : '+' ;
 MINUS : '-' ;
+TIMES : '*' ;
+DIVIDE : '/' ;
 
 // TODO : other keywords
 
