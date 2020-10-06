@@ -20,9 +20,14 @@ program returns [TP2.ASD.Program out]
     ;
 
 expression returns [TP2.ASD.Expression out]
-    : l=factor PLUS r=expression  { $out = new TP2.ASD.AddExpression($l.out, $r.out); }
+    : l=factor b=binop  { $out = $b.operation.apply($l,$b.out) }
     | f=factor { $out = $f.out; }
     // TODO : that's all?
+    ;
+
+binop returns [BiFunction<TP2.ASD.Expression,TP2.ASD.Expression,TP2.ASD.Expression> operation, TP2.ASD.Expression out]
+    : PLUS e=expression {$operation = ( (exp1,exp2) -> new AddExpression(exp1,exp2)); $out=$e.out}
+    | MINUS e=expression {$operation = ( (exp1,exp2) -> new SubExpression(exp1,exp2)); $out=$e.out}
     ;
 
 factor returns [TP2.ASD.Expression out]
