@@ -6,8 +6,9 @@ import TP2.Utils;
 
 // Concrete class for Expression: add case
   public class AddExpression extends Expression {
-    Expression left;
-    Expression right;
+
+    private Expression left;
+    private Expression right;
 
     public AddExpression(Expression left, Expression right) {
       this.left = left;

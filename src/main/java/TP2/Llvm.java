@@ -108,6 +108,24 @@ public class Llvm {
     }
   }
 
+  static public class Sub extends Instruction {
+    Type type;
+    String left;
+    String right;
+    String lvalue;
+
+    public Sub(Type type, String left, String right, String lvalue) {
+      this.type = type;
+      this.left = left;
+      this.right = right;
+      this.lvalue = lvalue;
+    }
+
+    public String toString() {
+      return lvalue + " = sub " + type + " " + left + ", " + right +  "\n";
+    }
+  }
+
   static public class Return extends Instruction {
     Type type;
     String value;
