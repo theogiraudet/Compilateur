@@ -1,8 +1,7 @@
 package TP2.ASD;
 
-import TP2.Llvm;
-import TP2.TypeException;
-import TP2.Utils;
+import TP2.llvm.BinOpInstruction;
+import TP2.llvm.Llvm;
 import TP2.utils.QuadriFunction;
 
 // Concrete class for Expression: add case
@@ -14,7 +13,7 @@ import TP2.utils.QuadriFunction;
 
   @Override
   protected QuadriFunction<Llvm.Type, String, String, String, Llvm.Instruction> getFunction() {
-    return (a, b, c, d) -> new Llvm.Add(a, b, c, d);
+    return (a, b, c, d) -> new BinOpInstruction.Add(a, b, c, d);
   }
 
   // Pretty-printer

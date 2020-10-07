@@ -1,6 +1,6 @@
 package TP2.ASD;
 
-import TP2.Llvm;
+import TP2.llvm.Llvm;
 import TP2.TypeException;
 
 public abstract class Expression {

@@ -1,6 +1,6 @@
 package TP2.ASD;
 
-import TP2.Llvm;
+import TP2.llvm.Llvm;
 
 public class Int extends Type {
     public String pp() {

@@ -27,23 +27,23 @@ expression returns [TP2.ASD.Expression out]
     // TODO : that's all?
     ;
 
-lpop returns [BiFunction<TP2.ASD.Expression,TP2.ASD.Expression,TP2.ASD.Expression> op, TP2.ASD.Expression out]
-    : PLUS e=expression {$op = ( (exp1,exp2) -> new AddExpression(exp1,exp2)); $out=$e.out;}
-    | MINUS e=expression {$op = ( (exp1,exp2) -> new SubExpression(exp1,exp2)); $out=$e.out;}
+lpop returns [BiFunction<TP2.ASD.Expression, TP2.ASD.Expression, TP2.ASD.Expression> op, TP2.ASD.Expression out]
+    : PLUS e = expression { $op = (exp1,exp2) -> new AddExpression(exp1,exp2); $out=$e.out; }
+    | MINUS e = expression { $op = (exp1,exp2) -> new SubExpression(exp1,exp2); $out=$e.out; }
     ;
 
 factor returns [TP2.ASD.Expression out]
-    : p=primary o=hpop {$out = $o.op.apply($p.out,$o.out);}
-    | p=primary { $out = $p.out; }
+    : p = primary o = hpop { $out = $o.op.apply($p.out, $o.out); }
+    | p = primary { $out = $p.out; }
     ;
 
-hpop returns [BiFunction<Expression,Expression,Expression> op, Expression out]
-    : TIMES f=factor {$op = ( (exp1,exp2) -> new MulExpression(exp1,exp2)); $out=$f.out;}
-    | DIVIDE f=factor {$op = ( (exp1,exp2) -> new DivExpression(exp1,exp2)); $out=$f.out;}
+hpop returns [BiFunction<Expression, Expression, Expression> op, Expression out]
+    : TIMES f = factor { $op = (exp1,exp2) -> new MulExpression(exp1,exp2); $out = $f.out; }
+    | DIVIDE f = factor { $op = (exp1,exp2) -> new DivExpression(exp1,exp2); $out = $f.out; }
     ;
 
 primary returns [TP2.ASD.Expression out]
-    : LP (e=expression) RP {$out=$e.out;}
+    : LP e = expression RP { $out=$e.out; }
     | INTEGER { $out = new TP2.ASD.IntegerExpression($INTEGER.int); }
     // TODO : that's all?
     ;

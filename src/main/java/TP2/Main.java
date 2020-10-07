@@ -3,6 +3,7 @@ package TP2;
 import java.nio.file.Paths;
 import java.io.IOException;
 
+import TP2.llvm.Llvm;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -34,7 +35,7 @@ public class Main {
       Program ast = parser.program().out;
 
       // Pretty-print the program (to debug parsing, if you implemented it!)
-      // System.err.println(ast.pp());
+      System.err.println(ast.pp());
 
       // Compute LLVM IR from the ast
       try {

@@ -1,10 +1,13 @@
 package TP2.ASD;
 
-import TP2.Llvm;
+import TP2.llvm.Llvm;
 import TP2.TypeException;
 import TP2.Utils;
 import TP2.utils.QuadriFunction;
 
+/**
+ * Représente une opération binaire
+ */
 public abstract class BinaryOperation extends Expression {
 
     protected Expression left;
@@ -15,6 +18,10 @@ public abstract class BinaryOperation extends Expression {
         this.right = right;
     }
 
+    /**
+     *
+     * @return l'instruction correspondant à l'opération courante
+     */
     protected abstract QuadriFunction<Llvm.Type, String, String, String, Llvm.Instruction> getFunction();
 
     @Override
