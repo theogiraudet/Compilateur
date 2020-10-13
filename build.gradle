@@ -5,9 +5,14 @@ repositories {
   mavenCentral()
 }
 
+test {
+  useJUnitPlatform()
+}
+
 dependencies {
   antlr 'org.antlr:antlr4:4.7.1'
-  testCompile 'junit:junit:4.12'
+  testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.7.0'
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0'
 }
 
 generateGrammarSource {

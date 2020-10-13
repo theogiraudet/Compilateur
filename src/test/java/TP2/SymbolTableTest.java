@@ -1,15 +1,14 @@
 package TP2;
 
-import java.util.ArrayList;
-import junit.framework.TestCase;
-import org.junit.*;
-
 import TP2.ASD.Int;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotEquals;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public class SymbolTableTest extends TestCase {
+public class SymbolTableTest {
   @Test
   public static void testLookupEmpty() {
     SymbolTable table = new SymbolTable();
