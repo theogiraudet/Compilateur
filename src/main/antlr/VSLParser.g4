@@ -18,7 +18,11 @@ options {
 // TODO : other rules
 
 program returns [TP2.ASD.Program out]
-    : e=expression EOF { $out = new TP2.ASD.Program($e.out); } // TODO : change when you extend the language
+    : (s=statement)* EOF { $out = new TP2.ASD.Program($s.out); } // TODO : change when you extend the language
+    ;
+
+statement returns  [TP2.ASD.Statement out]
+    : i=IDENT AFFECT e=expression {$out = new Affectation($i.text,$e.out);}
     ;
 
 expression returns [TP2.ASD.Expression out]
