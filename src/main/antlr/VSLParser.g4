@@ -10,6 +10,7 @@ options {
 
   import java.util.stream.Collectors;
   import java.util.Arrays;
+  import java.util.LinkedList;
   import java.util.function.BiFunction;
   import TP2.ASD.*;
 }
@@ -18,11 +19,12 @@ options {
 // TODO : other rules
 
 program returns [TP2.ASD.Program out]
-    : (s=statement)* EOF { $out = new TP2.ASD.Program($s.out); } // TODO : change when you extend the language
+@init { List<Statement> list = new LinkedList<>(); }
+    : (s=statement { list.add($s.out); })* EOF { $out = new TP2.ASD.Program(list); } // TODO : change when you extend the language
     ;
 
 statement returns  [TP2.ASD.Statement out]
-    : i=IDENT AFFECT e=expression {$out = new Affectation($i.text,$e.out);}
+    : i=IDENT AFFECT e=expression {$out = new Assignment($i.text,$e.out);}
     ;
 
 expression returns [TP2.ASD.Expression out]

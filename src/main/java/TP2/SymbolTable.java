@@ -6,6 +6,7 @@ import TP2.ASD.Type;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 // This file contains the symbol table definition.
 // A symbol table contains a set of ident and the
@@ -17,15 +18,25 @@ import java.util.List;
 public class SymbolTable {
   // Define different symbols
   public static abstract class Symbol {
-    String ident; // minimum, used in the storage map
+    private final String ident; // minimum, used in the storage map
+
+    protected Symbol(String ident) {
+      this.ident = ident;
+    }
+
+    public String getIdent() { return ident; }
   }
 
   public static class VariableSymbol extends Symbol {
-    Type type;
+    private final Type type;
 
-    VariableSymbol(Type type, String ident) {
+    public VariableSymbol(Type type, String ident) {
+      super(ident);
       this.type = type;
-      this.ident = ident;
+    }
+
+    public Type getType() {
+      return type;
     }
 
     @Override public boolean equals(Object obj) {
@@ -34,20 +45,32 @@ public class SymbolTable {
       if(!(obj instanceof VariableSymbol)) return false;
       VariableSymbol o = (VariableSymbol) obj;
       return o.type.equals(this.type) &&
-        o.ident.equals(this.ident);
+        o.getIdent().equals(this.getIdent());
     }
   }
 
   public static class FunctionSymbol extends Symbol {
-    Type returnType;
-    List<VariableSymbol> arguments; // arguments is an ordered list of VariableSymbol
-    boolean defined; // false if declared but not defined
+    private final Type returnType;
+    private final List<VariableSymbol> arguments; // arguments is an ordered list of VariableSymbol
+    private final boolean defined; // false if declared but not defined
 
     FunctionSymbol(Type returnType, String ident, List<VariableSymbol> arguments, boolean defined) {
+      super(ident);
       this.returnType = returnType;
-      this.ident = ident;
       this.arguments = arguments;
       this.defined = defined;
+    }
+
+    public Type getReturnType() {
+      return returnType;
+    }
+
+    public List<VariableSymbol> getArguments() {
+      return arguments;
+    }
+
+    public boolean isDefined() {
+      return defined;
     }
 
     @Override public boolean equals(Object obj) {
@@ -56,7 +79,7 @@ public class SymbolTable {
       if(!(obj instanceof FunctionSymbol)) return false;
       FunctionSymbol o = (FunctionSymbol) obj;
       return o.returnType.equals(this.returnType) &&
-        o.ident.equals(this.ident) &&
+        o.getIdent().equals(this.getIdent()) &&
         o.arguments.equals(this.arguments) &&
         o.defined == this.defined;
     }
@@ -97,10 +120,10 @@ public class SymbolTable {
     return this.table.remove(ident) != null;
   }
 
-  public Symbol lookup(String ident) {
-    Symbol res = this.table.get(ident);
+  public Optional<Symbol> lookup(String ident) {
+    Optional<Symbol> res = Optional.ofNullable(this.table.get(ident));
 
-    if((res == null) && (this.parent != null)) {
+    if(!res.isPresent() && (this.parent != null)) {
       // Forward request
       return this.parent.lookup(ident);
     }

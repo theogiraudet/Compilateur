@@ -1,7 +1,13 @@
 package TP2;
 
-public class TypeException extends Exception {
+import java.util.function.Supplier;
+
+public class TypeException extends RuntimeException {
   public TypeException(String message) {
     super(message);
+  }
+
+  public TypeException(String message, Supplier<String> at) {
+    super(message + "\nat '" + at.get() + "'.");
   }
 }

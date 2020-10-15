@@ -13,7 +13,7 @@ import TP2.utils.QuadriFunction;
 
   @Override
   protected QuadriFunction<Llvm.Type, String, String, String, Llvm.Instruction> getFunction() {
-    return (a, b, c, d) -> new BinOpInstruction.Add(a, b, c, d);
+    return BinOpInstruction.Add::new;
   }
 
   // Pretty-printer

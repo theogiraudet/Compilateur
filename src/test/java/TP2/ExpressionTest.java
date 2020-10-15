@@ -7,15 +7,17 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ExpressionTest {
+
+    private VSLParser parser;
 
     public Program createParser(String input) throws RecognitionException {
         VSLLexer lexer = new VSLLexer(CharStreams.fromString(input));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-        VSLParser parser = new VSLParser(tokens);
+        parser = new VSLParser(tokens);
+
         return parser.program().out;
     }
 
@@ -29,7 +31,65 @@ public class ExpressionTest {
     @Test
     public void atomicExpression2() {
         final String INPUT = "+";
-        assertThrows(RecognitionException.class, () -> createParser(INPUT));
+        createParser(INPUT);
+        assertEquals(parser.getNumberOfSyntaxErrors(), 1);
     }
 
+    @Test
+    public void simpleExpression() {
+        final String INPUT = "5 + 4";
+        assertEquals("(5 + 4)", createParser(INPUT).pp());
+    }
+
+    @Test
+    public void simpleExpression2() {
+        final String INPUT = "0 / 147";
+        assertEquals("(0 / 147)", createParser(INPUT).pp());
+    }
+
+    @Test
+    public void simpleExpression3() {
+        final String INPUT = "0 0";
+        createParser(INPUT);
+        assertEquals(parser.getNumberOfSyntaxErrors(), 1);
+    }
+
+    @Test
+    public void simpleExpression4() {
+        final String INPUT = "-5";
+        createParser(INPUT);
+        assertEquals(parser.getNumberOfSyntaxErrors(), 1);
+    }
+
+    @Test
+    public void complexExpression() {
+        final String INPUT = "0 / 147 + 7";
+        assertEquals("((0 / 147) + 7)", createParser(INPUT).pp());
+    }
+
+    @Test
+    public void complexExpression4() {
+        final String INPUT = "0 + 147 / 7";
+        assertEquals("(0 + (147 / 7))", createParser(INPUT).pp());
+    }
+
+    @Test
+    public void complexExpression5() {
+        final String INPUT = "0 + +";
+        createParser(INPUT);
+        assertEquals(parser.getNumberOfSyntaxErrors(), 1);
+    }
+
+    @Test
+    public void complexExpression6() {
+        final String INPUT = "(0 + 147) / 7";
+        assertEquals("((0 + 147) / 7)", createParser(INPUT).pp());
+    }
+
+    @Test
+    public void complexExpression7() {
+        final String INPUT = "(0 + 147 / 7";
+        createParser(INPUT);
+        assertEquals(parser.getNumberOfSyntaxErrors(), 1);
+    }
 }

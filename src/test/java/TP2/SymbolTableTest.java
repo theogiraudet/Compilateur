@@ -9,32 +9,33 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class SymbolTableTest {
+
   @Test
-  public static void testLookupEmpty() {
+  public void testLookupEmpty() {
     SymbolTable table = new SymbolTable();
 
     assertNull(table.lookup("unknown"));
   }
 
   @Test
-  public static void testSimple() {
+  public void testSimple() {
     SymbolTable table = new SymbolTable();
     SymbolTable.Symbol sym = new SymbolTable.VariableSymbol(new Int(), "key");
 
     assertTrue(table.add(sym));
 
     assertNull(table.lookup("unknown"));
-    assertNotNull(table.lookup(sym.ident));
-    assertEquals(table.lookup(sym.ident), sym);
+    assertNotNull(table.lookup(sym.getIdent()));
+    assertEquals(table.lookup(sym.getIdent()), sym);
 
-    assertTrue(table.remove(sym.ident));
-    assertFalse(table.remove(sym.ident));
+    assertTrue(table.remove(sym.getIdent()));
+    assertFalse(table.remove(sym.getIdent()));
 
-    assertNull(table.lookup(sym.ident));
+    assertNull(table.lookup(sym.getIdent()));
   }
 
   @Test
-  public static void testParent() {
+  public void testParent() {
     SymbolTable parent = new SymbolTable();
     SymbolTable.Symbol sym = new SymbolTable.VariableSymbol(new Int(), "key");
 
@@ -45,15 +46,15 @@ public class SymbolTableTest {
 
     assertTrue(table.add(sym2));
 
-    assertEquals(table.lookup(sym2.ident), sym2);
-    assertEquals(table.lookup(sym.ident), sym); // in parent
+    assertEquals(table.lookup(sym2.getIdent()), sym2);
+    assertEquals(table.lookup(sym.getIdent()), sym); // in parent
 
-    assertFalse(table.remove(sym.ident)); // in parent
-    assertTrue(table.remove(sym2.ident));
+    assertFalse(table.remove(sym.getIdent())); // in parent
+    assertTrue(table.remove(sym2.getIdent()));
   }
 
   @Test
-  public static void testEquals() {
+  public void testEquals() {
     SymbolTable table = new SymbolTable();
     SymbolTable table2 = new SymbolTable();
     SymbolTable.Symbol sym = new SymbolTable.VariableSymbol(new Int(), "key");

@@ -26,12 +26,12 @@ public abstract class BinaryOperation extends Expression {
 
     @Override
     public RetExpression toIR() throws TypeException {
-        RetExpression leftRet = left.toIR();
-        RetExpression rightRet = right.toIR();
+        final RetExpression leftRet = left.toIR();
+        final RetExpression rightRet = right.toIR();
 
         // We check if the types mismatches
         if(!leftRet.type.equals(rightRet.type)) {
-            throw new TypeException("type mismatch: have " + leftRet.type + " and " + rightRet.type);
+            throw new TypeException("Type mismatch: have '" + leftRet.type + "' and '" + rightRet.type + "'.", this::pp);
         }
 
         // We base our build on the left generated IR:
@@ -41,8 +41,8 @@ public abstract class BinaryOperation extends Expression {
         // allocate a new identifier for the result
         String result = Utils.newtmp();
 
-        // new add instruction result = left + right
-        Llvm.Instruction sub = getFunction().apply(leftRet.type.toLlvmType(), leftRet.result, rightRet.result, result);
+        // new add instruction result = left op right
+        Llvm.Instruction sub = getFunction().apply(leftRet.type, leftRet.result, rightRet.result, result);
 
         // append this instruction
         leftRet.ir.appendCode(sub);

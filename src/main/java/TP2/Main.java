@@ -2,6 +2,7 @@ package TP2;
 
 import java.nio.file.Paths;
 import java.io.IOException;
+import java.util.Arrays;
 
 import TP2.llvm.Llvm;
 import org.antlr.v4.runtime.CharStream;
@@ -11,6 +12,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import TP2.ASD.Program;
 
 public class Main {
+
   public static void main(String[] args) {
     try {
       // Set input
