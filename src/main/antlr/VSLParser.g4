@@ -20,7 +20,12 @@ options {
 
 program returns [TP2.ASD.Program out]
 @init { List<Statement> list = new LinkedList<>(); }
-    : (s=statement { list.add($s.out); })* EOF { $out = new TP2.ASD.Program(list); } // TODO : change when you extend the language
+    :  block? EOF  // TODO : change when you extend the language
+    ;
+
+block returns [TP2.ASD.Block out]
+@init { List<Statement> list = new LinkedList<>(); }
+    :   LB (s=statement { list.add($s.out); })* RB { $out = new TP2.ASD.Block(list}
     ;
 
 statement returns  [TP2.ASD.Statement out]

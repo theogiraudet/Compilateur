@@ -26,6 +26,8 @@ MINUS  : '-' ;
 TIMES  : '*' ;
 DIVIDE : '/' ;
 AFFECT : ':=' ;
+LB     : '{' ;
+RB     : '}' ;
 // TODO : other keywords
 
 // other tokens (no conflict with keywords in VSL)
