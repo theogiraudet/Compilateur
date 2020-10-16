@@ -14,7 +14,7 @@ WS : (' '|'\n'|'\t'|'\r') -> skip
 COMMENT : '//' (~'\n')* -> skip
         ;
 
-fragment LETTER : 'a'..'z' ;
+fragment LETTER : ('a'..'z' | 'A'..'Z') ;
 fragment DIGIT  : '0'..'9' ;
 fragment ASCII  : ~('\n'|'"');
 
@@ -28,9 +28,17 @@ DIVIDE : '/' ;
 AFFECT : ':=' ;
 LB     : '{' ;
 RB     : '}' ;
+LSB    : '[' ;
+RSB    : ']' ;
+COMMA  : ',' ;
 // TODO : other keywords
+
+//types
+INT : 'INT' ;
+
 
 // other tokens (no conflict with keywords in VSL)
 IDENT   : LETTER (LETTER|DIGIT)*;
 TEXT    : '"' (ASCII)* '"' { setText(getText().substring(1, getText().length() - 1)); };
 INTEGER : (DIGIT)+ ;
+

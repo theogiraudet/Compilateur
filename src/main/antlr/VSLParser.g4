@@ -25,6 +25,11 @@ program returns [Program out]
     :  s=statement EOF {$out = new Program($s.out); } // TODO : change when you extend the language
     ;
 
+decAndStat returns [DecAndStat out]        //this rule provides to have only one declaration when a if isn't a block
+    : s=statement {$out = $s.out;}
+    | d=declaration {$out = $d.out;}
+    ;
+
 statement returns  [Statement out]
     : i=IDENT AFFECT e=expression { $out = new Assignment($i.text,$e.out); }
     | b=block { $out = $b.out; }
@@ -32,7 +37,21 @@ statement returns  [Statement out]
 
 block returns [Block out]
 @init { List<Statement> list = new LinkedList<>(); }
-    :   LB (s=statement { list.add($s.out); })* RB { $out = new Block(list); }
+    :   LB (s=decAndStat { list.add($s.out); })* RB { $out = new Block(list); }
+    ;
+
+declaration returns [LinkedList<Declaration> out]
+@init { List<Declaration> list = new LinkedList(); }
+    : t=type v1=var { list.add(new Declaration($t.out,$v1.out); }
+      (COMMA v2=var { list.add(new Declaration($t.out,$v2.out); })* { $out=list }
+    ;
+
+type returns [Type out]
+    : INT { new Int(); }
+    ;
+
+var returns [Var out]
+    : i=IDENT { $out=new Var($i.text); }
     ;
 
 expression returns [Expression out]
