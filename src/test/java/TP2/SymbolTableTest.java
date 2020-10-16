@@ -1,6 +1,6 @@
 package TP2;
 
-import TP2.ASD.Int;
+import TP2.asd.type.Int;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

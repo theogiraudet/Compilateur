@@ -1,4 +1,4 @@
-package TP2.ASD;
+package TP2.asd.statement;
 
 import TP2.SymbolTable;
 import TP2.TypeException;

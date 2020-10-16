@@ -2,14 +2,13 @@ package TP2;
 
 import java.nio.file.Paths;
 import java.io.IOException;
-import java.util.Arrays;
 
 import TP2.llvm.Llvm;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import TP2.ASD.Program;
+import TP2.asd.Program;
 
 public class Main {
 

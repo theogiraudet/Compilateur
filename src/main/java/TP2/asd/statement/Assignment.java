@@ -1,5 +1,6 @@
-package TP2.ASD;
+package TP2.asd.statement;
 
+import TP2.asd.expression.Expression;
 import TP2.SymbolTable;
 import TP2.TypeException;
 import TP2.llvm.Llvm;

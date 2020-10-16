@@ -2,7 +2,7 @@ package TP2;
 
 import java.util.Map;
 
-import TP2.ASD.Type;
+import TP2.asd.type.Type;
 
 import java.util.HashMap;
 import java.util.List;
