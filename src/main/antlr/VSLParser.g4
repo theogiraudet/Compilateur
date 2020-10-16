@@ -20,16 +20,17 @@ options {
 
 program returns [TP2.ASD.Program out]
 @init { List<Statement> list = new LinkedList<>(); }
-    :  block? EOF  // TODO : change when you extend the language
+    :  statement? EOF  // TODO : change when you extend the language
+    ;
+
+statement returns  [TP2.ASD.Statement out]
+    : i=IDENT AFFECT e=expression {$out = new Assignment($i.text,$e.out);}
+    | b=block {$out = new Block($b.out)}
     ;
 
 block returns [TP2.ASD.Block out]
 @init { List<Statement> list = new LinkedList<>(); }
     :   LB (s=statement { list.add($s.out); })* RB { $out = new TP2.ASD.Block(list}
-    ;
-
-statement returns  [TP2.ASD.Statement out]
-    : i=IDENT AFFECT e=expression {$out = new Assignment($i.text,$e.out);}
     ;
 
 expression returns [TP2.ASD.Expression out]
