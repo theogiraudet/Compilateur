@@ -22,47 +22,44 @@ options {
 // TODO : other rules
 
 program returns [Program out]
-    :  s=statement EOF {$out = new Program($s.out); } // TODO : change when you extend the language
-    ;
-
-decAndStat returns [DecAndStat out]        //this rule provides to have only one declaration when a if isn't a block
-    : s=statement {$out = $s.out;}
-    | d=declaration {$out = $d.out;}
+    :  s = statement EOF { $out = new Program($s.out); } // TODO : change when you extend the language
     ;
 
 statement returns  [Statement out]
-    : i=IDENT AFFECT e=expression { $out = new Assignment($i.text,$e.out); }
-    | b=block { $out = $b.out; }
+    : i = IDENT AFFECT e = expression { $out = new Assignment($i.text, $e.out); }
+    | b = block { $out = $b.out; }
     ;
 
 block returns [Block out]
-@init { List<Statement> list = new LinkedList<>(); }
-    :   LB (s=decAndStat { list.add($s.out); })* RB { $out = new Block(list); }
+@init { List<Statement> listStat = new LinkedList<>(); }
+    :   LB d = declaration (s = statement { listStat.add($s.out); })+ RB { $out = new Block($d.out, listStat); }
     ;
 
-declaration returns [LinkedList<Declaration> out]
+declaration returns [List<Declaration> out]
 @init { List<Declaration> list = new LinkedList(); }
-    : t=type v1=var { list.add(new Declaration($t.out,$v1.out); }
-      (COMMA v2=var { list.add(new Declaration($t.out,$v2.out); })* { $out=list }
+    : (t = type id = IDENT {list.add(new Declaration($t.out, $id.text)); } listDeclaration[$t.out, list])? { $out = list; }
+    ;
+
+listDeclaration [Type typ, List<Declaration> list] returns [List<Declaration> out]
+    : (COMMA
+               (id = IDENT LSB i = INTEGER RSB { list.add(new Declaration(new Array(typ, $i.int), $id.text)); })
+             | (id = IDENT { list.add(new Declaration(typ, $id.text)); })
+               )*
     ;
 
 type returns [Type out]
     : INT { new Int(); }
     ;
 
-var returns [Var out]
-    : i=IDENT { $out=new Var($i.text); }
-    ;
-
 expression returns [Expression out]
-    : l=factor o=lpop  { $out = $o.op.apply($l.out,$o.out); }
-    | f=factor { $out = $f.out; }
+    : l = factor o = lpop  { $out = $o.op.apply($l.out,$o.out); }
+    | f = factor { $out = $f.out; }
     // TODO : that's all?
     ;
 
 lpop returns [BiFunction<Expression, Expression, Expression> op, Expression out]
-    : PLUS e = expression { $op = (exp1,exp2) -> new AddExpression(exp1,exp2); $out=$e.out; }
-    | MINUS e = expression { $op = (exp1,exp2) -> new SubExpression(exp1,exp2); $out=$e.out; }
+    : PLUS e = expression { $op = (exp1,exp2) -> new AddExpression(exp1,exp2); $out = $e.out; }
+    | MINUS e = expression { $op = (exp1,exp2) -> new SubExpression(exp1,exp2); $out = $e.out; }
     ;
 
 factor returns [Expression out]

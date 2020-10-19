@@ -14,7 +14,7 @@ WS : (' '|'\n'|'\t'|'\r') -> skip
 COMMENT : '//' (~'\n')* -> skip
         ;
 
-fragment LETTER : ('a'..'z' | 'A'..'Z') ;
+fragment LETTER : ('a'..'z') ;
 fragment DIGIT  : '0'..'9' ;
 fragment ASCII  : ~('\n'|'"');
 

@@ -92,7 +92,26 @@ public class Llvm {
 
   }
 
-  // TODO : other types
+  static public class Array extends Type {
+    private final Type type;
+    private final int size;
+
+    public Array(Type type, int size) {
+      this.type = type;
+      this.size = size;
+    }
+
+    public String toString() { return "[" + size + " x " + type.toString() + "]"; }
+
+    @Override
+    public boolean equals(Object o) {
+      if(o instanceof Array) {
+        Array array = (Array) o;
+        return array.size == size && array.type.equals(type);
+      }
+      return false;
+    }
+  }
 
 
   // LLVM IR Instructions
@@ -131,6 +150,22 @@ public class Llvm {
     @Override
     public String toString() {
       return "store " + type + " " + value + ", " + type + "* %" + destination + '\n';
+    }
+  }
+
+  static public class Declaration extends Instruction {
+
+    Type type;
+    String destination;
+
+    public Declaration(Type type, String destination) {
+      this.type = type;
+      this.destination = destination;
+    }
+
+    @Override
+    public String toString() {
+      return '%' + destination + " = alloca " + type.toString() + '\n';
     }
   }
 
