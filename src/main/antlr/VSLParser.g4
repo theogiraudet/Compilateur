@@ -41,10 +41,10 @@ declaration returns [List<Declaration> out]
     ;
 
 listDeclaration [Type typ, List<Declaration> list] returns [List<Declaration> out]
-    : (COMMA
-               (id = IDENT LSB i = INTEGER RSB { list.add(new Declaration(new Array(typ, $i.int), $id.text)); })
-             | (id = IDENT { list.add(new Declaration(typ, $id.text)); })
-               )*
+    :   (COMMA id= IDENT
+               ( LSB i = INTEGER RSB { list.add(new Declaration(new Array(typ, $i.int), $id.text)); }
+               |  {list.add(new Declaration(typ, $id.text)); } )
+        )*
     ;
 
 type returns [Type out]
