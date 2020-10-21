@@ -14,7 +14,7 @@ public class SymbolTableTest {
   public void testLookupEmpty() {
     SymbolTable table = new SymbolTable();
 
-    assertNull(table.lookup("unknown"));
+    assertFalse(table.lookup("unknown").isPresent());
   }
 
   @Test
@@ -24,14 +24,14 @@ public class SymbolTableTest {
 
     assertTrue(table.add(sym));
 
-    assertNull(table.lookup("unknown"));
-    assertNotNull(table.lookup(sym.getIdent()));
-    assertEquals(table.lookup(sym.getIdent()), sym);
+    assertFalse(table.lookup("unknown").isPresent());
+    assertTrue(table.lookup(sym.getIdent()).isPresent());
+    assertEquals(table.lookup(sym.getIdent()).get(), sym);
 
     assertTrue(table.remove(sym.getIdent()));
     assertFalse(table.remove(sym.getIdent()));
 
-    assertNull(table.lookup(sym.getIdent()));
+    assertFalse(table.lookup(sym.getIdent()).isPresent());
   }
 
   @Test
@@ -46,8 +46,8 @@ public class SymbolTableTest {
 
     assertTrue(table.add(sym2));
 
-    assertEquals(table.lookup(sym2.getIdent()), sym2);
-    assertEquals(table.lookup(sym.getIdent()), sym); // in parent
+    assertEquals(table.lookup(sym2.getIdent()).get(), sym2);
+    assertEquals(table.lookup(sym.getIdent()).get(), sym); // in parent
 
     assertFalse(table.remove(sym.getIdent())); // in parent
     assertTrue(table.remove(sym2.getIdent()));

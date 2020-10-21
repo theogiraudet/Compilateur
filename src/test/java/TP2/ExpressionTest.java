@@ -1,7 +1,7 @@
 package TP2;
 
 
-import TP2.asd.Program;
+import TP2.asd.expression.Expression;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
@@ -12,19 +12,20 @@ public class ExpressionTest {
 
     private VSLParser parser;
 
-    public Program createParser(String input) throws RecognitionException {
+    public Expression createParser(String input) throws RecognitionException {
         VSLLexer lexer = new VSLLexer(CharStreams.fromString(input));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
         parser = new VSLParser(tokens);
 
-        return parser.program().out;
+        return parser.expression().out;
     }
 
     @Test
     public void atomicExpression() {
         final String INPUT = "5";
         String result = createParser(INPUT).pp();
+        System.out.println(createParser(INPUT).toIR().ir.toString());
         assertEquals(result, "5");
     }
 
@@ -49,16 +50,9 @@ public class ExpressionTest {
 
     @Test
     public void simpleExpression3() {
-        final String INPUT = "0 0";
-        createParser(INPUT);
-        assertEquals(parser.getNumberOfSyntaxErrors(), 1);
-    }
-
-    @Test
-    public void simpleExpression4() {
         final String INPUT = "-5";
         createParser(INPUT);
-        assertEquals(parser.getNumberOfSyntaxErrors(), 1);
+        assertEquals(1, parser.getNumberOfSyntaxErrors());
     }
 
     @Test
