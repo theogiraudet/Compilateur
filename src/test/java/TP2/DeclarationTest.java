@@ -6,13 +6,15 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AssignementTest {
+public class DeclarationTest {
 
     private VSLParser parser;
 
-    public Program createParser(String input) throws RecognitionException {
+    private Program createParser(String input) throws RecognitionException {
         VSLLexer lexer = new VSLLexer(CharStreams.fromString(input));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
@@ -22,10 +24,9 @@ public class AssignementTest {
     }
 
     @Test
-    public void assignement() {
-        final SymbolTable table = new SymbolTable();
-        final String INPUT = "a := 5";
-        String result = createParser(INPUT).pp();
-        assertEquals("a := 5", result);
+    public void assignment() throws IOException {
+        final String vsl = UtilsFile.getFileContent("testsPersos/testDecl0V.vsl");
+        Program prog = createParser(vsl);
+        System.out.println(prog.toIR());
     }
 }

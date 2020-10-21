@@ -9,6 +9,7 @@ import TP2.SymbolTable.*;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Declaration extends Statement {
@@ -17,6 +18,7 @@ public class Declaration extends Statement {
     private final Type type;
 
     public Declaration(Type type, String ident) {
+        Objects.requireNonNull(type);
         this.ident = ident;
         this.type = type;
     }

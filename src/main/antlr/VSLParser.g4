@@ -48,7 +48,7 @@ listDeclaration [Type typ, List<Declaration> list] returns [List<Declaration> ou
     ;
 
 type returns [Type out]
-    : INT { new Int(); }
+    : INT { $out = new Int(); }
     ;
 
 expression returns [Expression out]
