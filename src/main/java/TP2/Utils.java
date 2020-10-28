@@ -67,19 +67,4 @@ public class Utils {
       this.length = length;
     }
   }
-
-  /**
-   * Traite les erreurs que peuvent renvoyer une fonction pour pouvoir faire du lambda
-   * @param fun une fonction renvoyant une exception de type NPE ou TypeException
-   * @param map une table de symbole
-   * @return une instruction résultante de l'exécution de fun sur map
-   */
-  public static Llvm.IR errorWrapper(Function<SymbolTable, Llvm.IR> fun, SymbolTable map) {
-    try {
-      return fun.apply(map);
-    } catch(NullPointerException | TypeException e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
 }

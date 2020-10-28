@@ -25,7 +25,6 @@ public class ExpressionTest {
     public void atomicExpression() {
         final String INPUT = "5";
         String result = createParser(INPUT).pp();
-        System.out.println(createParser(INPUT).toIR().ir.toString());
         assertEquals(result, "5");
     }
 

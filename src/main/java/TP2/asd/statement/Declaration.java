@@ -31,14 +31,13 @@ public class Declaration extends Statement {
     @Override
     public Llvm.IR toIR(SymbolTable table) throws TypeException, NullPointerException {
 
-        final Optional<SymbolTable.Symbol> variable = table.lookup(ident);
+        final VariableSymbol variable = new VariableSymbol(type, ident);
+        final boolean isAdded = table.add(variable);
 
-        if(variable.isPresent())
-            throw new NullPointerException("Variable '" + ident + "' is already defined." + "\nat '" + pp() + "'.");
+        if(!isAdded)
+            throw new IllegalStateException("Variable '" + ident + "' is already defined." + "\nat '" + pp() + "'.");
 
-        table.add(new VariableSymbol(type, ident));
-
-        final Llvm.Declaration instruction = new Llvm.Declaration(type.toLlvmType(), ident);
+        final Llvm.Declaration instruction = new Llvm.Declaration(type.toLlvmType(), variable.toString());
 
         return new Llvm.IR(new LinkedList<>(), new LinkedList<>(Arrays.asList(instruction)));
     }

@@ -44,7 +44,7 @@ public class Main {
 
         // Output LLVM IR
         System.out.println(ir);
-      } catch(TypeException e) {
+      } catch(TypeException | NullPointerException e) {
         e.printStackTrace(); // Useful for developping, not for the ``end users''!
         System.err.println(e.getMessage());
       }

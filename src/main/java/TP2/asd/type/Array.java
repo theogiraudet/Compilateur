@@ -12,6 +12,14 @@ public class Array extends Type {
         this.size = size;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
     @Override
     public String pp() {
         return type.pp() + '[' + size + ']';

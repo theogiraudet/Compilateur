@@ -169,5 +169,91 @@ public class Llvm {
     }
   }
 
+  static public class Load extends Instruction {
+
+    @Override
+    public String toString() {
+      //%val = load i32, i32* %ptr
+      return "";
+    }
+  }
+
+  static public class Conditional extends Instruction {
+
+    private final String value;
+    private final int equals;
+    private final String destination;
+    private final Comparator comparator;
+
+    public enum Comparator {
+      EQUAL("eq"),
+      NOT_EQUAL("ne");
+
+      private String value;
+
+      Comparator(String ne) { value = ne; }
+    }
+
+    public Conditional(String value, int equals, String destination, Comparator comparator) {
+      this.value = value;
+      this.equals = equals;
+      this.destination = destination;
+      this.comparator = comparator;
+    }
+
+    @Override
+    public String toString() {
+      //%cond = icmp eq i32 %a, %b
+      return destination + " = " + comparator.value + " i32 " + "%" + value + ", " + equals + '\n';
+    }
+  }
+
+  static public class ConditionalBranch extends Instruction {
+
+    private final String cond;
+    private final String ifLabel;
+    private final String elseLabel;
+
+    public ConditionalBranch(String cond, String ifLabel, String elseLabel) {
+      this.cond = cond;
+      this.ifLabel = ifLabel;
+      this.elseLabel = elseLabel;
+    }
+
+    @Override
+    public String toString() {
+      //br i1 <cond>, label <iftrue>, label <iffalse>
+      return "br i1 " + cond + ", label " + ifLabel + ", label " + elseLabel + '\n';
+    }
+  }
+
+  static public class UnconditionalBranch extends Instruction {
+
+    private final String label;
+
+    public UnconditionalBranch(String label) {
+      this.label = label;
+    }
+
+    @Override
+    public String toString() {
+      return "br label " + label + "\n";
+    }
+  }
+
+  static public class Label extends Instruction {
+
+    private final String label;
+
+    public Label(String label) {
+      this.label = label;
+    }
+
+    @Override
+    public String toString() {
+      return label + ":\n";
+    }
+  }
+
   // TODO : other instructions
 }

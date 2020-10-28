@@ -25,10 +25,13 @@ public class SymbolTable {
     }
 
     public String getIdent() { return ident; }
+
+    @Override public String toString() { return getIdent(); }
   }
 
   public static class VariableSymbol extends Symbol {
     private final Type type;
+    private int block;
 
     public VariableSymbol(Type type, String ident) {
       super(ident);
@@ -38,6 +41,8 @@ public class SymbolTable {
     public Type getType() {
       return type;
     }
+
+    @Override public String toString() { return block + "." + getIdent(); }
 
     @Override public boolean equals(Object obj) {
       if(obj == null) return false;
@@ -85,21 +90,29 @@ public class SymbolTable {
     }
   }
 
+  private static int id = 0;
+
   // Store the table as a map
   private Map<String, Symbol> table;
   // Parent table
   private SymbolTable parent;
+  // Block ID
+  private int blockId;
+
+  public static void reset() {
+    id = 0;
+  }
 
   // Construct a new symbol table
   public SymbolTable() {
-    this.table = new HashMap<String, Symbol>();
-    this.parent = null;
+    this(null);
   }
 
   // Construct a new symbol table with a parent
   public SymbolTable(SymbolTable parent) {
-    this.table = new HashMap<String, Symbol>();
+    this.table = new HashMap<>();
     this.parent = parent;
+    blockId = id++;
   }
 
   // Add a new symbol
@@ -109,6 +122,9 @@ public class SymbolTable {
     if(res != null) {
       return false;
     }
+
+    if(sym instanceof VariableSymbol)
+      ((VariableSymbol)sym).block = blockId;
 
     this.table.put(sym.ident, sym);
     return true;

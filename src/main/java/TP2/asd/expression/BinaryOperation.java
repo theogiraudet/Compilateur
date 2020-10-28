@@ -1,5 +1,6 @@
 package TP2.asd.expression;
 
+import TP2.SymbolTable;
 import TP2.llvm.Llvm;
 import TP2.TypeException;
 import TP2.Utils;
@@ -25,9 +26,9 @@ public abstract class BinaryOperation extends Expression {
     protected abstract QuadriFunction<Llvm.Type, String, String, String, Llvm.Instruction> getFunction();
 
     @Override
-    public RetExpression toIR() throws TypeException {
-        final RetExpression leftRet = left.toIR();
-        final RetExpression rightRet = right.toIR();
+    public RetExpression toIR(SymbolTable table) throws TypeException {
+        final RetExpression leftRet = left.toIR(table);
+        final RetExpression rightRet = right.toIR(table);
 
         // We check if the types mismatches
         if(!leftRet.type.equals(rightRet.type)) {

@@ -1,6 +1,7 @@
 package TP2;
 
 import TP2.asd.type.Int;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -9,6 +10,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class SymbolTableTest {
+
+  @BeforeEach
+  public void reset() {
+    SymbolTable.reset();
+  }
 
   @Test
   public void testLookupEmpty() {
@@ -25,6 +31,7 @@ public class SymbolTableTest {
     assertTrue(table.add(sym));
 
     assertFalse(table.lookup("unknown").isPresent());
+    System.out.println(sym.getIdent());
     assertTrue(table.lookup(sym.getIdent()).isPresent());
     assertEquals(table.lookup(sym.getIdent()).get(), sym);
 
