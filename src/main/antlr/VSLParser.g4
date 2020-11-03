@@ -28,6 +28,10 @@ program returns [Program out]
 statement returns  [Statement out]
     : i = IDENT AFFECT e = expression { $out = new Assignment($i.text, $e.out); }
     | b = block { $out = $b.out; }
+    | IF e = expression THEN s1 = statement
+        ((ELSE s2 = statement  { $out = new If($e.out,$s1.out,$s2.out) ; } )
+        | { $out = new If($e.out,$s1.out) ; } ) FI
+    | WHILE e = expression DO s = statement  DONE { $out = new While($e.out,$s.out) ; }
     ;
 
 block returns [Block out]
