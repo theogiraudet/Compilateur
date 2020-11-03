@@ -1,0 +1,6 @@
+IF a THEN
+{
+a:=a+1
+}
+ELSE
+FI

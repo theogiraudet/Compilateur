@@ -1,0 +1,5 @@
+WHILE n DO
+{
+    n:=n-1
+}
+DONE
