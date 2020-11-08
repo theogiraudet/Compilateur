@@ -24,7 +24,8 @@ jar {
   manifest {
     attributes (
       'Main-Class': 'TP2.Main',
-      'Class-Path': configurations.runtimeClasspath.files.join(' ')
+      //'Class-Path': configurations.runtimeClasspath.files.join(' ')
+      'Class-Path': configurations.compile.collect{it.toURI().toString()}.join(' ')
     )
   }
 }

@@ -6,7 +6,10 @@ import TP2.asd.type.Array;
 import TP2.asd.type.Int;
 import TP2.llvm.Llvm;
 
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class VarExpression extends Expression {
 

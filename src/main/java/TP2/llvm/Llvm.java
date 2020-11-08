@@ -169,12 +169,42 @@ public class Llvm {
     }
   }
 
+  static public class GetElementPtr extends Instruction {
+
+    private final Array type;
+    private final String position;
+    private final String source;
+    private final String destination;
+
+    public GetElementPtr(Array type, String position, String source, String destination) {
+      this.type = type;
+      this.position = position;
+      this.source = source;
+      this.destination = destination;
+    }
+
+    @Override
+    public String toString() {
+      return destination + " = getelementptr" + type.toString() + ", " + type.toString() + "%" + source + ", i64 0, i32" + position;
+    }
+  }
+
   static public class Load extends Instruction {
+
+    Type type;
+    String destination;
+    String value;
+
+    public Load(Type type, String destination, String value) {
+      this.type = type;
+      this.destination = destination;
+      this.value = value;
+    }
 
     @Override
     public String toString() {
       //%val = load i32, i32* %ptr
-      return "";
+      return "%" + destination + " = load " + type + ", " + type + "* " + value;
     }
   }
 
