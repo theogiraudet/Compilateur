@@ -11,9 +11,9 @@ import java.util.Optional;
 public class ArrayExpression extends Expression {
 
     private final String ident;
-    private final int index;
+    private final Expression index;
 
-    public ArrayExpression(String ident, int index) {
+    public ArrayExpression(String ident, Expression index) {
         this.ident = ident;
         this.index = index;
     }
@@ -44,8 +44,7 @@ public class ArrayExpression extends Expression {
 
         Array type = ((Array)var.getType());
 
-        if(type.getSize() <= index)
-            throw new ArrayIndexOutOfBoundsException("Index " + index + " found for an array of size " + type.getSize() + ".");
+
 
 
         //TODO À finir

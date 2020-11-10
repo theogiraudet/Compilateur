@@ -86,7 +86,7 @@ hpop returns [BiFunction<Expression, Expression, Expression> op, Expression out]
 primary returns [Expression out]
     : LP e = expression RP { $out=$e.out; }
     | INTEGER { $out = new IntegerExpression($INTEGER.int); }
-    | id=IDENT (( LSB  in = INTEGER RSB { $out = new ArrayExpression($id.text, $in.int); })
-               | { $out = new VarExpression($id.text); })
+    | id=IDENT (( LSB  in = expression RSB { $out = new ArrayElementVariable($id.text, $in.out); })
+               | { $out = new SimpleVariable($id.text); })
     // TODO : that's all?
     ;

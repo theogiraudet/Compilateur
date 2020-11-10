@@ -3,7 +3,7 @@ package TP2.asd.variable;
 import TP2.SymbolTable;
 import TP2.asd.expression.Expression;
 
-public abstract class Variable {
+public abstract class Variable extends Expression {
 
     public abstract String pp();
 

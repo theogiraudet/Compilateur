@@ -27,7 +27,7 @@ public class DeclarationTest {
 
     @Test
     public void assignment() throws IOException {
-        final String vsl = UtilsFile.getFileContent("testsPersos/testDecl0V.vsl");
+        final String vsl = UtilsFile.getFileContent("testsPersos/Decl/testDecl0V.vsl");
         final String result = "%1.a = alloca i32\n" +
                 "%1.b = alloca i32\n" +
                 "%1.c = alloca i32\n" +
@@ -43,7 +43,7 @@ public class DeclarationTest {
     @DisplayName("Declaration sans ident")
     @Test
     public void declaration2() throws IOException {
-        final String vsl = UtilsFile.getFileContent("testsPersos/testDecl1F.vsl");
+        final String vsl = UtilsFile.getFileContent("testsPersos/Decl/testDecl1F.vsl");
         createParser(vsl);
         assertEquals(1, parser.getNumberOfSyntaxErrors());
     }
@@ -51,7 +51,7 @@ public class DeclarationTest {
     @DisplayName("Declaration finissant par un virgule et non un ident")
     @Test
     public void declaration3() throws IOException {
-        final String vsl = UtilsFile.getFileContent("testsPersos/testDecl2F.vsl");
+        final String vsl = UtilsFile.getFileContent("testsPersos/Decl/testDecl2F.vsl");
         createParser(vsl);
         assertEquals(1, parser.getNumberOfSyntaxErrors());
     }
@@ -59,14 +59,14 @@ public class DeclarationTest {
     @DisplayName("Declaration avec un tableau dont le crochet de fermeture manque")
     @Test
     public void declaration4() throws IOException {
-        final String vsl = UtilsFile.getFileContent("testsPersos/testDecl3F.vsl");
+        final String vsl = UtilsFile.getFileContent("testsPersos/Decl/testDecl3F.vsl");
         createParser(vsl);
         assertEquals(1, parser.getNumberOfSyntaxErrors());
     }
 
     @Test
     public void declaration5() throws IOException {
-        final String vsl = UtilsFile.getFileContent("testsPersos/testDecl4V.vsl");
+        final String vsl = UtilsFile.getFileContent("testsPersos/Decl/testDecl4V.vsl");
         final String result = "%1.a = alloca i32\n" +
                 "store i32 15, i32* %1.a";
 
@@ -77,7 +77,7 @@ public class DeclarationTest {
     @DisplayName("Declaration avec deux variables du même nom")
     @Test
     public void declaration6() throws IOException {
-        final String vsl = UtilsFile.getFileContent("testsPersos/testDecl5F.vsl");
+        final String vsl = UtilsFile.getFileContent("testsPersos/Decl/testDecl5F.vsl");
         Program prog = createParser(vsl);
         assertThrows(IllegalStateException.class, prog::toIR);
     }
@@ -85,7 +85,7 @@ public class DeclarationTest {
     @DisplayName("Declaration avec deux variables, dont un tableau, du même nom")
     @Test
     public void declaration7() throws IOException {
-        final String vsl = UtilsFile.getFileContent("testsPersos/testDecl6F.vsl");
+        final String vsl = UtilsFile.getFileContent("testsPersos/Decl/testDecl6F.vsl");
         Program prog = createParser(vsl);
         assertThrows(IllegalStateException.class, prog::toIR);
     }
@@ -93,7 +93,7 @@ public class DeclarationTest {
     @DisplayName("Declaration d'une variable avec pour nom un entier")
     @Test
     public void declaration8() throws IOException {
-        final String vsl = UtilsFile.getFileContent("testsPersos/testDecl7F.vsl");
+        final String vsl = UtilsFile.getFileContent("testsPersos/Decl/testDecl7F.vsl");
         createParser(vsl);
         // Une erreur pour l'ident, et une pour l'affectation
         assertEquals(2, parser.getNumberOfSyntaxErrors());
@@ -102,7 +102,7 @@ public class DeclarationTest {
     @DisplayName("Declaration de deux variables ayant le même nom mais dans deux blocs différents")
     @Test
     public void declaration9() throws IOException {
-        final String vsl = UtilsFile.getFileContent("testsPersos/testDecl8V.vsl");
+        final String vsl = UtilsFile.getFileContent("testsPersos/Decl/testDecl8V.vsl");
         final String result = "%1.a = alloca i32\n" +
                               "%2.a = alloca i32\n" +
                               "store i32 1, i32* %2.a";

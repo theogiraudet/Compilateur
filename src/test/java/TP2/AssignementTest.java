@@ -36,7 +36,7 @@ public class AssignementTest {
     @DisplayName("Affectation à une variable non déclarée")
     @Test
     public void assignement1() throws IOException {
-        final String vsl = UtilsFile.getFileContent("testsPersos/testAffect0F.vsl");
+        final String vsl = UtilsFile.getFileContent("testsPersos/Affect/testAffect0F.vsl");
         createParser(vsl);
         assertEquals(1, parser.getNumberOfSyntaxErrors());
     }
@@ -44,7 +44,7 @@ public class AssignementTest {
     @DisplayName("Affectation correcte")
     @Test
     public void assignement2() throws IOException {
-        final String vsl = UtilsFile.getFileContent("testsPersos/testAffect1V.vsl");
+        final String vsl = UtilsFile.getFileContent("testsPersos/Affect/testAffect1V.vsl");
         final String result = "%1.y = alloca i32\n" +
                               "%tmp1 = add i32 5, 4\n" +
                               "store i32 %tmp1, i32* %1.y";
