@@ -32,7 +32,7 @@ public class Assignment extends Statement {
         if(!exp.type.equals(varRet.type))
             throw new TypeException("Type mismatch: '" + varRet.type + "' expected, found '" + exp.type, this::pp);
 
-        final Llvm.Instruction instruction = new Llvm.Assignment(exp.type, exp.result, varRet.result;
+        final Llvm.Instruction instruction = new Llvm.Assignment(exp.type, exp.result, varRet.result);
 
         return varRet.ir.append(exp.ir.appendCode(instruction));
     }

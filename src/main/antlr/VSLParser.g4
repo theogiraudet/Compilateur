@@ -16,6 +16,7 @@ options {
   import TP2.asd.expression.*;
   import TP2.asd.type.*;
   import TP2.asd.*;
+  import TP2.asd.variable.*;
 }
 
 
@@ -26,7 +27,7 @@ program returns [Program out]
     ;
 
 statement returns  [Statement out]
-    : i = IDENT AFFECT e = expression { $out = new Assignment($i.text, $e.out); }
+    : v = variable AFFECT e = expression { $out = new Assignment($v.out, $e.out); }
     | b = block { $out = $b.out; }
     | IF e = expression THEN s1 = statement
         ((ELSE s2 = statement  { $out = new If($e.out,$s1.out,$s2.out) ; } )
@@ -51,8 +52,14 @@ listDeclaration [Type typ, List<Declaration> list] returns [List<Declaration> ou
         )*
     ;
 
+variable returns [Variable out]
+    :  i = IDENT ( LSB e = expression RSB {$out = new ArrayElementVariable($i.text,$e.out); }
+                 | {$out = new SimpleVariable($i.text);}  )
+    ;
+
+
 type returns [Type out]
-    : INT { new Int(); }
+    : INT { $out = new Int(); }
     ;
 
 expression returns [Expression out]
