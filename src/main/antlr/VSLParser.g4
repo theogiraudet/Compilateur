@@ -42,7 +42,10 @@ block returns [Block out]
 
 declaration returns [List<Declaration> out]
 @init { List<Declaration> list = new LinkedList(); }
-    : (t = type id = IDENT {list.add(new Declaration($t.out, $id.text)); } listDeclaration[$t.out, list])? { $out = list; }
+    : (t = type id = IDENT
+                     ( LSB i = INTEGER RSB { list.add(new Declaration(new Array($t.out, $i.int), $id.text)); }
+                     | {list.add(new Declaration($t.out, $id.text)); } )
+      listDeclaration[$t.out, list])? { $out = list; }
     ;
 
 listDeclaration [Type typ, List<Declaration> list] returns [List<Declaration> out]
