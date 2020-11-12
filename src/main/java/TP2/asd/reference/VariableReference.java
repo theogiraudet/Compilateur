@@ -1,4 +1,4 @@
-package TP2.asd.variable;
+package TP2.asd.reference;
 
 import TP2.SymbolTable;
 import TP2.TypeException;
@@ -7,11 +7,11 @@ import TP2.llvm.Llvm;
 
 import java.util.Optional;
 
-public class SimpleVariable extends Variable {
+public class VariableReference extends Reference {
 
     private final String ident;
 
-    public SimpleVariable(String ident) {
+    public VariableReference(String ident) {
         this.ident = ident;
     }
 
@@ -26,7 +26,7 @@ public class SimpleVariable extends Variable {
 
         final SymbolTable.VariableSymbol var = isValid(variable);
 
-        return new Expression.RetExpression(new Llvm.IR(Llvm.empty(), Llvm.empty()), var.getType().toLlvmType(), ident);
+        return new Expression.RetExpression(new Llvm.IR(Llvm.empty(), Llvm.empty()), var.getType().toLlvmType(), var.toString());
     }
 
     private SymbolTable.VariableSymbol isValid(Optional<SymbolTable.Symbol> symbol) {

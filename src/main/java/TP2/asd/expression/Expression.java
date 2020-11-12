@@ -4,9 +4,9 @@ import TP2.SymbolTable;
 import TP2.llvm.Llvm;
 import TP2.TypeException;
 
-public abstract class Expression {
-    public abstract String pp();
-    public abstract Expression.RetExpression toIR(SymbolTable table) throws TypeException;
+public interface Expression {
+    public String pp();
+    public Expression.RetExpression toIR(SymbolTable table) throws TypeException;
 
     // Object returned by toIR on expressions, with IR + synthesized attributes
     static public class RetExpression {

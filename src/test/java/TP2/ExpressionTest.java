@@ -85,4 +85,10 @@ public class ExpressionTest {
         createParser(INPUT);
         assertEquals(parser.getNumberOfSyntaxErrors(), 1);
     }
+
+    @Test
+    public void complexExpression8() {
+        final String INPUT = "0 + 147 - 7";
+        assertEquals("((0 + 147) - 7)", createParser(INPUT).pp());
+    }
 }

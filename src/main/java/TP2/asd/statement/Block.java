@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class Block extends Statement {
+public class Block implements Statement {
 
     private final List<Statement> statements;
     private final List<Declaration> declarations;

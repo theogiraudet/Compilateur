@@ -149,7 +149,7 @@ public class Llvm {
 
     @Override
     public String toString() {
-      return "store " + type + " " + value + ", " + type + "* %" + destination + '\n';
+      return "store " + type + " " + value + ", " + type + "* " + destination + '\n';
     }
   }
 
@@ -165,7 +165,7 @@ public class Llvm {
 
     @Override
     public String toString() {
-      return '%' + destination + " = alloca " + type.toString() + '\n';
+      return destination + " = alloca " + type.toString() + '\n';
     }
   }
 
@@ -185,7 +185,7 @@ public class Llvm {
 
     @Override
     public String toString() {
-      return destination + " = getelementptr" + type.toString() + ", " + type.toString() + "%" + source + ", i64 0, i32" + position;
+      return destination + " = getelementptr " + type.toString() + ", " + type.toString() + "* " + source + ", i64 0, i32 " + position + "\n";
     }
   }
 
@@ -204,7 +204,7 @@ public class Llvm {
     @Override
     public String toString() {
       //%val = load i32, i32* %ptr
-      return "%" + destination + " = load " + type + ", " + type + "* " + value;
+      return destination + " = load " + type + ", " + type + "* " + value + "\n";
     }
   }
 
@@ -234,7 +234,7 @@ public class Llvm {
     @Override
     public String toString() {
       //%cond = icmp eq i32 %a, %b
-      return destination + " = " + comparator.value + " i32 " + "%" + value + ", " + equals + '\n';
+      return destination + " = " + comparator.value + " i32 " + value + ", " + equals + '\n';
     }
   }
 

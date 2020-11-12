@@ -7,7 +7,7 @@ import TP2.asd.expression.Expression;
 import TP2.llvm.Llvm;
 import TP2.llvm.Llvm.*;
 
-public class If extends Statement {
+public class If implements Statement {
 
     private final Expression condition;
     private final Statement elseStatement;

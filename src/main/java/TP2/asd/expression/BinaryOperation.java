@@ -9,7 +9,7 @@ import TP2.utils.QuadriFunction;
 /**
  * Représente une opération binaire
  */
-public abstract class BinaryOperation extends Expression {
+public abstract class BinaryOperation implements Expression {
 
     protected Expression left;
     protected Expression right;

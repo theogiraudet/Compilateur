@@ -22,8 +22,6 @@ public class Program {
     public Llvm.IR toIR() throws TypeException, NullPointerException {
       // TODO : change when you extend the language
         final SymbolTable table = new SymbolTable();
-        table.add(new SymbolTable.VariableSymbol(new Int(), "y"));
-        table.add(new SymbolTable.VariableSymbol(new Int(), "x"));
       // computes the IR of the expression
 
       //Expression.RetExpression retExpr = e.toIR();

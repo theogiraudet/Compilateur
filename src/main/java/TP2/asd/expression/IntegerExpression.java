@@ -4,7 +4,7 @@ import TP2.SymbolTable;
 import TP2.llvm.Llvm;
 
 // Concrete class for Expression: constant (integer) case
-  public class IntegerExpression extends Expression {
+  public class IntegerExpression implements Expression {
 
     private final int value;
 

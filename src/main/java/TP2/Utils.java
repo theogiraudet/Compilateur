@@ -12,6 +12,10 @@ public class Utils {
   private static int glob = 0;
   private final static Pattern re = Pattern.compile("\\\\n");
 
+  public static void reset() {
+    tmp = lab = glob = 0;
+  }
+
   // return "  " × level, useful for code indentation
   static public String indent(int level) {
     StringBuilder r = new StringBuilder();

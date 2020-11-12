@@ -22,6 +22,7 @@ public class DeclarationTest {
         parser = new VSLParser(tokens);
 
         SymbolTable.reset();
+        Utils.reset();
         return parser.program().out;
     }
 

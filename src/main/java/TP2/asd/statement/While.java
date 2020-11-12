@@ -7,7 +7,7 @@ import TP2.asd.expression.Expression;
 import TP2.llvm.Llvm;
 import TP2.llvm.Llvm.*;
 
-public class While extends Statement {
+public class While implements Statement {
 
     private final Expression condition;
     private final Statement whileStatement;

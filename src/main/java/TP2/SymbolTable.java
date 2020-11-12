@@ -42,7 +42,7 @@ public class SymbolTable {
       return type;
     }
 
-    @Override public String toString() { return block + "." + getIdent(); }
+    @Override public String toString() { return "%" + block + "." + getIdent(); }
 
     @Override public boolean equals(Object obj) {
       if(obj == null) return false;

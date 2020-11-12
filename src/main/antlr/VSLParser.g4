@@ -16,7 +16,7 @@ options {
   import TP2.asd.expression.*;
   import TP2.asd.type.*;
   import TP2.asd.*;
-  import TP2.asd.variable.*;
+  import TP2.asd.reference.*;
 }
 
 
@@ -55,9 +55,9 @@ listDeclaration [Type typ, List<Declaration> list] returns [List<Declaration> ou
         )*
     ;
 
-variable returns [Variable out]
-    :  i = IDENT ( LSB e = expression RSB {$out = new ArrayElementVariable($i.text,$e.out); }
-                 | {$out = new SimpleVariable($i.text);}  )
+variable returns [Reference out]
+    :  i = IDENT ( LSB e = expression RSB {$out = new ArrayElementReference($i.text,$e.out); }
+                 | {$out = new VariableReference($i.text);}  )
     ;
 
 
@@ -89,7 +89,7 @@ hpop returns [BiFunction<Expression, Expression, Expression> op, Expression out]
 primary returns [Expression out]
     : LP e = expression RP { $out=$e.out; }
     | INTEGER { $out = new IntegerExpression($INTEGER.int); }
-    | id=IDENT (( LSB  in = expression RSB { $out = new ArrayElementVariable($id.text, $in.out); })
-               | { $out = new SimpleVariable($id.text); })
+    | id=IDENT (( LSB  in = expression RSB { $out = new Dereference(new ArrayElementReference($id.text, $in.out)); })
+               | { $out = new Dereference(new VariableReference($id.text)); })
     // TODO : that's all?
     ;

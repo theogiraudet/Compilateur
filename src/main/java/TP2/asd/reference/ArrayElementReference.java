@@ -1,4 +1,4 @@
-package TP2.asd.variable;
+package TP2.asd.reference;
 
 import TP2.SymbolTable;
 import TP2.TypeException;
@@ -9,12 +9,12 @@ import TP2.llvm.Llvm;
 
 import java.util.Optional;
 
-public class ArrayElementVariable extends Variable {
+public class ArrayElementReference extends Reference {
 
     private final String ident;
     private final Expression index;
 
-    public ArrayElementVariable(String ident, Expression index) {
+    public ArrayElementReference(String ident, Expression index) {
         this.ident = ident;
         this.index = index;
     }
@@ -32,13 +32,14 @@ public class ArrayElementVariable extends Variable {
 
         final Expression.RetExpression ret = index.toIR(table);
 
+        // L'index doit être un entier
         if(!(ret.type instanceof Llvm.Int))
             throw new TypeException("Type mismatch: '" + var.getType().pp() + "' expected, found '" + ret.type, this::pp);
 
         final Llvm.IR ir = ret.ir;
         final String dest = Utils.newtmp();
 
-        final Llvm.GetElementPtr instruction = new Llvm.GetElementPtr((Llvm.Array) var.getType().toLlvmType(), ret.result, ident, dest);
+        final Llvm.GetElementPtr instruction = new Llvm.GetElementPtr((Llvm.Array) var.getType().toLlvmType(), ret.result, var.toString(), dest);
 
         // Le type de la variable correspond au type dont le tableau est un agrégat
         return new Expression.RetExpression(ir.appendCode(instruction), ((Array)var.getType()).getType().toLlvmType(), dest);

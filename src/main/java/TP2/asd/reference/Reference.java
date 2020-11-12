@@ -1,9 +1,9 @@
-package TP2.asd.variable;
+package TP2.asd.reference;
 
 import TP2.SymbolTable;
 import TP2.asd.expression.Expression;
 
-public abstract class Variable extends Expression {
+public abstract class Reference {
 
     public abstract String pp();
 
