@@ -25,7 +25,11 @@ public class If implements Statement {
 
     @Override
     public String pp() {
-        return "IF " + condition.pp() + " THEN\n" + ifStatement.pp() + "\nELSE\n" + elseStatement.pp();
+        String result = "IF " + condition.pp() + " THEN\n" + ifStatement.pp();
+        if(elseStatement==null){
+            return result;
+        }
+        return result+=  "\nELSE\n" + elseStatement.pp();
     }
 
     @Override

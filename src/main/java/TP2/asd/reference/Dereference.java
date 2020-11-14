@@ -13,7 +13,7 @@ public class Dereference implements Expression {
         this.reference = reference;
     }
 
-    public String pp() { return null; }
+    public String pp() { return reference.pp(); }
 
     /**
      * @param table une table de symboles

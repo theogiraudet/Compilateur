@@ -1,1 +1,5 @@
+{
+INT n;
+n:=1
 IF n THEN n:=n+1 FI
+}
