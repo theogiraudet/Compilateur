@@ -31,7 +31,6 @@ public abstract class BinaryOperation implements Expression {
         final RetExpression rightRet = right.toIR(table);
 
         // We check if the types mismatches
-        //TODO À tester
         if(!leftRet.type.equals(rightRet.type)) {
             throw new TypeException("Type mismatch: have '" + leftRet.type + "' and '" + rightRet.type + "'.", this::pp);
         }

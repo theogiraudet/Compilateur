@@ -116,4 +116,28 @@ public class AssignementTest {
         Program prog = createParser(vsl);
         assertTrue(prog.toIR().toString().contains(result));
     }
+
+    @DisplayName("Affectation avec erreur de type")
+    @Test
+    public void assignement8() throws IOException {
+        final String vsl = UtilsFile.getFileContent("testsPersos/Affect/testAffect7F.vsl");
+        Program prog = createParser(vsl);
+        assertThrows(TypeException.class, prog::toIR);
+    }
+
+    @DisplayName("Affectation avec une référence d'un tableau qui n'est pas un entier")
+    @Test
+    public void assignement9() throws IOException {
+        final String vsl = UtilsFile.getFileContent("testsPersos/Affect/testAffect8F.vsl");
+        Program prog = createParser(vsl);
+        assertThrows(TypeException.class, prog::toIR);
+    }
+
+    @DisplayName("Affectation à un ident qui n'existe pas")
+    @Test
+    public void assignement10() throws IOException {
+        final String vsl = UtilsFile.getFileContent("testsPersos/Affect/testAffect9F.vsl");
+        Program prog = createParser(vsl);
+        assertThrows(NullPointerException.class, prog::toIR);
+    }
 }

@@ -28,7 +28,7 @@ public class Assignment implements Statement {
         final Expression.RetExpression exp = expression.toIR(table);
 
         if(!exp.type.equals(varRet.type))
-            throw new TypeException("Type mismatch: '" + varRet.type + "' expected, found '" + exp.type, () -> this.pp(0));
+            throw new TypeException("Type mismatch: '" + varRet.type + "' expected, found '" + exp.type  + '\'', () -> this.pp(0));
 
         final Llvm.Instruction instruction = new Llvm.Assignment(exp.type, exp.result, varRet.result);
 

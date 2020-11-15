@@ -33,7 +33,6 @@ public class ArrayElementReference extends Reference {
         final Expression.RetExpression ret = index.toIR(table);
 
         // L'index doit être un entier
-        //TODO À tester
         if(!(ret.type instanceof Llvm.Int))
             throw new TypeException("Type mismatch: '" + var.getType().pp() + "' expected, found '" + ret.type, this::pp);
 
@@ -48,7 +47,6 @@ public class ArrayElementReference extends Reference {
 
     private SymbolTable.VariableSymbol isValid(Optional<SymbolTable.Symbol> symbol) {
 
-        //TODO À tester
         if(!symbol.isPresent())
             throw new NullPointerException("Variable '" + ident + "' is not initialized." + "\nat '" + pp() + "'.");
 
