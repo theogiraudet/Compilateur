@@ -12,7 +12,7 @@ public class MulExpression extends BinaryOperation {
 
     @Override
     protected QuadriFunction<Llvm.Type, String, String, String, Llvm.Instruction> getFunction() {
-        return (a, b, c, d) -> new BinOpInstruction.Mul(a, b, c, d);
+        return BinOpInstruction::mul;
     }
 
     // Pretty-printer

@@ -12,7 +12,7 @@ public class SubExpression extends BinaryOperation {
 
     @Override
     protected QuadriFunction<Llvm.Type, String, String, String, Llvm.Instruction> getFunction() {
-        return (a, b, c, d) -> new BinOpInstruction.Sub(a, b, c, d);
+        return BinOpInstruction::sub;
     }
 
     // Pretty-printer

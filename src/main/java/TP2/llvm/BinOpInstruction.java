@@ -1,59 +1,38 @@
 package TP2.llvm;
 
-public abstract class BinOpInstruction extends Llvm.Instruction {
+public final class BinOpInstruction extends Llvm.Instruction {
 
-    protected Llvm.Type type;
-    protected String left;
-    protected String right;
-    protected String lvalue;
+    protected final String op;
+    protected final Llvm.Type type;
+    protected final String left;
+    protected final String right;
+    protected final String lvalue;
 
-    public BinOpInstruction(Llvm.Type type, String left, String right, String lvalue) {
+    private BinOpInstruction(String op, Llvm.Type type, String left, String right, String lvalue) {
+        this.op = op;
         this.type = type;
         this.left = left;
         this.right = right;
         this.lvalue = lvalue;
     }
 
-    static public class Add extends BinOpInstruction {
-        public Add(Llvm.Type type, String left, String right, String lvalue) {
-            super(type, left, right, lvalue);
-        }
-
-        public String toString() {
-            return lvalue + " = add " + type + " " + left + ", " + right +  "\n";
-        }
+    public String toString() {
+        return lvalue + " = " + op + " " + type + " " + left + ", " + right + "\n";
     }
 
-    static public class Sub extends BinOpInstruction {
-        public Sub(Llvm.Type type, String left, String right, String lvalue) {
-            super(type, left, right, lvalue);
-        }
-
-        public String toString() {
-            return lvalue + " = sub " + type + " " + left + ", " + right +  "\n";
-        }
+    public static BinOpInstruction add(Llvm.Type type, String left, String right, String lvalue) {
+        return new BinOpInstruction("add", type, left, right, lvalue);
     }
 
-    static public class Mul extends BinOpInstruction {
-        public Mul(Llvm.Type type, String left, String right, String lvalue) {
-            super(type, left, right, lvalue);
-        }
-
-        public String toString() {
-            return lvalue + " = mul " + type + " " + left + ", " + right +  "\n";
-        }
+    public static BinOpInstruction sub(Llvm.Type type, String left, String right, String lvalue) {
+        return new BinOpInstruction("sub", type, left, right, lvalue);
     }
 
-    static public class Div extends BinOpInstruction {
-        public Div(Llvm.Type type, String left, String right, String lvalue) {
-            super(type, left, right, lvalue);
-        }
-
-        public String toString() {
-            return lvalue + " = sdiv " + type + " " + left + ", " + right +  "\n";
-        }
+    public static BinOpInstruction mul(Llvm.Type type, String left, String right, String lvalue) {
+        return new BinOpInstruction("mul", type, left, right, lvalue);
     }
 
-
-
+    public static BinOpInstruction div(Llvm.Type type, String left, String right, String lvalue) {
+        return new BinOpInstruction("sdiv", type, left, right, lvalue);
+    }
 }
