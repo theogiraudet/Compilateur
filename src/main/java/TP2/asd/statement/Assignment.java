@@ -5,6 +5,7 @@ import TP2.SymbolTable;
 import TP2.TypeException;
 import TP2.asd.reference.Reference;
 import TP2.llvm.Llvm;
+import TP2.utils.Utils;
 
 public class Assignment implements Statement {
 
@@ -16,8 +17,8 @@ public class Assignment implements Statement {
         this.expression = e;
     }
 
-    public String pp() {
-        return variable.pp() + " := " + expression.pp();
+    public String pp(int indent) {
+        return Utils.indent(indent) + variable.pp() + " := " + expression.pp();
     }
 
     @Override
@@ -27,7 +28,7 @@ public class Assignment implements Statement {
         final Expression.RetExpression exp = expression.toIR(table);
 
         if(!exp.type.equals(varRet.type))
-            throw new TypeException("Type mismatch: '" + varRet.type + "' expected, found '" + exp.type, this::pp);
+            throw new TypeException("Type mismatch: '" + varRet.type + "' expected, found '" + exp.type, () -> this.pp(0));
 
         final Llvm.Instruction instruction = new Llvm.Assignment(exp.type, exp.result, varRet.result);
 

@@ -3,7 +3,7 @@ package TP2.asd.expression;
 import TP2.SymbolTable;
 import TP2.llvm.Llvm;
 import TP2.TypeException;
-import TP2.Utils;
+import TP2.utils.Utils;
 import TP2.utils.QuadriFunction;
 
 /**
@@ -31,6 +31,7 @@ public abstract class BinaryOperation implements Expression {
         final RetExpression rightRet = right.toIR(table);
 
         // We check if the types mismatches
+        //TODO À tester
         if(!leftRet.type.equals(rightRet.type)) {
             throw new TypeException("Type mismatch: have '" + leftRet.type + "' and '" + rightRet.type + "'.", this::pp);
         }

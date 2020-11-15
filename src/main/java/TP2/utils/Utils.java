@@ -1,4 +1,4 @@
-package TP2;
+package TP2.utils;
 
 import TP2.llvm.Llvm;
 

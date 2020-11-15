@@ -1,5 +1,4 @@
 {
-INT n
-n:=1
+INT n[10]
 IF n THEN n:=n+1 FI
 }

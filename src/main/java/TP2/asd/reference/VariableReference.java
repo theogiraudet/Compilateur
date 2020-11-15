@@ -33,6 +33,7 @@ public class VariableReference extends Reference {
         if(!symbol.isPresent())
             throw new NullPointerException("Variable '" + ident + "' is not initialized." + "\nat '" + pp() + "'.");
 
+        //TODO À tester
         if(!(symbol.get() instanceof SymbolTable.VariableSymbol))
             throw new TypeException("Identifier '" + ident + "' is not an identifier of variable.", this::pp);
 

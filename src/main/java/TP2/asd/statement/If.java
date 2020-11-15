@@ -2,7 +2,7 @@ package TP2.asd.statement;
 
 import TP2.SymbolTable;
 import TP2.TypeException;
-import TP2.Utils;
+import TP2.utils.Utils;
 import TP2.asd.expression.Expression;
 import TP2.llvm.Llvm;
 import TP2.llvm.Llvm.*;
@@ -24,21 +24,19 @@ public class If implements Statement {
     }
 
     @Override
-    public String pp() {
-        String result = "IF " + condition.pp() + " THEN\n" + ifStatement.pp();
-        if(elseStatement==null){
-            return result;
-        }
-        return result+=  "\nELSE\n" + elseStatement.pp();
+    public String pp(int nbIndent) {
+        String result = Utils.indent(nbIndent) + "IF " + condition.pp() + " THEN\n" + ifStatement.pp(nbIndent + 1);
+        if(elseStatement == null)
+            return result + "\n" + Utils.indent(nbIndent) + "FI";
+        return result + "\n" + Utils.indent(nbIndent) + "ELSE\n" + elseStatement.pp(nbIndent + 1) + "\n" + Utils.indent(nbIndent) + "FI";
     }
 
     @Override
     public Llvm.IR toIR(SymbolTable table) throws TypeException, NullPointerException {
         final Expression.RetExpression condRet = condition.toIR(table);
-        final Llvm.IR ifIr = ifStatement.toIR(table);
 
         if(!(condRet.type instanceof Llvm.Int))
-            throw new TypeException("Type mismatch: 'INT' expected, found '" + condRet.type, this::pp);
+            throw new TypeException("Type mismatch: 'INT' expected, found '" + condRet.type, () -> this.pp(0));
 
         final Llvm.IR ir = condRet.ir;
         // Création des labels
@@ -56,6 +54,7 @@ public class If implements Statement {
         ir.appendCode(new ConditionalBranch(condLabel, ifLabel, elseStatement != null ? elseLabel : endLabel));
 
         // If
+        final Llvm.IR ifIr = ifStatement.toIR(table);
         ir.appendCode(new Label(ifLabel));
         ir.append(ifIr);
         if(elseStatement != null)

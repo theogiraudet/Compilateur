@@ -1,0 +1,11 @@
+{
+INT a
+IF a THEN a:=a+1
+ELSE
+{
+    IF a + 1 THEN
+        a:=a-1
+        FI
+}
+FI
+}

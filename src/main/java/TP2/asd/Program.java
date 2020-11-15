@@ -15,12 +15,11 @@ public class Program {
 
     // Pretty-printer
     public String pp() {
-      return statement.pp();
+      return statement.pp(1);
     }
 
     // IR generation
     public Llvm.IR toIR() throws TypeException, NullPointerException {
-      // TODO : change when you extend the language
         final SymbolTable table = new SymbolTable();
       // computes the IR of the expression
 

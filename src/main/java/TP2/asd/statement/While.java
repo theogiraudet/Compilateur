@@ -2,7 +2,7 @@ package TP2.asd.statement;
 
 import TP2.SymbolTable;
 import TP2.TypeException;
-import TP2.Utils;
+import TP2.utils.Utils;
 import TP2.asd.expression.Expression;
 import TP2.llvm.Llvm;
 import TP2.llvm.Llvm.*;
@@ -18,8 +18,9 @@ public class While implements Statement {
     }
 
     @Override
-    public String pp() {
-        return null;
+    public String pp(int nbIndent) {
+        return Utils.indent(nbIndent) + "WHILE " + condition.pp() + "DO\n" + whileStatement.pp(nbIndent + 1)
+                + Utils.indent(nbIndent) + "DONE\n";
     }
 
     @Override
@@ -28,7 +29,7 @@ public class While implements Statement {
         final Llvm.IR whileIr = whileStatement.toIR(table);
 
         if(!(condRet.type instanceof Llvm.Int))
-            throw new TypeException("Type mismatch: 'INT' expected, found '" + condRet.type, this::pp);
+            throw new TypeException("Type mismatch: 'INT' expected, found '" + condRet.type, () -> this.pp(0));
 
         final Llvm.IR ir = condRet.ir;
         // Création des labels

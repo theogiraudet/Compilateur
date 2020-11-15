@@ -134,7 +134,6 @@ public class Llvm {
     }
   }
 
-
   static public class Assignment extends Instruction {
 
     Type type;
@@ -234,7 +233,7 @@ public class Llvm {
     @Override
     public String toString() {
       //%cond = icmp eq i32 %a, %b
-      return destination + " = " + comparator.value + " i32 " + value + ", " + equals + '\n';
+      return destination + " = icmp " + comparator.value + " i32 " + value + ", " + equals + '\n';
     }
   }
 
@@ -253,7 +252,7 @@ public class Llvm {
     @Override
     public String toString() {
       //br i1 <cond>, label <iftrue>, label <iffalse>
-      return "br i1 " + cond + ", label " + ifLabel + ", label " + elseLabel + '\n';
+      return "br i1 " + cond + ", label %" + ifLabel + ", label %" + elseLabel + '\n';
     }
   }
 
@@ -267,7 +266,7 @@ public class Llvm {
 
     @Override
     public String toString() {
-      return "br label " + label + "\n";
+      return "br label %" + label + "\n";
     }
   }
 

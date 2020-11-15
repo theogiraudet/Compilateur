@@ -1,9 +1,9 @@
 package TP2.asd.statement;
 
 import TP2.SymbolTable;
-import TP2.TypeException;
 import TP2.llvm.Llvm;
 import TP2.utils.Try;
+import TP2.utils.Utils;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,20 +20,17 @@ public class Block implements Statement {
     }
 
     @Override
-    public String pp() {
-        return "{\n" +
-                statements.stream().map(Statement::pp).collect(Collectors.joining("\n\t")) +
-                "\n}";
+    public String pp(int nbIndent) {
+        return Utils.indent(nbIndent - 1) + "{\n" +
+                declarations.stream().map(d -> d.pp(nbIndent)).collect(Collectors.joining("\n")) +
+                statements.stream().map(s -> s.pp(nbIndent)).collect(Collectors.joining("\n")) +
+                "\n" + Utils.indent(nbIndent - 1) + "}";
     }
 
     @Override
     public Llvm.IR toIR(SymbolTable table) throws RuntimeException {
         // Nouvelle table de contexte
         final SymbolTable newTable = new SymbolTable(table);
-
-        /*final Optional<Llvm.IR> dec = declarations.stream()
-                .map(s -> errorWrapper(s::toIR, newTable))
-                .reduce((acc, ir) -> acc.append(ir));*/
 
         final Optional<Try<Llvm.IR>> dec =
                     declarations.stream()

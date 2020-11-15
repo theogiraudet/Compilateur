@@ -2,7 +2,7 @@ package TP2.asd.reference;
 
 import TP2.SymbolTable;
 import TP2.TypeException;
-import TP2.Utils;
+import TP2.utils.Utils;
 import TP2.asd.expression.Expression;
 import TP2.asd.type.Array;
 import TP2.llvm.Llvm;
@@ -33,6 +33,7 @@ public class ArrayElementReference extends Reference {
         final Expression.RetExpression ret = index.toIR(table);
 
         // L'index doit être un entier
+        //TODO À tester
         if(!(ret.type instanceof Llvm.Int))
             throw new TypeException("Type mismatch: '" + var.getType().pp() + "' expected, found '" + ret.type, this::pp);
 
@@ -47,9 +48,11 @@ public class ArrayElementReference extends Reference {
 
     private SymbolTable.VariableSymbol isValid(Optional<SymbolTable.Symbol> symbol) {
 
+        //TODO À tester
         if(!symbol.isPresent())
             throw new NullPointerException("Variable '" + ident + "' is not initialized." + "\nat '" + pp() + "'.");
 
+        //TODO À tester
         if(!(symbol.get() instanceof SymbolTable.VariableSymbol))
             throw new TypeException("Identifier '" + ident + "' is not an identifier of variable.", this::pp);
 

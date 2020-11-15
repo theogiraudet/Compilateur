@@ -1,7 +1,7 @@
 package TP2.asd.reference;
 
 import TP2.SymbolTable;
-import TP2.Utils;
+import TP2.utils.Utils;
 import TP2.asd.expression.Expression;
 import TP2.llvm.Llvm;
 

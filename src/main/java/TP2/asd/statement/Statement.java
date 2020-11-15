@@ -5,6 +5,6 @@ import TP2.TypeException;
 import TP2.llvm.Llvm;
 
 public interface Statement {
-    public String pp();
-    public Llvm.IR toIR(SymbolTable table) throws TypeException, NullPointerException;
+    String pp(int nbIndent);
+    Llvm.IR toIR(SymbolTable table) throws TypeException, NullPointerException;
 }
