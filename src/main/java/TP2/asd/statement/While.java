@@ -7,6 +7,9 @@ import TP2.asd.expression.Expression;
 import TP2.llvm.Llvm;
 import TP2.llvm.Llvm.*;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+
 public class While implements Statement {
 
     private final Expression condition;
@@ -19,7 +22,7 @@ public class While implements Statement {
 
     @Override
     public String pp(int nbIndent) {
-        return Utils.indent(nbIndent) + "WHILE " + condition.pp() + "DO\n" + whileStatement.pp(nbIndent + 1)
+        return Utils.indent(nbIndent) + "WHILE " + condition.pp() + " DO\n" + whileStatement.pp(nbIndent + 1)
                 + Utils.indent(nbIndent) + "DONE\n";
     }
 
@@ -40,26 +43,26 @@ public class While implements Statement {
         final String doLabel = "Do" + number;
         final String doneLabel = "Done" + number;
 
-
         // Ajout du label du while en header de l'évaluation de la condition
-        ir.appendCode(new Label(whileLabel));
+        final Llvm.IR irReturn = new IR(new LinkedList<>(), new LinkedList<>(Arrays.asList(new Label(whileLabel))));
+        irReturn.append(ir);
 
         // Ajout du test d'égalité entre condRet.result et 0
-        ir.appendCode(new Conditional(condRet.result, 0, condLabel, Conditional.Comparator.NOT_EQUAL));
+        irReturn.appendCode(new Conditional(condRet.result, 0, condLabel, Conditional.Comparator.NOT_EQUAL));
 
         // Ajout du branchement
-        ir.appendCode(new ConditionalBranch(condLabel, doLabel, doneLabel));
+        irReturn.appendCode(new ConditionalBranch(condLabel, doLabel, doneLabel));
 
         // Do
-        ir.appendCode(new Llvm.Label(doLabel));
+        irReturn.appendCode(new Llvm.Label(doLabel));
         final Llvm.IR whileIr = whileStatement.toIR(table);
-        ir.append(whileIr);
+        irReturn.append(whileIr);
         // Retour à l'évaluation de la condition
-        ir.appendCode(new UnconditionalBranch(whileLabel));
+        irReturn.appendCode(new UnconditionalBranch(whileLabel));
 
-        ir.appendCode(new Label(doneLabel));
+        irReturn.appendCode(new Label(doneLabel));
 
         // End
-        return ir;
+        return irReturn;
     }
 }
