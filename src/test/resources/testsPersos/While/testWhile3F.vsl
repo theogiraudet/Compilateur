@@ -1,2 +1,6 @@
-WHILE n  n:=n-1
-DONE
+{
+    INT n
+    n:=10
+    WHILE n  n:=n-1
+    DONE
+}

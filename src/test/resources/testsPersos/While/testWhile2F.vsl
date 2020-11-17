@@ -1,1 +1,5 @@
-WHILE n DO n:=n-1
+{
+    INT n
+    n:=10
+    WHILE n DO n:=n-1
+}

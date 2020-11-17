@@ -1,0 +1,13 @@
+{
+    INT n,j
+    n:=10
+    j:=7
+    WHILE n DO{
+        n:=n-1
+        WHILE j DO {
+            j:=j-1
+        }
+        DONE
+    }
+    DONE
+}
