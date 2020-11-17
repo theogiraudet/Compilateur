@@ -7,9 +7,6 @@ import TP2.asd.expression.Expression;
 import TP2.llvm.Llvm;
 import TP2.llvm.Llvm.*;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-
 public class While implements Statement {
 
     private final Expression condition;
@@ -45,25 +42,24 @@ public class While implements Statement {
 
 
         // Ajout du label du while en header de l'évaluation de la condition
-        final Llvm.IR irReturn = new IR(new LinkedList<>(), new LinkedList<>(Arrays.asList(new Label(whileLabel))));
-        irReturn.append(ir);
+        ir.appendCode(new Label(whileLabel));
 
         // Ajout du test d'égalité entre condRet.result et 0
-        irReturn.appendCode(new Conditional(condRet.result, 0, condLabel, Conditional.Comparator.NOT_EQUAL));
+        ir.appendCode(new Conditional(condRet.result, 0, condLabel, Conditional.Comparator.NOT_EQUAL));
 
         // Ajout du branchement
-        irReturn.appendCode(new ConditionalBranch(condLabel, doLabel, doneLabel));
+        ir.appendCode(new ConditionalBranch(condLabel, doLabel, doneLabel));
 
         // Do
-        irReturn.appendCode(new Llvm.Label(doLabel));
+        ir.appendCode(new Llvm.Label(doLabel));
         final Llvm.IR whileIr = whileStatement.toIR(table);
-        irReturn.append(whileIr);
+        ir.append(whileIr);
         // Retour à l'évaluation de la condition
-        irReturn.appendCode(new UnconditionalBranch(whileLabel));
+        ir.appendCode(new UnconditionalBranch(whileLabel));
 
-        irReturn.appendCode(new Label(doneLabel));
+        ir.appendCode(new Label(doneLabel));
 
         // End
-        return irReturn;
+        return ir;
     }
 }
