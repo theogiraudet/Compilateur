@@ -42,7 +42,7 @@ public class While implements Statement {
 
 
         // Ajout du label du while en header de l'évaluation de la condition
-        ir.appendHeader(new Label(whileLabel));
+        ir.appendCode(new Label(whileLabel));
 
         // Ajout du test d'égalité entre condRet.result et 0
         ir.appendCode(new Conditional(condRet.result, 0, condLabel, Conditional.Comparator.NOT_EQUAL));
