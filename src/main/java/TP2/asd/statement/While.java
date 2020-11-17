@@ -26,7 +26,7 @@ public class While implements Statement {
     @Override
     public Llvm.IR toIR(SymbolTable table) throws TypeException, NullPointerException {
         final Expression.RetExpression condRet = condition.toIR(table);
-        final Llvm.IR whileIr = whileStatement.toIR(table);
+
 
         if(!(condRet.type instanceof Llvm.Int))
             throw new TypeException("Type mismatch: 'INT' expected, found '" + condRet.type, () -> this.pp(0));
@@ -52,6 +52,7 @@ public class While implements Statement {
 
         // Do
         ir.appendCode(new Llvm.Label(doLabel));
+        final Llvm.IR whileIr = whileStatement.toIR(table);
         ir.append(whileIr);
         // Retour à l'évaluation de la condition
         ir.appendCode(new UnconditionalBranch(whileLabel));
