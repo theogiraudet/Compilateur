@@ -63,6 +63,7 @@ statement returns  [Statement out]
         ((ELSE s2 = statement  { $out = new If($e.out,$s1.out,$s2.out) ; } )
         | { $out = new If($e.out,$s1.out) ; } ) FI
     | WHILE e = expression DO s = statement  DONE { $out = new While($e.out,$s.out) ; }
+    | f=funcCall {$out=$f.out}
     ;
 
 block returns [Block out]
@@ -104,6 +105,11 @@ expression returns [Expression out]
       ( PLUS  f2 = factor {exp = new AddExpression(exp, $f2.out); }
       | MINUS f2 = factor {exp = new SubExpression(exp, $f2.out); }
     )* { $out = exp; }
+    | f=funcCall {$out=$f.out}
+    ;
+
+funcCall returns [FunctionCall out] :
+    //TODO: définir l'appel de fonctions
     ;
 
 factor returns [Expression out]
