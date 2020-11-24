@@ -17,6 +17,9 @@ import java.util.Optional;
 
 public class SymbolTable {
   // Define different symbols
+
+  private static int id = 0;
+
   public static abstract class Symbol {
     private final String ident; // minimum, used in the storage map
 
@@ -59,7 +62,7 @@ public class SymbolTable {
     private final List<VariableSymbol> arguments; // arguments is an ordered list of VariableSymbol
     private final boolean defined; // false if declared but not defined
 
-    FunctionSymbol(Type returnType, String ident, List<VariableSymbol> arguments, boolean defined) {
+    public FunctionSymbol(Type returnType, String ident, List<VariableSymbol> arguments, boolean defined) {
       super(ident);
       this.returnType = returnType;
       this.arguments = arguments;
@@ -90,12 +93,11 @@ public class SymbolTable {
     }
   }
 
-  private static int id = 0;
-
   // Store the table as a map
   private Map<String, Symbol> table;
   // Parent table
   private SymbolTable parent;
+
   // Block ID
   private int blockId;
 

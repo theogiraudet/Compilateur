@@ -17,6 +17,8 @@ options {
   import TP2.asd.type.*;
   import TP2.asd.*;
   import TP2.asd.reference.*;
+  import TP2.asd.function.*;
+  import TP2.asd.type.Void;
 }
 
 
@@ -26,16 +28,16 @@ program returns [Program out]
     :  i=iFunction EOF { $out = new Program($i.out); } // TODO : change when you extend the language
     ;
 
-iFunction returns [List<iFunction> out]
-@init {List<iFunction> list = new LinkedList();}
+iFunction returns [List<IFunction> out]
+@init {List<IFunction> list = new LinkedList();}
     : (p=decProto {list.add($p.out);} | d=decFunc {list.add($d.out);})+ {$out=list;}
     ;
 
-decFunc returns [Function out]
+decFunc returns [IFunction out]
     :   FUNC t=retType i=IDENT LP p=params RP s=statement {$out=new Function($p.out,$t.out,$i.text,$s.out);}
     ;
 
-decProto returns [Prototype out]
+decProto returns [IFunction out]
     : PROTO t=retType i=IDENT LP p=params RP {$out=new Prototype($p.out,$t.out,$i.text);}
     ;
 
@@ -88,8 +90,8 @@ variable returns [Reference out]
                  | {$out = new VariableReference($i.text);}  )
     ;
 
-retType returns [retType out]
-    : t=type {$out = new retType($t.out);} | VOID {$out = new retType();}
+retType returns [Type out]
+    : t=type {$out = $t.out;} | VOID {$out = new Void();}
     ;
 
 type returns [Type out]

@@ -2,6 +2,7 @@ package TP2.llvm;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 // This file contains a simple LLVM IR representation
 // and methods to generate its string representation
@@ -113,6 +114,31 @@ public class Llvm {
     }
   }
 
+  static public class Void extends Type {
+
+    @Override
+    public String toString() {
+      return "void";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      return o instanceof Void;
+    }
+  }
+
+  static public class Variable {
+
+    private final Type type;
+    private final String ident;
+
+    public Variable(Type type, String ident) {
+      this.type = type;
+      this.ident = ident;
+    }
+
+    public String toString() { return type.toString() + " " + ident; }
+  }
 
   // LLVM IR Instructions
   static public abstract class Instruction {
@@ -281,6 +307,27 @@ public class Llvm {
     @Override
     public String toString() {
       return label + ":\n";
+    }
+  }
+
+  static public class Function extends Instruction {
+
+    private final String ident;
+    private final List<Variable> params;
+    private final Type returnType;
+    private final IR ins;
+
+    public Function(String ident, List<Variable> params, Type returnType, IR ins) {
+      this.ident = ident;
+      this.params = params;
+      this.returnType = returnType;
+      this.ins = ins;
+    }
+
+    public String toString() {
+      return "define " + returnType.toString() + " " + ident + "(" +
+              params.stream().map(Variable::toString).collect(Collectors.joining(", "))
+              + ") {" + ins.toString() + "\n}";
     }
   }
 
