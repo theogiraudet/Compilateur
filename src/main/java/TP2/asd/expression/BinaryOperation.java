@@ -11,8 +11,8 @@ import TP2.utils.QuadriFunction;
  */
 public abstract class BinaryOperation implements Expression {
 
-    protected Expression left;
-    protected Expression right;
+    protected final Expression left;
+    protected final Expression right;
 
     public BinaryOperation(Expression left, Expression right) {
         this.left = left;

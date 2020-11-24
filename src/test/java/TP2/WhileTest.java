@@ -5,6 +5,11 @@ import TP2.utils.Utils;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 
@@ -40,6 +45,7 @@ public class WhileTest {
                               "br i1 %tmp2, label %Do1, label %Done1\n" +
                               "Do1:\n" +
                               "%tmp3 = load i32, i32* %1.n\n" +
+                              "%tmp4 = sub i32 %tmp3, 1\n" +
                               "store i32 %tmp4, i32* %1.n\n" +
                               "br label %While1\n" +
                               "Done1:"   ;
@@ -68,7 +74,7 @@ public class WhileTest {
     public void while4() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/While/testWhile4F.vsl");
         createParser(vsl);
-        assertEquals(1, parser.getNumberOfSyntaxErrors());
+        assertEquals(3, parser.getNumberOfSyntaxErrors());
     }
 
     @DisplayName("While absence corps")
@@ -87,12 +93,13 @@ public class WhileTest {
                               "store i32 10, i32* %1.n\n" +
                               "While1:\n" +
                               "%tmp1 = load i32, i32* %1.n\n" +
-                              "%tmp2 = icmp ne i32 %tmp1, 0\n"+
+                              "%tmp2 = sub i32 %tmp1, 1\n" +
                               "%tmp3 = icmp ne i32 %tmp2, 0\n" +
                               "br i1 %tmp3, label %Do1, label %Done1\n" +
                               "Do1:\n" +
-                              "%tmp3 = load i32, i32* %1.n\n" +
-                              "store i32 %tmp4, i32* %1.n\n" +
+                              "%tmp4 = load i32, i32* %1.n\n" +
+                              "%tmp5 = sub i32 %tmp4, 1\n" +
+                              "store i32 %tmp5, i32* %1.n\n" +
                               "br label %While1\n" +
                               "Done1:"   ;
         Program p = createParser(vsl);
@@ -118,7 +125,7 @@ public class WhileTest {
                               "While1:\n" +
                               "%tmp1 = load i32, i32* %1.n\n" +
                               "%tmp2 = icmp ne i32 %tmp1, 0\n"+
-                              "br i1 %tmp3, label %Do1, label %Done1\n" +
+                              "br i1 %tmp2, label %Do1, label %Done1\n" +
                               "Do1:\n" +
                               "%tmp3 = load i32, i32* %1.n\n" +
                               "%tmp4 = sub i32 %tmp3, 1\n" +
