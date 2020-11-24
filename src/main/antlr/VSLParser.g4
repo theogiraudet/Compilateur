@@ -23,7 +23,35 @@ options {
 // TODO : other rules
 
 program returns [Program out]
-    :  s = statement EOF { $out = new Program($s.out); } // TODO : change when you extend the language
+    :  i=iFunction EOF { $out = new Program($i.out); } // TODO : change when you extend the language
+    ;
+
+iFunction returns [List<iFunction> out]
+@init {List<iFunction> list = new LinkedList();}
+    : (p=decProto {list.add($p.out);} | d=decFunc {list.add($d.out);})+ {$out=list;}
+    ;
+
+decFunc returns [Function out]
+    :   FUNC t=retType i=IDENT LP p=params RP s=statement {$out=new Function($p.out,$t.out,$i.text,$s.out);}
+    ;
+
+decProto returns [Prototype out]
+    : PROTO t=retType i=IDENT LP p=params RP {$out=new Prototype($p.out,$t.out,$i.text);}
+    ;
+
+params returns [List<VariableParam> out]
+@init { List<VariableParam> list = new LinkedList(); }
+    :  (id=IDENT |
+                 (LSB i=INTEGER RSB {list.add(new VariableParam(new Array(new Int(),$i.int),$id.text));}
+                 | {list.add(new VariableParam(new Int(),$id.text));} )
+        (listParams[list])? {$out=list;})
+    ;
+
+listParams [List<VariableParam> list]
+    :  (COMMA id=IDENT
+                      (LSB i=INTEGER RSB {list.add(new VariableParam(new Array(new Int(),$i.int),$id.text));}
+                      |  {list.add(new VariableParam(new Int(),$id.text));})
+       )+
     ;
 
 statement returns  [Statement out]
@@ -60,6 +88,9 @@ variable returns [Reference out]
                  | {$out = new VariableReference($i.text);}  )
     ;
 
+retType returns [retType out]
+    : t=type {$out = new retType($t.out);} | VOID {$out = new retType();}
+    ;
 
 type returns [Type out]
     : INT { $out = new Int(); }

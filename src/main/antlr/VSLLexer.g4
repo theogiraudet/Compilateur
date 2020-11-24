@@ -38,10 +38,13 @@ FI : 'FI';
 WHILE : 'WHILE' ;
 DO : 'DO';
 DONE : 'DONE';
+FUNC : 'FUNC';
+PROTO : 'PROTO';
 // TODO : other keywords
 
 //types
 INT : 'INT' ;
+VOID : 'VOID';
 
 
 // other tokens (no conflict with keywords in VSL)
