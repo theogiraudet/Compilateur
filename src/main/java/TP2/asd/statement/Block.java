@@ -28,7 +28,7 @@ public class Block implements Statement {
     }
 
     @Override
-    public Llvm.IR toIR(SymbolTable table) throws RuntimeException {
+    public Llvm.IR toIr(SymbolTable table) throws RuntimeException {
         // Nouvelle table de contexte
         final SymbolTable newTable = new SymbolTable(table);
 
@@ -40,7 +40,7 @@ public class Block implements Statement {
         // Un bloc ne pouvant pas ne pas avoir de statements, ins ne sera jamais vide
         final Llvm.IR ins = Try.toTry( // Conversion du Optional<Try<Llvm.IR>> en Try<Try<Llvm.IR>>
                 statements.stream()
-                        .map(s -> Try.tryThis(() -> s.toIR(newTable))) // Application de la fonction toIr sur chacune des déclarations
+                        .map(s -> Try.tryThis(() -> s.toIr(newTable))) // Application de la fonction toIr sur chacune des déclarations
                         .reduce((acc, ir) -> acc.reduce(ir, Llvm.IR::append))) // Réduction du stream en concaténant toutes les instructions
                 .flatMap(i -> i) // Conversion du Try<Try<Llvm.IR>> (à cause de la conversion de Optional à Try) en Try<Llvm.IR>
                 .get();

@@ -50,24 +50,22 @@ public class Function implements IFunction {
             prototyped = true;
         }
 
-        addToTable(table);
+        // Ajout à la table des symboles
+        final List<SymbolTable.VariableSymbol> symbols = params.stream()
+                .map(VariableParam::toVariableSymbol).collect(Collectors.toList());
+        final SymbolTable.FunctionSymbol sym = new SymbolTable.FunctionSymbol(returnType, ident, symbols, true);
+        table.add(sym);
 
+        // Nouvelle table des contextes
         final SymbolTable newTable = new SymbolTable(table);
         params.forEach(p -> newTable.add(p.toVariableSymbol()));
 
         final Llvm.Instruction ins = new Llvm.Function(ident, params.stream().map(VariableParam::toLlvm).collect(Collectors.toList())
-                , returnType.toLlvmType(), body.toIR(newTable));
+                , returnType.toLlvmType(), body.toIr(newTable));
 
         if(prototyped)
             return new Llvm.IR(Collections.singletonList(ins), Collections.emptyList());
         else
             return new Llvm.IR(Collections.emptyList(), Collections.singletonList(ins));
     }
-
-    private void addToTable(SymbolTable table) {
-        final List<SymbolTable.VariableSymbol> symbols = params.stream()
-                .map(VariableParam::toVariableSymbol).collect(Collectors.toList());
-        table.add(new SymbolTable.FunctionSymbol(returnType, ident, symbols, true));
-    }
-
 }

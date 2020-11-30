@@ -2,6 +2,7 @@ package TP2.asd.reference;
 
 import TP2.SymbolTable;
 import TP2.TypeException;
+import TP2.asd.type.Int;
 import TP2.utils.Utils;
 import TP2.asd.expression.Expression;
 import TP2.asd.type.Array;
@@ -33,7 +34,7 @@ public class ArrayElementReference extends Reference {
         final Expression.RetExpression ret = index.toIR(table);
 
         // L'index doit être un entier
-        if(!(ret.type instanceof Llvm.Int))
+        if(!(ret.type instanceof Int))
             throw new TypeException("Type mismatch: '" + var.getType().pp() + "' expected, found '" + ret.type, this::pp);
 
         final Llvm.IR ir = ret.ir;
@@ -42,7 +43,7 @@ public class ArrayElementReference extends Reference {
         final Llvm.GetElementPtr instruction = new Llvm.GetElementPtr((Llvm.Array) var.getType().toLlvmType(), ret.result, var.toString(), dest);
 
         // Le type de la variable correspond au type dont le tableau est un agrégat
-        return new Expression.RetExpression(ir.appendCode(instruction), ((Array)var.getType()).getType().toLlvmType(), dest);
+        return new Expression.RetExpression(ir.appendCode(instruction), ((Array)var.getType()).getType(), dest);
     }
 
     private SymbolTable.VariableSymbol isValid(Optional<SymbolTable.Symbol> symbol) {

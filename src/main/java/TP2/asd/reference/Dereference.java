@@ -24,7 +24,7 @@ public class Dereference implements Expression {
         final Expression.RetExpression ret = reference.toIR(table);
         final String dest = Utils.newtmp();
         // On déréférence de pointeur obtenu
-        final Llvm.Instruction instruction = new Llvm.Load(ret.type, dest, ret.result);
+        final Llvm.Instruction instruction = new Llvm.Load(ret.type.toLlvmType(), dest, ret.result);
         ret.ir.appendCode(instruction);
         return new Expression.RetExpression(ret.ir, ret.type, dest);
     }

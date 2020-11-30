@@ -3,11 +3,13 @@ package TP2.asd.statement;
 import TP2.SymbolTable;
 import TP2.TypeException;
 import TP2.utils.Utils;
+import TP2.asd.type.Int;
 import TP2.asd.expression.Expression;
 import TP2.llvm.Llvm;
 import TP2.llvm.Llvm.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class While implements Statement {
@@ -27,11 +29,11 @@ public class While implements Statement {
     }
 
     @Override
-    public Llvm.IR toIR(SymbolTable table) throws TypeException, NullPointerException {
+    public Llvm.IR toIr(SymbolTable table) throws TypeException, NullPointerException {
         final Expression.RetExpression condRet = condition.toIR(table);
 
 
-        if(!(condRet.type instanceof Llvm.Int))
+        if(!(condRet.type instanceof Int))
             throw new TypeException("Type mismatch: 'INT' expected, found '" + condRet.type, () -> this.pp(0));
 
         final Llvm.IR ir = condRet.ir;
@@ -44,7 +46,7 @@ public class While implements Statement {
         final String doneLabel = "Done" + number;
 
         // Ajout du label du while en header de l'évaluation de la condition
-        final Llvm.IR irReturn = new IR(new LinkedList<>(), new LinkedList<>(Arrays.asList(new Label(whileLabel))));
+        final Llvm.IR irReturn = new IR(new LinkedList<>(), new LinkedList<>(Collections.singletonList(new Label(whileLabel))));
         irReturn.append(ir);
 
         // Ajout du test d'égalité entre condRet.result et 0
@@ -55,7 +57,7 @@ public class While implements Statement {
 
         // Do
         irReturn.appendCode(new Llvm.Label(doLabel));
-        final Llvm.IR whileIr = whileStatement.toIR(table);
+        final Llvm.IR whileIr = whileStatement.toIr(table);
         irReturn.append(whileIr);
         // Retour à l'évaluation de la condition
         irReturn.appendCode(new UnconditionalBranch(whileLabel));

@@ -22,7 +22,7 @@ public class Assignment implements Statement {
     }
 
     @Override
-    public Llvm.IR toIR(SymbolTable table) throws TypeException, NullPointerException {
+    public Llvm.IR toIr(SymbolTable table) throws TypeException, NullPointerException {
 
         final Expression.RetExpression varRet = variable.toIR(table);
         final Expression.RetExpression exp = expression.toIR(table);
@@ -30,7 +30,7 @@ public class Assignment implements Statement {
         if(!exp.type.equals(varRet.type))
             throw new TypeException("Type mismatch: '" + varRet.type + "' expected, found '" + exp.type  + '\'', () -> this.pp(0));
 
-        final Llvm.Instruction instruction = new Llvm.Assignment(exp.type, exp.result, varRet.result);
+        final Llvm.Instruction instruction = new Llvm.Assignment(exp.type.toLlvmType(), exp.result, varRet.result);
 
         return varRet.ir.append(exp.ir.appendCode(instruction));
     }

@@ -155,8 +155,12 @@ public class Llvm {
       this.value = value;
     }
 
+    public Return() {
+      this(new Void(), null);
+    }
+
     public String toString() {
-      return "ret " + type + " " + value + "\n";
+      return "ret " + type + ((type instanceof Void) ? " " + value : "") + "\n";
     }
   }
 
@@ -331,5 +335,36 @@ public class Llvm {
     }
   }
 
+  static public class FunctionCall extends Instruction {
+    private final List<Variable> params;
+    private final String ident;
+    private final Type returnType;
+
+    public FunctionCall(List<Variable> params, String ident, Type returnType) {
+      this.params = params;
+      this.ident = ident;
+      this.returnType = returnType;
+    }
+
+    @Override
+    public String toString() {
+      return "call " + returnType.toString() + " @" + ident + "(" + params.stream().map(Variable::toString).collect(Collectors.joining(", ")) + ")\n";
+    }
+  }
+
+  static public class FunctionCallExpr extends Instruction {
+    private final FunctionCall functionCall;
+    private final String dest;
+
+    public FunctionCallExpr(FunctionCall functionCall, String dest) {
+      this.functionCall = functionCall;
+      this.dest = dest;
+    }
+
+    @Override
+    public String toString() {
+      return dest + " = " + functionCall.toString();
+    }
+  }
   // TODO : other instructions
 }

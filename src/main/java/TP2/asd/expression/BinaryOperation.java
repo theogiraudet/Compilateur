@@ -43,7 +43,7 @@ public abstract class BinaryOperation implements Expression {
         String result = Utils.newtmp();
 
         // new add instruction result = left op right
-        Llvm.Instruction sub = getFunction().apply(leftRet.type, leftRet.result, rightRet.result, result);
+        Llvm.Instruction sub = getFunction().apply(leftRet.type.toLlvmType(), leftRet.result, rightRet.result, result);
 
         // append this instruction
         leftRet.ir.appendCode(sub);

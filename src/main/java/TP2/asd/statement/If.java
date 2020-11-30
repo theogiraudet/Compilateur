@@ -2,9 +2,10 @@ package TP2.asd.statement;
 
 import TP2.SymbolTable;
 import TP2.TypeException;
+import TP2.asd.type.Int;
+import TP2.llvm.Llvm;
 import TP2.utils.Utils;
 import TP2.asd.expression.Expression;
-import TP2.llvm.Llvm;
 import TP2.llvm.Llvm.*;
 
 public class If implements Statement {
@@ -32,10 +33,10 @@ public class If implements Statement {
     }
 
     @Override
-    public Llvm.IR toIR(SymbolTable table) throws TypeException, NullPointerException {
+    public Llvm.IR toIr(SymbolTable table) throws TypeException, NullPointerException {
         final Expression.RetExpression condRet = condition.toIR(table);
 
-        if(!(condRet.type instanceof Llvm.Int))
+        if(!(condRet.type instanceof Int))
             throw new TypeException("Type mismatch: 'INT' expected, found '" + condRet.type, () -> this.pp(0));
 
         final Llvm.IR ir = condRet.ir;
@@ -54,7 +55,7 @@ public class If implements Statement {
         ir.appendCode(new ConditionalBranch(condLabel, ifLabel, elseStatement != null ? elseLabel : endLabel));
 
         // If
-        final Llvm.IR ifIr = ifStatement.toIR(table);
+        final Llvm.IR ifIr = ifStatement.toIr(table);
         ir.appendCode(new Label(ifLabel));
         ir.append(ifIr);
         if(elseStatement != null)
@@ -62,7 +63,7 @@ public class If implements Statement {
 
         // Else
         if(elseStatement != null) {
-            final Llvm.IR elseIr = elseStatement.toIR(table);
+            final Llvm.IR elseIr = elseStatement.toIr(table);
 
             ir.appendCode(new Label(elseLabel));
             ir.append(elseIr);

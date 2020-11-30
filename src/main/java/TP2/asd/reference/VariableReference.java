@@ -26,7 +26,7 @@ public class VariableReference extends Reference {
 
         final SymbolTable.VariableSymbol var = isValid(variable);
 
-        return new Expression.RetExpression(new Llvm.IR(Llvm.empty(), Llvm.empty()), var.getType().toLlvmType(), var.toString());
+        return new Expression.RetExpression(new Llvm.IR(Llvm.empty(), Llvm.empty()), var.getType(), var.toString());
     }
 
     private SymbolTable.VariableSymbol isValid(Optional<SymbolTable.Symbol> symbol) {
