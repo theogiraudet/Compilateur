@@ -1,0 +1,6 @@
+PROTO a()
+PROTO b()
+FUNC a()
+    RETURN 1
+FUNC b()
+    RETURN a()

@@ -1,0 +1,5 @@
+FUNC INT somme(c,a,b) {
+    c:= aplusb(a,b)
+}
+FUNC INT aplusb(a,b)
+    RETURN a+b

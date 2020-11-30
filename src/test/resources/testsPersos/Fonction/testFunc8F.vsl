@@ -1,0 +1,3 @@
+PROTO aplusb(a,b)
+FUNC VOID main()
+    RETURN 1

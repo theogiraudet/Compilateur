@@ -1,0 +1,4 @@
+FUNC INT aplusb(a,b)
+    RETURN a+b
+FUNC VOID main()
+    RETURN aplusb(4)

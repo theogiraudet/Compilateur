@@ -21,11 +21,8 @@ options {
   import TP2.asd.type.Void;
 }
 
-
-// TODO : other rules
-
 program returns [Program out]
-    :  i=iFunction EOF { $out = new Program($i.out); } // TODO : change when you extend the language
+    :  i=iFunction EOF { $out = new Program($i.out); }
     ;
 
 iFunction returns [List<IFunction> out]
@@ -34,17 +31,16 @@ iFunction returns [List<IFunction> out]
     ;
 
 decFunc returns [IFunction out]
-    :   FUNC t=retType i=IDENT LP p=params RP s=statement {$out=new Function($p.out,$t.out,$i.text,$s.out);}
+    :   FUNC t=retType i=IDENT LP (p=params)? RP s=statement {$out=new Function($p.out,$t.out,$i.text,$s.out);}
     ;
 
 decProto returns [IFunction out]
-    : PROTO t=retType i=IDENT LP p=params RP {$out=new Prototype($p.out,$t.out,$i.text);}
+    : PROTO t=retType i=IDENT LP (p=params)? RP {$out=new Prototype($p.out,$t.out,$i.text);}
     ;
 
 params returns [List<VariableParam> out]
 @init { List<VariableParam> list = new LinkedList(); }
-    :  (id=IDENT |
-                 (LSB i=INTEGER RSB {list.add(new VariableParam(new Array(new Int(),$i.int),$id.text));}
+    :  (id=IDENT (LSB i=INTEGER RSB {list.add(new VariableParam(new Array(new Int(),$i.int),$id.text));}
                  | {list.add(new VariableParam(new Int(),$id.text));} )
         (listParams[list])? {$out=list;})
     ;
@@ -64,6 +60,9 @@ statement returns  [Statement out]
         | { $out = new If($e.out,$s1.out) ; } ) FI
     | WHILE e = expression DO s = statement  DONE { $out = new While($e.out,$s.out) ; }
     | f=funcCall {$out=$f.out}
+    | RETURN (e=expression)? //TODO: voir avec le constructeur du return
+    | print //TODO: voir quoi retourner
+    | read // TODO:voir quoi retourner
     ;
 
 block returns [Block out]
@@ -109,8 +108,14 @@ expression returns [Expression out]
     ;
 
 funcCall returns [FunctionCall out] :
-    //TODO: définir l'appel de fonctions
+    i=IDENT LP (e=expParams)? RP
     ;
+
+expParams returns [List<Expression> out]
+@init {List<Expression> list;}
+    : e=expression {list.add(e);} (COMMA a=expression {list.add(a);})* {$out=list;}
+    ;
+
 
 factor returns [Expression out]
 @init { Expression exp = null; }
@@ -125,5 +130,4 @@ primary returns [Expression out]
     | INTEGER { $out = new IntegerExpression($INTEGER.int); }
     | id=IDENT (( LSB  in = expression RSB { $out = new Dereference(new ArrayElementReference($id.text, $in.out)); })
                | { $out = new Dereference(new VariableReference($id.text)); })
-    // TODO : that's all?
     ;

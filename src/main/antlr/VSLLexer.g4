@@ -40,7 +40,9 @@ DO : 'DO';
 DONE : 'DONE';
 FUNC : 'FUNC';
 PROTO : 'PROTO';
-// TODO : other keywords
+RETURN : 'RETURN';
+PRINT : 'PRINT' ;
+READ : 'READ' ;
 
 //types
 INT : 'INT' ;
