@@ -39,6 +39,17 @@ public class Program {
                         .map(s -> Try.tryThis(() -> s.toIR(table))) // Application de la fonction toIr sur chacune des functions
                         .reduce((acc, ir) -> acc.reduce(ir, Llvm.IR::append)); // Réduction du stream en concaténant toutes les instructions
 
+        // Vérification que toutes les fonctions sont déclarées
+        final Optional<SymbolTable.FunctionSymbol> symbol = functions.stream()
+                .map(f -> table.lookup(f.getIdent()))
+                .filter(Optional::isPresent) // Normalement, toutes les fonctions se trouvent dans la table des symboles, juste pour éviter un dangerous get
+                .map(o -> (SymbolTable.FunctionSymbol)o.get())
+                .filter(f -> !f.isDefined())
+                .findAny();
+
+        if(symbol.isPresent())
+            throw new IllegalStateException("Function '" + symbol.get().getIdent() + "' is prototyped but never declared.");
+
         // Traitement des exceptions sur fun
         if(fun.isPresent() && fun.get().failed())
             fun.get().get();

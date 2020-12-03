@@ -40,4 +40,9 @@ public class Prototype implements IFunction {
         return new Llvm.IR(Collections.emptyList(), Collections.emptyList());
     }
 
+    @Override
+    public String getIdent() {
+        return ident;
+    }
+
 }

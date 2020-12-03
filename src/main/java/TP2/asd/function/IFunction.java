@@ -7,4 +7,5 @@ import TP2.llvm.Llvm;
 public interface IFunction {
     String pp();
     Llvm.IR toIR(SymbolTable table) throws TypeException;
+    String getIdent();
 }

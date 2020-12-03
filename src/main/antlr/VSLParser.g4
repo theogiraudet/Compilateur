@@ -59,10 +59,10 @@ statement returns  [Statement out]
         ((ELSE s2 = statement  { $out = new If($e.out,$s1.out,$s2.out) ; } )
         | { $out = new If($e.out,$s1.out) ; } ) FI
     | WHILE e = expression DO s = statement  DONE { $out = new While($e.out,$s.out) ; }
-    | f=funcCall {$out=$f.out}
-    | RETURN (e=expression)? //TODO: voir avec le constructeur du return
-    | print //TODO: voir quoi retourner
-    | read // TODO:voir quoi retourner
+    | f=funcCall {$out=$f.out;}
+    | RETURN (e=expression)? {$out = new Return($e.out); } //TODO: voir avec le constructeur du return
+    //| print //TODO: voir quoi retourner
+    //| read // TODO:voir quoi retourner
     ;
 
 block returns [Block out]
@@ -104,7 +104,7 @@ expression returns [Expression out]
       ( PLUS  f2 = factor {exp = new AddExpression(exp, $f2.out); }
       | MINUS f2 = factor {exp = new SubExpression(exp, $f2.out); }
     )* { $out = exp; }
-    | f=funcCall {$out=$f.out}
+    | f=funcCall {$out=$f.out; }
     ;
 
 funcCall returns [FunctionCall out] :
@@ -112,8 +112,8 @@ funcCall returns [FunctionCall out] :
     ;
 
 expParams returns [List<Expression> out]
-@init {List<Expression> list;}
-    : e=expression {list.add(e);} (COMMA a=expression {list.add(a);})* {$out=list;}
+@init {List<Expression> list = new LinkedList<>();}
+    : e=expression {list.add($e.out);} (COMMA a=expression {list.add($a.out);})* {$out=list;}
     ;
 
 

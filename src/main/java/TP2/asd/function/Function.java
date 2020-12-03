@@ -68,4 +68,9 @@ public class Function implements IFunction {
         else
             return new Llvm.IR(Collections.emptyList(), Collections.singletonList(ins));
     }
+
+    @Override
+    public String getIdent() {
+        return ident;
+    }
 }

@@ -36,7 +36,8 @@ public class FuncTest {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc0V.vsl");
         final String result = ""; //TODO: écrire le résultat llvm attendu
         Program p = createParser(vsl);
-        assertTrue(p.toIR().toString().contains(result));
+        System.out.println(p.toIR().toString());
+        //assertTrue(p.toIR().toString().contains(result));
     }
 
     @DisplayName("Appel à un parametre inexistant/ variable non déclarée")
