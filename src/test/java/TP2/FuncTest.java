@@ -34,13 +34,18 @@ public class FuncTest {
     @Test
     public void func0() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc0V.vsl");
-        final String result = ""; //TODO: écrire le résultat llvm attendu
+        final String result = "define i32 aplusb(a,b) {\n"
+                            + "%tmp1 = load i32, i32* %1.a\n"
+                            + "%tmp2 = load i32, i32* %1.b\n"
+                            + "%tmp3 = add i32 %tmp1, %tmp2\n"
+                            + "ret i32 %tmp3\n"
+                            + "}";
         Program p = createParser(vsl);
         System.out.println(p.toIR().toString());
-        //assertTrue(p.toIR().toString().contains(result));
+        assertTrue(p.toIR().toString().contains(result));
     }
 
-    @DisplayName("Appel à un parametre inexistant/ variable non déclarée")
+    @DisplayName("Appel à un parametre inexistant/ variable non déclarée")\n
     @Test
     public void func1() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc1F.vsl");
@@ -60,7 +65,17 @@ public class FuncTest {
     @Test
     public void func3() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc3V.vsl");
-        final String result = ""; //TODO: écrire le résultat llvm attendu
+        final String result = "define i32 aplusb(a,b) {\n"
+                            + "%tmp1 = load i32, i32* %1.a\n"
+                            + "%tmp2 = load i32, i32* %1.b\n"
+                            + "%tmp3 = add i32 %tmp1, %tmp2\n"
+                            + "ret i32 %tmp3\n"
+                            + "}\n"
+                            + "define i32 somme(c,a,b) {\n"
+                            + "%tmp4 = call i32 @aplusb(%1.a,%1.b)\n"
+                            + "store i32 %tmp4, i32* %1.c\n"
+                            + "ret i32 %1.c\n"
+                            + "}\n";
         Program p = createParser(vsl);
         assertTrue(p.toIR().toString().contains(result));
     }
@@ -69,7 +84,14 @@ public class FuncTest {
     @Test
     public void func4() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc4V.vsl");
-        final String result = ""; //TODO: écrire le résultat llvm attendu
+        final String result = "define i32 a() {\n"
+                            + "%tmp1 = add i32 1, 0\n"
+                            + "ret i32 %tmp1\n"
+                            + "}\n"
+                            + "define i32 b() {\n"
+                            + "%tmp2 = call i32 @a()\n"
+                            + "ret i32 %tmp2\n"
+                            + "}\n";
         Program p = createParser(vsl);
         assertTrue(p.toIR().toString().contains(result));
     }
@@ -105,4 +127,13 @@ public class FuncTest {
         Program p = createParser(vsl);
         assertEquals(1, parser.getNumberOfSyntaxErrors());
     }
+
+    @DisplayName("Proto avec des param différents de la fonction")
+    @Test
+    public void func9() throws IOException {
+        final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc9F.vsl");
+        Program p = createParser(vsl);
+        assertEquals(1, parser.getNumberOfSyntaxErrors());
+    }
+
 }

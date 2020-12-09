@@ -1,0 +1,3 @@
+PROTO INT aplusb(a)
+FUNC INT aplusb(a)
+    RETURN a+b

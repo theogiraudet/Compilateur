@@ -31,11 +31,13 @@ iFunction returns [List<IFunction> out]
     ;
 
 decFunc returns [IFunction out]
-    :   FUNC t=retType i=IDENT LP (p=params)? RP s=statement {$out=new Function($p.out,$t.out,$i.text,$s.out);}
+@init {List<VariableParam> list = new LinkedList();}
+    :   FUNC t=retType i=IDENT LP (p=params {list=$p.out;})? RP s=statement {$out=new Function(list,$t.out,$i.text,$s.out);}
     ;
 
 decProto returns [IFunction out]
-    : PROTO t=retType i=IDENT LP (p=params)? RP {$out=new Prototype($p.out,$t.out,$i.text);}
+@init {List<VariableParam> list = new LinkedList();}
+    : PROTO t=retType i=IDENT LP (p=params {list=$p.out;})? RP {$out=new Prototype(list,$t.out,$i.text);}
     ;
 
 params returns [List<VariableParam> out]
@@ -60,7 +62,7 @@ statement returns  [Statement out]
         | { $out = new If($e.out,$s1.out) ; } ) FI
     | WHILE e = expression DO s = statement  DONE { $out = new While($e.out,$s.out) ; }
     | f=funcCall {$out=$f.out;}
-    | RETURN (e=expression)? {$out = new Return($e.out); } //TODO: voir avec le constructeur du return
+    | RETURN (e=expression)? {$out = new Return($e.out);}
     //| print //TODO: voir quoi retourner
     //| read // TODO:voir quoi retourner
     ;
@@ -107,8 +109,9 @@ expression returns [Expression out]
     | f=funcCall {$out=$f.out; }
     ;
 
-funcCall returns [FunctionCall out] :
-    i=IDENT LP (e=expParams)? RP
+funcCall returns [FunctionCall out]
+@init {List<Expression> list = new LinkedList();} :
+    i=IDENT LP (e=expParams{list=$e.out;})? RP {$out= new FunctionCall($i.text,list);}
     ;
 
 expParams returns [List<Expression> out]

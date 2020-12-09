@@ -2,4 +2,5 @@ FUNC INT aplusb(a,b)
     RETURN a+b
 FUNC INT somme(c,a,b) {
     c:= aplusb(a,b)
+    RETURN c
 }
