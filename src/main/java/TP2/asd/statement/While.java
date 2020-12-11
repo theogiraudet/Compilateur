@@ -1,14 +1,13 @@
 package TP2.asd.statement;
 
-import TP2.SymbolTable;
+import TP2.Context;
 import TP2.TypeException;
-import TP2.utils.Utils;
-import TP2.asd.type.Int;
 import TP2.asd.expression.Expression;
+import TP2.asd.type.Int;
 import TP2.llvm.Llvm;
 import TP2.llvm.Llvm.*;
+import TP2.utils.Utils;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -29,7 +28,7 @@ public class While implements Statement {
     }
 
     @Override
-    public Llvm.IR toIr(SymbolTable table) throws TypeException, NullPointerException {
+    public Llvm.IR toIr(Context table) throws TypeException, NullPointerException {
         final Expression.RetExpression condRet = condition.toIR(table);
 
 

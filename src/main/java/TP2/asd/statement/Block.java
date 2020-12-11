@@ -1,6 +1,6 @@
 package TP2.asd.statement;
 
-import TP2.SymbolTable;
+import TP2.Context;
 import TP2.llvm.Llvm;
 import TP2.utils.Try;
 import TP2.utils.Utils;
@@ -28,9 +28,9 @@ public class Block implements Statement {
     }
 
     @Override
-    public Llvm.IR toIr(SymbolTable table) throws RuntimeException {
+    public Llvm.IR toIr(Context table) throws RuntimeException {
         // Nouvelle table de contexte
-        final SymbolTable newTable = new SymbolTable(table);
+        final Context newTable = new Context(table);
 
         final Optional<Try<Llvm.IR>> dec =
                     declarations.stream()

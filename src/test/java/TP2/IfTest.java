@@ -8,7 +8,9 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class IfTest {
@@ -16,34 +18,35 @@ public class IfTest {
     private VSLParser parser;
 
     private Program createParser(String input) throws RecognitionException {
+        input = "FUNC INT main() {\n" + input + "\n}";
         VSLLexer lexer = new VSLLexer(CharStreams.fromString(input));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
         parser = new VSLParser(tokens);
 
-        SymbolTable.reset();
+        Context.reset();
         Utils.reset();
         return parser.program().out;
     }
 
     @BeforeEach
     public void reset() {
-        SymbolTable.reset();
+        Context.reset();
     }
 
     @DisplayName("If simple statement et condition simple")
     @Test
     public void if1() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/If/testIf0V.vsl");
-        final String result = "%1.n = alloca i32\n" +
-                              "store i32 1, i32* %1.n\n" +
-                              "%tmp1 = load i32, i32* %1.n\n" +
+        final String result = "%3.n = alloca i32\n" +
+                              "store i32 1, i32* %3.n\n" +
+                              "%tmp1 = load i32, i32* %3.n\n" +
                               "%tmp2 = icmp ne i32 %tmp1, 0\n" +
                               "br i1 %tmp2, label %If1, label %End1\n" +
                               "If1:\n" +
-                              "%tmp3 = load i32, i32* %1.n\n" +
+                              "%tmp3 = load i32, i32* %3.n\n" +
                               "%tmp4 = add i32 %tmp3, 1\n" +
-                              "store i32 %tmp4, i32* %1.n\n" +
+                              "store i32 %tmp4, i32* %3.n\n" +
                               "End1:";
         Program p = createParser(vsl);
         assertTrue(p.toIR().toString().contains(result));

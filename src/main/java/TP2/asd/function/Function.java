@@ -1,6 +1,6 @@
 package TP2.asd.function;
 
-import TP2.SymbolTable;
+import TP2.Context;
 import TP2.TypeException;
 import TP2.asd.statement.Statement;
 import TP2.asd.type.Type;
@@ -33,40 +33,54 @@ public class Function implements IFunction {
     }
 
     @Override
-    public Llvm.IR toIR(SymbolTable table) throws TypeException {
-        final Optional<SymbolTable.Symbol> symbolOpt = table.lookup(ident);
-        boolean prototyped = false;
+    public Llvm.IR toIR(Context table) throws TypeException {
+        final Optional<Context.Symbol> symbolOpt = table.lookupSymbol(ident);
 
+        // Création du nouveau symbole
+        List<Context.VariableSymbol> symbols = params.stream()
+                .map(VariableParam::toVariableSymbol).collect(Collectors.toList());
+        final Context.FunctionSymbol sym = new Context.FunctionSymbol(returnType, ident, symbols, true);
+
+        // Si un symbole du même nom est déjà déclaré
         if(symbolOpt.isPresent()) {
-            final SymbolTable.Symbol symbol = symbolOpt.get();
-            if(!(symbol instanceof SymbolTable.FunctionSymbol))
+            final Context.Symbol symbol = symbolOpt.get();
+            if(!(symbol instanceof Context.FunctionSymbol))
                 throw new TypeException("Identifier '" + ident + "' is not an identifier of function.", this::pp);
-            SymbolTable.FunctionSymbol funSymbol = (SymbolTable.FunctionSymbol)symbol;
+            Context.FunctionSymbol funSymbol = (Context.FunctionSymbol)symbol;
 
             if(funSymbol.isDefined())
                 throw new IllegalStateException("Function '" + ident + "' is already defined." + "\nat '" + pp() + "'.");
 
-            table.remove(ident);
-            prototyped = true;
+            if(!funSymbol.isDefined() && !funSymbol.isEqualIgnoreDefine(sym))
+                throw new IllegalStateException("Function '" + ident + "' does not correspond with '" +
+                        ident + "'\nat '" + pp() + "'.");
+
+            table.removeSymbol(ident);
         }
 
         // Ajout à la table des symboles
-        final List<SymbolTable.VariableSymbol> symbols = params.stream()
-                .map(VariableParam::toVariableSymbol).collect(Collectors.toList());
-        final SymbolTable.FunctionSymbol sym = new SymbolTable.FunctionSymbol(returnType, ident, symbols, true);
-        table.add(sym);
+        table.addSymbol(sym);
 
-        // Nouvelle table des contextes
-        final SymbolTable newTable = new SymbolTable(table);
-        params.forEach(p -> newTable.add(p.toVariableSymbol()));
+        // Nouvelle table des contextes & ajout des paramètres
+        final Context newTable = new Context(table, sym);
+        params.forEach(p -> newTable.addSymbol(p.toVariableSymbol()));
 
-        final Llvm.Instruction ins = new Llvm.Function(ident, params.stream().map(VariableParam::toLlvm).collect(Collectors.toList())
-                , returnType.toLlvmType(), body.toIr(newTable));
+        List<Llvm.Variable> llvmParams = params.stream()
+                .map(p -> newTable.lookupSymbol(p.getIdent()))
+                .filter(Optional::isPresent) // Cas impossible, mais pour éviter un dangerous get
+                .map(o -> (Context.VariableSymbol)o.get())
+                .map(symb -> new Llvm.Variable(symb.getType().toLlvmType(), symb.toString()))
+                .collect(Collectors.toList());
 
-        if(prototyped)
+        final Llvm.IR ir = body.toIr(newTable);
+
+        final Llvm.Instruction ins = new Llvm.Function(ident, llvmParams, returnType.toLlvmType(), ir.getCode());
+
+
+        /*if(prototyped)
             return new Llvm.IR(Collections.singletonList(ins), Collections.emptyList());
-        else
-            return new Llvm.IR(Collections.emptyList(), Collections.singletonList(ins));
+        else*/
+            return new Llvm.IR(ir.getHeader(), Collections.singletonList(ins));
     }
 
     @Override

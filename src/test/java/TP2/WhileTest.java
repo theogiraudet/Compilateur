@@ -9,9 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WhileTest {
 
@@ -23,14 +24,14 @@ public class WhileTest {
 
         parser = new VSLParser(tokens);
 
-        SymbolTable.reset();
+        Context.reset();
         Utils.reset();
         return parser.program().out;
     }
 
     @BeforeEach
     public void reset() {
-        SymbolTable.reset();
+        Context.reset();
     }
 
     @DisplayName("While simple en ligne")

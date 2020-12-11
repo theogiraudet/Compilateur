@@ -1,9 +1,9 @@
 package TP2.asd.reference;
 
-import TP2.SymbolTable;
-import TP2.utils.Utils;
+import TP2.Context;
 import TP2.asd.expression.Expression;
 import TP2.llvm.Llvm;
+import TP2.utils.Utils;
 
 public class Dereference implements Expression {
 
@@ -19,7 +19,7 @@ public class Dereference implements Expression {
      * @param table une table de symboles
      * @return l'instruction correspondant à la variable.<br/>
      */
-    public Expression.RetExpression toIR(SymbolTable table) {
+    public Expression.RetExpression toIR(Context table) {
         // On délègue l'obtention du pointeur vers la valeur à Reference
         final Expression.RetExpression ret = reference.toIR(table);
         final String dest = Utils.newtmp();

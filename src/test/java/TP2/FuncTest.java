@@ -8,8 +8,11 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FuncTest {
     private VSLParser parser;
@@ -20,32 +23,31 @@ public class FuncTest {
 
         parser = new VSLParser(tokens);
 
-        SymbolTable.reset();
+        Context.reset();
         Utils.reset();
         return parser.program().out;
     }
 
     @BeforeEach
     public void reset() {
-        SymbolTable.reset();
+        Context.reset();
     }
 
     @DisplayName("Fonction simple")
     @Test
     public void func0() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc0V.vsl");
-        final String result = "define i32 aplusb(a,b) {\n"
+        final String result = "define i32 aplusb(i32 %1.a, i32 %1.b) {\n"
                             + "%tmp1 = load i32, i32* %1.a\n"
                             + "%tmp2 = load i32, i32* %1.b\n"
                             + "%tmp3 = add i32 %tmp1, %tmp2\n"
                             + "ret i32 %tmp3\n"
                             + "}";
         Program p = createParser(vsl);
-        System.out.println(p.toIR().toString());
         assertTrue(p.toIR().toString().contains(result));
     }
 
-    @DisplayName("Appel à un parametre inexistant/ variable non déclarée")\n
+    @DisplayName("Appel à un paramètre inexistant variable non déclarée")
     @Test
     public void func1() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc1F.vsl");

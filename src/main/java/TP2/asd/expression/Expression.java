@@ -1,13 +1,13 @@
 package TP2.asd.expression;
 
-import TP2.SymbolTable;
+import TP2.Context;
+import TP2.TypeException;
 import TP2.asd.type.Type;
 import TP2.llvm.Llvm;
-import TP2.TypeException;
 
 public interface Expression {
     public String pp();
-    public Expression.RetExpression toIR(SymbolTable table) throws TypeException;
+    public Expression.RetExpression toIR(Context table) throws TypeException;
 
     // Object returned by toIR on expressions, with IR + synthesized attributes
     static public class RetExpression {

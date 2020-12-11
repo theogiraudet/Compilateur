@@ -33,7 +33,7 @@ public class ExpressionTest {
 
         parser = new VSLParser(tokens);
 
-        SymbolTable.reset();
+        Context.reset();
         Utils.reset();
         return parser.program().out;
     }

@@ -1,12 +1,15 @@
 package TP2.asd.statement;
 
-import TP2.SymbolTable;
+import TP2.Context;
 import TP2.TypeException;
+import TP2.asd.expression.Expression;
 import TP2.asd.type.Int;
 import TP2.llvm.Llvm;
+import TP2.llvm.Llvm.Conditional;
+import TP2.llvm.Llvm.ConditionalBranch;
+import TP2.llvm.Llvm.Label;
+import TP2.llvm.Llvm.UnconditionalBranch;
 import TP2.utils.Utils;
-import TP2.asd.expression.Expression;
-import TP2.llvm.Llvm.*;
 
 public class If implements Statement {
 
@@ -33,11 +36,11 @@ public class If implements Statement {
     }
 
     @Override
-    public Llvm.IR toIr(SymbolTable table) throws TypeException, NullPointerException {
+    public Llvm.IR toIr(Context table) throws TypeException, NullPointerException {
         final Expression.RetExpression condRet = condition.toIR(table);
 
         if(!(condRet.type instanceof Int))
-            throw new TypeException("Type mismatch: 'INT' expected, found '" + condRet.type, () -> this.pp(0));
+            throw new TypeException("Type mismatch: 'INT' expected, found '" + condRet.type + "'.", () -> this.pp(0));
 
         final Llvm.IR ir = condRet.ir;
         // Création des labels

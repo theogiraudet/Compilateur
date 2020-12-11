@@ -1,8 +1,8 @@
 package TP2.llvm;
 
-import javax.xml.stream.events.Characters;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 // This file contains a simple LLVM IR representation
@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 public class Llvm {
   static public class IR {
-    List<Instruction> header; // IR instructions to be placed before the code (global definitions)
-    List<Instruction> code;   // main code
+    private final List<Instruction> header; // IR instructions to be placed before the code (global definitions)
+    private final List<Instruction> code;   // main code
 
     public IR(List<Instruction> header, List<Instruction> code) {
       this.header = header;
@@ -37,6 +37,14 @@ public class Llvm {
       return this;
     }
 
+    public List<Instruction> getCode() {
+      return Collections.unmodifiableList(code);
+    }
+
+    public List<Instruction> getHeader() {
+      return Collections.unmodifiableList(header);
+    }
+
     // Final string generation
     public String toString() {
       // This header describe to LLVM the target
@@ -52,16 +60,10 @@ public class Llvm {
 
       r.append("\n\n");
 
-      // We create the function main
-      // TODO : remove this when you extend the language
-      r.append("define i32 @main() {\n");
-
 
       for(Instruction inst: code)
         r.append(inst);
 
-      // TODO : remove this when you extend the language
-      r.append("}\n");
 
       return r.toString();
     }
@@ -156,12 +158,8 @@ public class Llvm {
       this.value = value;
     }
 
-    public Return() {
-      this(new Void(), null);
-    }
-
     public String toString() {
-      return "ret " + type + ((type instanceof Void) ? " " + value : "") + "\n";
+      return "ret " + type + ((type instanceof Void) ? "" : " " + value) + "\n";
     }
   }
 
@@ -320,9 +318,9 @@ public class Llvm {
     private final String ident;
     private final List<Variable> params;
     private final Type returnType;
-    private final IR ins;
+    private final List<Instruction> ins;
 
-    public Function(String ident, List<Variable> params, Type returnType, IR ins) {
+    public Function(String ident, List<Variable> params, Type returnType, List<Instruction> ins) {
       this.ident = ident;
       this.params = params;
       this.returnType = returnType;
@@ -332,7 +330,7 @@ public class Llvm {
     public String toString() {
       return "define " + returnType.toString() + " " + ident + "(" +
               params.stream().map(Variable::toString).collect(Collectors.joining(", "))
-              + ") {" + ins.toString() + "\n}";
+              + ") {\n" + ins.stream().map(Instruction::toString).collect(Collectors.joining()) + "}";
     }
   }
 

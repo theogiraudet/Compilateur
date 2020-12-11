@@ -1,6 +1,6 @@
 package TP2.asd.expression;
 
-import TP2.SymbolTable;
+import TP2.Context;
 import TP2.TypeException;
 import TP2.asd.statement.Statement;
 import TP2.asd.type.Type;
@@ -29,7 +29,7 @@ public class FunctionCall implements Statement, Expression {
     }
 
     @Override
-    public RetExpression toIR(SymbolTable table) throws TypeException {
+    public RetExpression toIR(Context table) throws TypeException {
     final Tuple3<Llvm.FunctionCall, Llvm.IR, Type> res = toIrCommon(table);
     final String var = Utils.newtmp();
     final Llvm.Instruction ir = new Llvm.FunctionCallExpr(res._1, var);
@@ -42,21 +42,21 @@ public class FunctionCall implements Statement, Expression {
     }
 
     @Override
-    public Llvm.IR toIr(SymbolTable table) throws TypeException {
+    public Llvm.IR toIr(Context table) throws TypeException {
         final Tuple3<Llvm.FunctionCall, Llvm.IR, Type> res = toIrCommon(table);
         return res._2.appendCode(res._1);
     }
 
 
-    private Tuple3<Llvm.FunctionCall, Llvm.IR, Type> toIrCommon(SymbolTable table) {
-        final Optional<SymbolTable.Symbol> symbolOpt = table.lookup(ident);
+    private Tuple3<Llvm.FunctionCall, Llvm.IR, Type> toIrCommon(Context table) {
+        final Optional<Context.Symbol> symbolOpt = table.lookupSymbol(ident);
         if(!symbolOpt.isPresent())
             throw new NullPointerException("Function '" + ident + "' is not declared." + "\nat '" + pp() + "'.");
 
-        if(!(symbolOpt.get() instanceof SymbolTable.FunctionSymbol))
+        if(!(symbolOpt.get() instanceof Context.FunctionSymbol))
             throw new TypeException("Identifier '" + ident + "' is not an identifier of function.", this::pp);
 
-        final SymbolTable.FunctionSymbol symbol = (SymbolTable.FunctionSymbol) symbolOpt.get();
+        final Context.FunctionSymbol symbol = (Context.FunctionSymbol) symbolOpt.get();
 
         // Vérification du bon nombre de paramètres
         if(params.size() > symbol.getArguments().size())

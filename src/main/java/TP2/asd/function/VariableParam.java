@@ -1,8 +1,7 @@
 package TP2.asd.function;
 
-import TP2.SymbolTable;
+import TP2.Context;
 import TP2.asd.type.Type;
-import TP2.llvm.Llvm;
 
 public class VariableParam {
 
@@ -14,11 +13,11 @@ public class VariableParam {
         this.ident = ident;
     }
 
-    public SymbolTable.VariableSymbol toVariableSymbol() {
-        return new SymbolTable.VariableSymbol(type, ident);
+    public String getIdent() {
+        return ident;
     }
 
-    public Llvm.Variable toLlvm() {
-        return new Llvm.Variable(type.toLlvmType(), ident);
+    public Context.VariableSymbol toVariableSymbol() {
+        return new Context.VariableSymbol(type, ident);
     }
 }

@@ -21,7 +21,7 @@ public class AssignementTest {
 
         VSLParser parser = new VSLParser(tokens);
         Utils.reset();
-        SymbolTable.reset();
+        Context.reset();
         return parser.program().out;
     }
 

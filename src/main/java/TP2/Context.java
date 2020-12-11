@@ -1,25 +1,24 @@
 package TP2;
 
-import java.util.Map;
-
 import TP2.asd.type.Type;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-// This file contains the symbol table definition.
-// A symbol table contains a set of ident and the
-// corresponding symbols.
-// It can have a parent, containing itself other
-// symbols. If a symbol is not found, the request
-// is forwarded to the parent.
-
-public class SymbolTable {
+/**
+ * Représente le contexte d'exécution du code
+ * Le contexte contient une table des symboles correspondant à un ensemble de couple ident vers symbole correspondant.
+ * Un contexte peut avoir un contexte parent. Dans le cas de la recherche d'un symbole, si le contexte
+ * courant ne possède aucun symbole de l'ident spécifié, la requête est remontée au contexte parent.
+ */
+public class Context {
   // Define different symbols
 
   private static int id = 0;
 
+  // Définition des symboles
   public static abstract class Symbol {
     private final String ident; // minimum, used in the storage map
 
@@ -81,49 +80,70 @@ public class SymbolTable {
       return defined;
     }
 
-    @Override public boolean equals(Object obj) {
+    public boolean isEqualIgnoreDefine(Object obj) {
       if(obj == null) return false;
       if(obj == this) return true;
       if(!(obj instanceof FunctionSymbol)) return false;
       FunctionSymbol o = (FunctionSymbol) obj;
       return o.returnType.equals(this.returnType) &&
-        o.getIdent().equals(this.getIdent()) &&
-        o.arguments.equals(this.arguments) &&
-        o.defined == this.defined;
+              o.getIdent().equals(this.getIdent()) &&
+              o.arguments.equals(this.arguments);
+    }
+
+    @Override public boolean equals(Object obj) {
+       return isEqualIgnoreDefine(obj) && ((FunctionSymbol) obj).defined == this.defined;
     }
   }
 
   // Store the table as a map
   private Map<String, Symbol> table;
-  // Parent table
-  private SymbolTable parent;
+
+  // Contexte parent
+  private final Context parent;
 
   // Block ID
-  private int blockId;
+  private final int blockId;
+
+  private final FunctionSymbol function;
 
   public static void reset() {
     id = 0;
   }
 
-  // Construct a new symbol table
-  public SymbolTable() {
+  /**
+   * Crée un nouveau contexte
+   */
+  public Context() {
     this(null);
   }
 
-  // Construct a new symbol table with a parent
-  public SymbolTable(SymbolTable parent) {
+  /**
+   * Crée un nouveau contexte dont le contexte passé en paramètre est le contexte parent du contexte courant
+   * @param parent un contexte parent
+   */
+  public Context(Context parent) {
+    this(parent, null);
+  }
+
+  /**
+   * Crée un nouveau contexte dont le contexte passé en paramètre est le contexte parent du contexte courant
+   * Associe une fonction à ce contexte
+   * @param parent un contexte parent
+   * @param associedFunc un symbole de fonction à associer au contexte courant
+   */
+  public Context(Context parent, FunctionSymbol associedFunc) {
     this.table = new HashMap<>();
     this.parent = parent;
+    this.function = associedFunc;
     blockId = id++;
   }
 
   // Add a new symbol
   // Returns false if the symbol cannot be added (already in the scope)
-  public boolean add(Symbol sym) {
-    Symbol res = this.table.get(sym.ident);
-    if(res != null) {
+  public boolean addSymbol(Symbol sym) {
+    final Symbol res = this.table.get(sym.ident);
+    if(res != null)
       return false;
-    }
 
     if(sym instanceof VariableSymbol)
       ((VariableSymbol)sym).block = blockId;
@@ -134,26 +154,30 @@ public class SymbolTable {
 
   // Remove a symbol
   // Returns false if the symbol is not in the table (without looking at parent's)
-  public boolean remove(String ident) {
+  public boolean removeSymbol(String ident) {
     return this.table.remove(ident) != null;
   }
 
-  public Optional<Symbol> lookup(String ident) {
+  public Optional<Symbol> lookupSymbol(String ident) {
     Optional<Symbol> res = Optional.ofNullable(this.table.get(ident));
 
     if(!res.isPresent() && (this.parent != null)) {
       // Forward request
-      return this.parent.lookup(ident);
+      return this.parent.lookupSymbol(ident);
     }
 
     return res; // Either the symbol or null
   }
 
+  public Optional<FunctionSymbol> getAssociedFunction() {
+    return Optional.ofNullable(function);
+  }
+
   @Override public boolean equals(Object obj) {
     if(obj == null) return false;
     if(obj == this) return true;
-    if(!(obj instanceof SymbolTable)) return false;
-    SymbolTable o = (SymbolTable) obj;
+    if(!(obj instanceof Context)) return false;
+    Context o = (Context) obj;
     return o.table.equals(this.table) &&
       ((o.parent == null && this.parent == null) || o.parent.equals(this.parent));
   }

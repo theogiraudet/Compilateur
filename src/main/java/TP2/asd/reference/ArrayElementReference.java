@@ -1,12 +1,12 @@
 package TP2.asd.reference;
 
-import TP2.SymbolTable;
+import TP2.Context;
 import TP2.TypeException;
-import TP2.asd.type.Int;
-import TP2.utils.Utils;
 import TP2.asd.expression.Expression;
 import TP2.asd.type.Array;
+import TP2.asd.type.Int;
 import TP2.llvm.Llvm;
+import TP2.utils.Utils;
 
 import java.util.Optional;
 
@@ -26,10 +26,10 @@ public class ArrayElementReference extends Reference {
     }
 
     @Override
-    public Expression.RetExpression toIR(SymbolTable table) {
-        final Optional<SymbolTable.Symbol> symbol = table.lookup(ident);
+    public Expression.RetExpression toIR(Context table) {
+        final Optional<Context.Symbol> symbol = table.lookupSymbol(ident);
 
-        final SymbolTable.VariableSymbol var = isValid(symbol);
+        final Context.VariableSymbol var = isValid(symbol);
 
         final Expression.RetExpression ret = index.toIR(table);
 
@@ -46,16 +46,16 @@ public class ArrayElementReference extends Reference {
         return new Expression.RetExpression(ir.appendCode(instruction), ((Array)var.getType()).getType(), dest);
     }
 
-    private SymbolTable.VariableSymbol isValid(Optional<SymbolTable.Symbol> symbol) {
+    private Context.VariableSymbol isValid(Optional<Context.Symbol> symbol) {
 
         if(!symbol.isPresent())
             throw new NullPointerException("Variable '" + ident + "' is not initialized." + "\nat '" + pp() + "'.");
 
         //TODO À tester
-        if(!(symbol.get() instanceof SymbolTable.VariableSymbol))
+        if(!(symbol.get() instanceof Context.VariableSymbol))
             throw new TypeException("Identifier '" + ident + "' is not an identifier of variable.", this::pp);
 
-        final SymbolTable.VariableSymbol variable = (SymbolTable.VariableSymbol)symbol.get();
+        final Context.VariableSymbol variable = (Context.VariableSymbol)symbol.get();
 
         if(!(variable.getType() instanceof Array))
             throw new TypeException("Identifier '" + ident + "' is not an identifier of array.", this::pp);

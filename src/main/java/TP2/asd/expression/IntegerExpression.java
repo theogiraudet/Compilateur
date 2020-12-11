@@ -1,6 +1,6 @@
 package TP2.asd.expression;
 
-import TP2.SymbolTable;
+import TP2.Context;
 import TP2.asd.type.Int;
 import TP2.llvm.Llvm;
 
@@ -17,7 +17,7 @@ import TP2.llvm.Llvm;
       return "" + value;
     }
 
-    public RetExpression toIR(SymbolTable table) {
+    public RetExpression toIR(Context table) {
       // Here we simply return an empty IR
       // the `result' of this expression is the integer itself (as string)
       return new RetExpression(new Llvm.IR(Llvm.empty(), Llvm.empty()), new Int(), "" + value);

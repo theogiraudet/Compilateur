@@ -1,6 +1,6 @@
 package TP2.asd.reference;
 
-import TP2.SymbolTable;
+import TP2.Context;
 import TP2.TypeException;
 import TP2.asd.expression.Expression;
 import TP2.llvm.Llvm;
@@ -21,22 +21,22 @@ public class VariableReference extends Reference {
     }
 
     @Override
-    public Expression.RetExpression toIR(SymbolTable table) {
-        final Optional<SymbolTable.Symbol> variable = table.lookup(ident);
+    public Expression.RetExpression toIR(Context table) {
+        final Optional<Context.Symbol> variable = table.lookupSymbol(ident);
 
-        final SymbolTable.VariableSymbol var = isValid(variable);
+        final Context.VariableSymbol var = isValid(variable);
 
         return new Expression.RetExpression(new Llvm.IR(Llvm.empty(), Llvm.empty()), var.getType(), var.toString());
     }
 
-    private SymbolTable.VariableSymbol isValid(Optional<SymbolTable.Symbol> symbol) {
+    private Context.VariableSymbol isValid(Optional<Context.Symbol> symbol) {
         if(!symbol.isPresent())
             throw new NullPointerException("Variable '" + ident + "' is not initialized." + "\nat '" + pp() + "'.");
 
         //TODO À tester
-        if(!(symbol.get() instanceof SymbolTable.VariableSymbol))
+        if(!(symbol.get() instanceof Context.VariableSymbol))
             throw new TypeException("Identifier '" + ident + "' is not an identifier of variable.", this::pp);
 
-        return (SymbolTable.VariableSymbol)symbol.get();
+        return (Context.VariableSymbol)symbol.get();
     }
 }

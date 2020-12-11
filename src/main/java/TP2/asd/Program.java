@@ -1,11 +1,9 @@
 package TP2.asd;
 
-import TP2.asd.function.IFunction;
-import TP2.asd.statement.Statement;
-import TP2.SymbolTable;
-import TP2.asd.type.Int;
-import TP2.llvm.Llvm;
+import TP2.Context;
 import TP2.TypeException;
+import TP2.asd.function.IFunction;
+import TP2.llvm.Llvm;
 import TP2.utils.Try;
 
 import java.util.List;
@@ -26,7 +24,7 @@ public class Program {
 
     // IR generation
     public Llvm.IR toIR() throws TypeException, NullPointerException {
-        final SymbolTable table = new SymbolTable();
+        final Context table = new Context();
       // computes the IR of the expression
 
       //Expression.RetExpression retExpr = e.toIR();
@@ -40,10 +38,10 @@ public class Program {
                         .reduce((acc, ir) -> acc.reduce(ir, Llvm.IR::append)); // Réduction du stream en concaténant toutes les instructions
 
         // Vérification que toutes les fonctions sont déclarées
-        final Optional<SymbolTable.FunctionSymbol> symbol = functions.stream()
-                .map(f -> table.lookup(f.getIdent()))
+        final Optional<Context.FunctionSymbol> symbol = functions.stream()
+                .map(f -> table.lookupSymbol(f.getIdent()))
                 .filter(Optional::isPresent) // Normalement, toutes les fonctions se trouvent dans la table des symboles, juste pour éviter un dangerous get
-                .map(o -> (SymbolTable.FunctionSymbol)o.get())
+                .map(o -> (Context.FunctionSymbol)o.get())
                 .filter(f -> !f.isDefined())
                 .findAny();
 
