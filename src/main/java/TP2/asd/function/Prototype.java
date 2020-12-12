@@ -5,7 +5,6 @@ import TP2.TypeException;
 import TP2.asd.type.Type;
 import TP2.llvm.Llvm;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +36,7 @@ public class Prototype implements IFunction {
                 .map(VariableParam::toVariableSymbol).collect(Collectors.toList());
         Context.FunctionSymbol funSymbol = new Context.FunctionSymbol(returnType, ident, symbols, false);
         table.addSymbol(funSymbol);
-        return new Llvm.IR(Collections.emptyList(), Collections.emptyList());
+        return new Llvm.IR(Llvm.empty(), Llvm.empty());
     }
 
     @Override

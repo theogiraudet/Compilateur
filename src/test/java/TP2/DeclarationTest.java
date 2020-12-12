@@ -17,12 +17,12 @@ public class DeclarationTest {
     private VSLParser parser;
 
     private Program createParser(String input) throws RecognitionException {
+        input = "FUNC INT main() {\n" + input + "\n}";
         VSLLexer lexer = new VSLLexer(CharStreams.fromString(input));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
         parser = new VSLParser(tokens);
 
-        Context.reset();
         Utils.reset();
         return parser.program().out;
     }
@@ -30,13 +30,13 @@ public class DeclarationTest {
     @Test
     public void assignment() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Decl/testDecl0V.vsl");
-        final String result = "%1.a = alloca i32\n" +
-                "%1.b = alloca i32\n" +
-                "%1.c = alloca i32\n" +
-                "%1.d = alloca [5 x i32]\n" +
-                "%1.e = alloca i32\n" +
-                "%1.f = alloca i32\n" +
-                "store i32 1, i32* %1.a";
+        final String result = "%2.a = alloca i32\n" +
+                "%2.b = alloca i32\n" +
+                "%2.c = alloca i32\n" +
+                "%2.d = alloca [5 x i32]\n" +
+                "%2.e = alloca i32\n" +
+                "%2.f = alloca i32\n" +
+                "store i32 1, i32* %2.a";
 
         Program prog = createParser(vsl);
         assertTrue(prog.toIR().toString().contains(result));
@@ -69,8 +69,8 @@ public class DeclarationTest {
     @Test
     public void declaration5() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Decl/testDecl4V.vsl");
-        final String result = "%1.a = alloca i32\n" +
-                "store i32 15, i32* %1.a";
+        final String result = "%2.a = alloca i32\n" +
+                "store i32 15, i32* %2.a";
 
         Program prog = createParser(vsl);
         assertTrue(prog.toIR().toString().contains(result));
@@ -105,9 +105,9 @@ public class DeclarationTest {
     @Test
     public void declaration9() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Decl/testDecl8V.vsl");
-        final String result = "%1.a = alloca i32\n" +
-                              "%2.a = alloca i32\n" +
-                              "store i32 1, i32* %2.a";
+        final String result = "%2.a = alloca i32\n" +
+                "%3.a = alloca i32\n" +
+                "store i32 1, i32* %3.a";
         Program p = createParser(vsl);
         assertTrue(p.toIR().toString().contains(result));
     }

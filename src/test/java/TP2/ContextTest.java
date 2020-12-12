@@ -1,7 +1,6 @@
 package TP2;
 
 import TP2.asd.type.Int;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -10,11 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ContextTest {
-
-  @BeforeEach
-  public void reset() {
-    Context.reset();
-  }
 
   @Test
   public void testLookupEmpty() {

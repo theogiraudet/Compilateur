@@ -22,35 +22,35 @@ options {
 }
 
 program returns [Program out]
-    :  i=iFunction EOF { $out = new Program($i.out); }
+    :  i = iFunction EOF { $out = new Program($i.out); }
     ;
 
 iFunction returns [List<IFunction> out]
 @init {List<IFunction> list = new LinkedList();}
-    : (p=decProto {list.add($p.out);} | d=decFunc {list.add($d.out);})+ {$out=list;}
+    : (p = decProto { list.add($p.out); } | d = decFunc { list.add($d.out); })+ { $out = list; }
     ;
 
 decFunc returns [IFunction out]
 @init {List<VariableParam> list = new LinkedList();}
-    :   FUNC t=retType i=IDENT LP (p=params {list=$p.out;})? RP s=statement {$out=new Function(list,$t.out,$i.text,$s.out);}
+    :   FUNC t = retType i = IDENT LP (p = params { list = $p.out; })? RP s = statement { $out = new Function(list, $t.out, $i.text, $s.out); }
     ;
 
 decProto returns [IFunction out]
 @init {List<VariableParam> list = new LinkedList();}
-    : PROTO t=retType i=IDENT LP (p=params {list=$p.out;})? RP {$out=new Prototype(list,$t.out,$i.text);}
+    : PROTO t = retType i = IDENT LP (p = params {list = $p.out; })? RP {$out = new Prototype(list, $t.out, $i.text); }
     ;
 
 params returns [List<VariableParam> out]
 @init { List<VariableParam> list = new LinkedList(); }
-    :  (id=IDENT (LSB i=INTEGER RSB {list.add(new VariableParam(new Array(new Int(),$i.int),$id.text));}
-                 | {list.add(new VariableParam(new Int(),$id.text));} )
-        (listParams[list])? {$out=list;})
+    :  (id = IDENT (LSB i = INTEGER RSB { list.add(new VariableParam(new Array(new Int(), $i.int), $id.text)) ;}
+                 | { list.add(new VariableParam(new Int(), $id.text)); } )
+        (listParams[list])? {$out = list;})
     ;
 
 listParams [List<VariableParam> list]
-    :  (COMMA id=IDENT
-                      (LSB i=INTEGER RSB {list.add(new VariableParam(new Array(new Int(),$i.int),$id.text));}
-                      |  {list.add(new VariableParam(new Int(),$id.text));})
+    :  (COMMA id = IDENT
+                      (LSB i = INTEGER RSB { list.add(new VariableParam(new Array(new Int(), $i.int), $id.text)); }
+                      |  { list.add(new VariableParam(new Int(), $id.text)); })
        )+
     ;
 
@@ -58,11 +58,11 @@ statement returns  [Statement out]
     : v = variable AFFECT e = expression { $out = new Assignment($v.out, $e.out); }
     | b = block { $out = $b.out; }
     | IF e = expression THEN s1 = statement
-        ((ELSE s2 = statement  { $out = new If($e.out,$s1.out,$s2.out) ; } )
-        | { $out = new If($e.out,$s1.out) ; } ) FI
-    | WHILE e = expression DO s = statement  DONE { $out = new While($e.out,$s.out) ; }
-    | f=funcCall {$out=$f.out;}
-    | RETURN (e=expression)? {$out = new Return($e.out);}
+        ((ELSE s2 = statement  { $out = new If($e.out, $s1.out, $s2.out); } )
+        | { $out = new If($e.out, $s1.out) ; } ) FI
+    | WHILE e = expression DO s = statement DONE { $out = new While($e.out,$s.out); }
+    | f = funcCall { $out = $f.out; }
+    | RETURN (e = expression { $out = new Return($e.out); } | { $out = new Return(); })
     //| print //TODO: voir quoi retourner
     //| read // TODO:voir quoi retourner
     ;
@@ -83,17 +83,17 @@ declaration returns [List<Declaration> out]
 listDeclaration [Type typ, List<Declaration> list] returns [List<Declaration> out]
     :   (COMMA id= IDENT
                ( LSB i = INTEGER RSB { list.add(new Declaration(new Array(typ, $i.int), $id.text)); }
-               |  {list.add(new Declaration(typ, $id.text)); } )
+               |  { list.add(new Declaration(typ, $id.text)); } )
         )*
     ;
 
 variable returns [Reference out]
     :  i = IDENT ( LSB e = expression RSB {$out = new ArrayElementReference($i.text,$e.out); }
-                 | {$out = new VariableReference($i.text);}  )
+                 | { $out = new VariableReference($i.text); }  )
     ;
 
 retType returns [Type out]
-    : t=type {$out = $t.out;} | VOID {$out = new Void();}
+    : t=type { $out = $t.out; } | VOID { $out = new Void(); }
     ;
 
 type returns [Type out]
@@ -102,21 +102,21 @@ type returns [Type out]
 
 expression returns [Expression out]
 @init { Expression exp = null; }
-    : f1 = factor { exp = $f1.out; }
+    : (f1 = factor { exp = $f1.out; }
       ( PLUS  f2 = factor {exp = new AddExpression(exp, $f2.out); }
       | MINUS f2 = factor {exp = new SubExpression(exp, $f2.out); }
-    )* { $out = exp; }
-    | f=funcCall {$out=$f.out; }
+    )* { $out = exp; })
+    | f = funcCall { $out = $f.out; }
     ;
 
 funcCall returns [FunctionCall out]
 @init {List<Expression> list = new LinkedList();} :
-    i=IDENT LP (e=expParams{list=$e.out;})? RP {$out= new FunctionCall($i.text,list);}
+    i=IDENT LP (e = expParams { list = $e.out; } )? RP { $out = new FunctionCall($i.text, list); }
     ;
 
 expParams returns [List<Expression> out]
 @init {List<Expression> list = new LinkedList<>();}
-    : e=expression {list.add($e.out);} (COMMA a=expression {list.add($a.out);})* {$out=list;}
+    : e = expression { list.add($e.out); } (COMMA a = expression { list.add($a.out); } )* { $out = list; }
     ;
 
 
@@ -129,7 +129,7 @@ factor returns [Expression out]
     ;
 
 primary returns [Expression out]
-    : LP e = expression RP { $out=$e.out; }
+    : LP e = expression RP { $out = $e.out; }
     | INTEGER { $out = new IntegerExpression($INTEGER.int); }
     | id=IDENT (( LSB  in = expression RSB { $out = new Dereference(new ArrayElementReference($id.text, $in.out)); })
                | { $out = new Dereference(new VariableReference($id.text)); })

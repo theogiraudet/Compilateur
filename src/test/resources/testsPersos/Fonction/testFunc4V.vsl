@@ -1,6 +1,6 @@
-PROTO a()
-PROTO b()
-FUNC a()
+PROTO INT a()
+PROTO INT b()
+FUNC INT a()
     RETURN 1
-FUNC b()
+FUNC INT b()
     RETURN a()

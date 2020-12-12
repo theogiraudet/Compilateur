@@ -1,8 +1,6 @@
-{
 INT a
 IF a + 1 THEN
 {
 a:=a+1
 }
 FI
-}

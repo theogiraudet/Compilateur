@@ -16,8 +16,6 @@ import java.util.Optional;
 public class Context {
   // Define different symbols
 
-  private static int id = 0;
-
   // Définition des symboles
   public static abstract class Symbol {
     private final String ident; // minimum, used in the storage map
@@ -106,10 +104,6 @@ public class Context {
 
   private final FunctionSymbol function;
 
-  public static void reset() {
-    id = 0;
-  }
-
   /**
    * Crée un nouveau contexte
    */
@@ -135,7 +129,7 @@ public class Context {
     this.table = new HashMap<>();
     this.parent = parent;
     this.function = associedFunc;
-    blockId = id++;
+    blockId = parent != null ? parent.blockId + 1 : 0;
   }
 
   // Add a new symbol
@@ -170,6 +164,8 @@ public class Context {
   }
 
   public Optional<FunctionSymbol> getAssociedFunction() {
+    if (function == null && parent != null)
+      return parent.getAssociedFunction();
     return Optional.ofNullable(function);
   }
 

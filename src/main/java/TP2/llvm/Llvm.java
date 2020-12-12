@@ -1,7 +1,7 @@
 package TP2.llvm;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,11 +38,11 @@ public class Llvm {
     }
 
     public List<Instruction> getCode() {
-      return Collections.unmodifiableList(code);
+      return new LinkedList<>(code);
     }
 
     public List<Instruction> getHeader() {
-      return Collections.unmodifiableList(header);
+      return new LinkedList<>(header);
     }
 
     // Final string generation
@@ -328,9 +328,9 @@ public class Llvm {
     }
 
     public String toString() {
-      return "define " + returnType.toString() + " " + ident + "(" +
+      return "define " + returnType.toString() + " @" + ident + "(" +
               params.stream().map(Variable::toString).collect(Collectors.joining(", "))
-              + ") {\n" + ins.stream().map(Instruction::toString).collect(Collectors.joining()) + "}";
+              + ") {\n" + ins.stream().map(Instruction::toString).collect(Collectors.joining()) + "}\n";
     }
   }
 

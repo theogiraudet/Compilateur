@@ -7,7 +7,6 @@ import TP2.asd.type.Type;
 import TP2.llvm.Llvm;
 import TP2.utils.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,11 +78,11 @@ public class FunctionCall implements Statement, Expression {
         // Vérification du bon typage des paramètres
         Optional<Tuple2<Integer, Type>> badTyped = IntStream.range(0, rets.size()) // Récupération du premier élément mal typé
                 .mapToObj(i -> Tuple.of(i, rets.get(i).type)) // Zipage de vars avec leur index dans la liste
-                .filter(p -> symbol.getArguments().get(p._1).getType().equals(p._2)).findFirst(); // Vérification du bon typage
+                .filter(p -> !symbol.getArguments().get(p._1).getType().equals(p._2)).findFirst(); // Vérification du bon typage
 
         if(badTyped.isPresent()) {
-            final String getted = badTyped.get()._2.toString();
-            final String expected = symbol.getArguments().get(badTyped.get()._1).getType().toString();
+            final String getted = badTyped.get()._2.pp();
+            final String expected = symbol.getArguments().get(badTyped.get()._1).getType().pp();
             throw new TypeException("Type mismatch: '" + expected + "' expected, found '" + getted + "' for " +
                     symbol.getArguments().get(badTyped.get()._1).getIdent() + ".", this::pp);
         }
@@ -101,7 +100,7 @@ public class FunctionCall implements Statement, Expression {
                 .reduce(Llvm.IR::append); // Réduction du stream en concaténant toutes les instructions
 
         // Ajout de l'appel de fonction
-        final Llvm.IR resultIr = fun.orElse(new Llvm.IR(Collections.emptyList(), Collections.emptyList()));
+        final Llvm.IR resultIr = fun.orElse(new Llvm.IR(Llvm.empty(), Llvm.empty()));
 
         //return new RetExpression(resultIr, symbol.getReturnType(), );
         return Tuple.of(ir, resultIr, symbol.getReturnType());

@@ -7,6 +7,7 @@ import TP2.asd.type.Type;
 import TP2.llvm.Llvm;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -80,7 +81,7 @@ public class Function implements IFunction {
         /*if(prototyped)
             return new Llvm.IR(Collections.singletonList(ins), Collections.emptyList());
         else*/
-            return new Llvm.IR(ir.getHeader(), Collections.singletonList(ins));
+        return new Llvm.IR(ir.getHeader(), new LinkedList<>(Collections.singletonList(ins)));
     }
 
     @Override

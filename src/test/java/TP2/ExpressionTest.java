@@ -28,12 +28,12 @@ public class ExpressionTest {
     }
 
     private Program createParserFromProgram(String input) throws RecognitionException {
+        input = "FUNC INT main() {\n" + input + "\n}";
         VSLLexer lexer = new VSLLexer(CharStreams.fromString(input));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
         parser = new VSLParser(tokens);
 
-        Context.reset();
         Utils.reset();
         return parser.program().out;
     }
@@ -49,7 +49,7 @@ public class ExpressionTest {
     public void atomicExpression2() {
         final String INPUT = "+";
         createParser(INPUT);
-        assertEquals(parser.getNumberOfSyntaxErrors(), 2);
+        assertEquals(1, parser.getNumberOfSyntaxErrors());
     }
 
     @Test

@@ -7,12 +7,16 @@ import TP2.asd.reference.Reference;
 import TP2.llvm.Llvm;
 import TP2.utils.Utils;
 
+import java.util.Objects;
+
 public class Assignment implements Statement {
 
     private final Reference variable;
     private final Expression expression;
 
     public Assignment(Reference var, Expression e) {
+        Objects.requireNonNull(var);
+        Objects.requireNonNull(e);
         this.variable = var;
         this.expression = e;
     }

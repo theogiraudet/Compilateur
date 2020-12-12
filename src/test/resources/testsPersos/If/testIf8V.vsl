@@ -1,4 +1,3 @@
-{
 INT a
 IF a THEN a:=a+1
 ELSE
@@ -6,4 +5,3 @@ ELSE
     a:=a-1
 }
 FI
-}

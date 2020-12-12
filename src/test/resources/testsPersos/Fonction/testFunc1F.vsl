@@ -1,2 +1,2 @@
-FUNC INT aPlusB(a)
+FUNC INT aplusb(a)
     RETURN a+b
