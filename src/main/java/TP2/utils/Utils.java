@@ -1,10 +1,7 @@
 package TP2.utils;
 
-import TP2.llvm.Llvm;
-
-import java.util.function.Function;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
   private static int tmp = 0;
@@ -64,8 +61,9 @@ public class Utils {
 
   // Return type of stringTransform
   public static class LLVMStringConstant {
-    String str;
-    int length;
+    public String str;
+    public int length;
+
     LLVMStringConstant(String str, int length) {
       this.str = str;
       this.length = length;

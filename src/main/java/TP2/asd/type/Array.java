@@ -16,10 +16,6 @@ public class Array extends Type {
         return type;
     }
 
-    public int getSize() {
-        return size;
-    }
-
     @Override
     public String pp() {
         return type.pp() + '[' + size + ']';
