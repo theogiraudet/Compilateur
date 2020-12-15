@@ -63,8 +63,8 @@ statement returns  [Statement out]
     | WHILE e = expression DO s = statement DONE { $out = new While($e.out,$s.out); }
     | f = funcCall { $out = $f.out; }
     | RETURN (e = expression { $out = new Return($e.out); } | { $out = new Return(); })
-    //| print //TODO: voir quoi retourner
-    //| read // TODO:voir quoi retourner
+    | p=print  {$out = $p.out}
+    | r=read  {$out = $r.out}
     ;
 
 block returns [Block out]
@@ -100,25 +100,38 @@ type returns [Type out]
     : INT { $out = new Int(); }
     ;
 
+print returns [Print out]
+@init { List<Expression> list = new LinkedList(); }
+    :  PRINT e=printable {list.add($e.out);} (COMMA t=printable {list.add($t.out);})* {$out = new Print(list);}
+    ;
+
+printable returns [Expression out]
+    :   (s=TEXT {$out=new StringExpresion($s.text);} | e=expression {$out = $e.out;})
+    ;
+
+read returns [Read out]
+@init { List<Reference> list = new LinkedList();}
+    :   READ v=variable {list.add($v.out);} (COMMA r=variable {list.add($r.out)})* {$out = new Read(list);}
+    ;
+
 expression returns [Expression out]
 @init { Expression exp = null; }
     : (f1 = factor { exp = $f1.out; }
       ( PLUS  f2 = factor {exp = new AddExpression(exp, $f2.out); }
       | MINUS f2 = factor {exp = new SubExpression(exp, $f2.out); }
     )* { $out = exp; })
-    | f = funcCall { $out = $f.out; }
+    | f = funcCall {$out = $f.out;}
     ;
 
 funcCall returns [FunctionCall out]
 @init {List<Expression> list = new LinkedList();} :
-    i=IDENT LP (e = expParams { list = $e.out; } )? RP { $out = new FunctionCall($i.text, list); }
+    i=IDENT LP (e = listExp { list = $e.out; } )? RP { $out = new FunctionCall($i.text, list); }
     ;
 
-expParams returns [List<Expression> out]
+listExp returns [List<Expression> out]
 @init {List<Expression> list = new LinkedList<>();}
-    : e = expression { list.add($e.out); } (COMMA a = expression { list.add($a.out); } )* { $out = list; }
+    : e = expression { list.add($e.out); } (COMMA a = expression { list.add($a.out); } )* { $out = list;}
     ;
-
 
 factor returns [Expression out]
 @init { Expression exp = null; }
