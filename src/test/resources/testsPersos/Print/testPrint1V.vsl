@@ -1,0 +1,5 @@
+FUNC VOID main() {
+    INT a
+    a:=0
+    PRINT a
+}

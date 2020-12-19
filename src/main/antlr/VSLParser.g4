@@ -63,8 +63,8 @@ statement returns  [Statement out]
     | WHILE e = expression DO s = statement DONE { $out = new While($e.out,$s.out); }
     | f = funcCall { $out = $f.out; }
     | RETURN (e = expression { $out = new Return($e.out); } | { $out = new Return(); })
-    | p=print  {$out = $p.out}
-    | r=read  {$out = $r.out}
+    | p=print  {$out = $p.out;}
+    | r=read  {$out = $r.out;}
     ;
 
 block returns [Block out]
@@ -106,12 +106,12 @@ print returns [Print out]
     ;
 
 printable returns [Expression out]
-    :   (s=TEXT {$out=new StringExpresion($s.text);} | e=expression {$out = $e.out;})
+    :   (s=TEXT {$out=new StringExpression($s.text);} | e=expression {$out = $e.out;})
     ;
 
 read returns [Read out]
 @init { List<Reference> list = new LinkedList();}
-    :   READ v=variable {list.add($v.out);} (COMMA r=variable {list.add($r.out)})* {$out = new Read(list);}
+    :   READ v=variable {list.add($v.out);} (COMMA r=variable {list.add($r.out);})* {$out = new Read(list);}
     ;
 
 expression returns [Expression out]
