@@ -25,4 +25,9 @@ public class Array extends Type {
     public Llvm.Type toLlvmType() {
         return new Llvm.Array(type.toLlvmType(), size);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Array && ((Array) obj).size == size && ((Array) obj).type.equals(type);
+    }
 }

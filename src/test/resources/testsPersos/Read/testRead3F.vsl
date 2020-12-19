@@ -1,4 +1,4 @@
 FUNC VOID main() {
 INT x,y[5]
-READ x,y[3]
+READ x,y
 }

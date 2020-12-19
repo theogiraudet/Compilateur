@@ -1,5 +1,6 @@
 FUNC INT aplusb (a,b)
-    return a+b
+    RETURN a+b
 FUNC VOID main() {
  PRINT aplusb(1,2)
+ RETURN
 }

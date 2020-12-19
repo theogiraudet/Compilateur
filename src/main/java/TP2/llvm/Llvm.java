@@ -54,10 +54,11 @@ public class Llvm {
       // This header describe to LLVM the target
       // and declare the external function printf
       StringBuilder r = new StringBuilder("; Target\n" +
-        "target triple = \"x86_64-unknown-linux-gnu\"\n" +
-        "; External declaration of the printf function\n" +
-        "declare i32 @printf(i8* noalias nocapture, ...)\n" +
-        "\n; Actual code begins\n\n");
+              "target triple = \"x86_64-unknown-linux-gnu\"\n" +
+              "; External declaration of the printf function\n" +
+              "declare i32 @printf(i8* noalias nocapture, ...)\n" +
+              "declare i32 @scanf(i8* noalias nocapture, ...)\n" +
+              "\n; Actual code begins\n\n");
 
       for(Instruction inst: header)
         r.append(inst);
@@ -138,10 +139,7 @@ public class Llvm {
     private final int size;
 
     public StringL(int size) {
-      // La taille du String LLVM est la même que celle du String classique + 1 pour le caractère null
-      // En Java, \n comme \t est considéré dans un String comme étant un seul caractère, il n'y a donc pas besoin
-      // de faire -1 par \n trouvé
-      this.size = size + 1;
+      this.size = size;
     }
 
     @Override
@@ -397,15 +395,17 @@ public class Llvm {
 
     private final String label;
     private final String string;
+    private final int size;
 
-    public DefineString(String label, String string) {
+    public DefineString(String label, String string, int size) {
       this.label = label;
       this.string = string;
+      this.size = size;
     }
 
     @Override
     public String toString() {
-      return label + " = global [" + string.length() + 1 + " x i8] c\"" + formatString(string) + "\"\n";
+      return label + " = global [" + size + " x i8] c\"" + string + "\"\n";
     }
   }
 
@@ -424,7 +424,8 @@ public class Llvm {
     @Override
     public String toString() {
       return "call i32 (i8*, ...) @printf(i8* getelementptr inbounds (" + type.toString() + ", " +
-              type.toString() + "* " + str + ", i64 0, i64 0), " + results.stream().map(Variable::toString).collect(Collectors.joining(", ")) + ")";
+              type.toString() + "* " + str + ", i64 0, i64 0)" + (results.isEmpty() ? "" : ", ") +
+              results.stream().map(Variable::toString).collect(Collectors.joining(", ")) + ")\n";
     }
   }
 
@@ -443,7 +444,7 @@ public class Llvm {
     @Override
     public String toString() {
       return "call i32 (i8*, ...) @scanf(i8* getelementptr inbounds (" + type.toString() + ", " +
-              type.toString() + "* " + str + ", i64 0, i64 0), " + results.stream().map(Variable::toString).collect(Collectors.joining(", ")) + ")";
+              type.toString() + "* " + str + ", i64 0, i64 0), " + results.stream().map(v -> v.type + "* " + v.ident).collect(Collectors.joining(", ")) + ")\n";
     }
   }
 
@@ -453,15 +454,14 @@ public class Llvm {
    * @return un string formaté pour LLVM
    * @throws IllegalFormatException si le string possède un caractère non affichable différent de '\n'
    */
-  private static String formatString(String str) {
+  public static String formatString(String str) {
     // Transformation de tous les caractères inférieurs à 32 en hexadécimal
     final OptionalInt badFormat = CharBuffer.wrap(str.toCharArray()).chars().filter(c -> c < 32 && c != '\n').findFirst();
     if (badFormat.isPresent())
       throw new IllegalFormatException("String only accept printable character and '\n'. " + "\\u" + Integer.toHexString(badFormat.getAsInt()) + " is not allowed.");
 
-    final String string = CharBuffer.wrap(str.toCharArray()).chars()
-            .mapToObj(c -> c < 32 ? String.format("%02X", c) : Character.toString((char) c))
-            .collect(Collectors.joining()) + "\00";
-    return string;
+    return CharBuffer.wrap(str.toCharArray()).chars()
+            .mapToObj(c -> c < 32 ? '\\' + String.format("%02X", c).replace("u", "") : Character.toString((char) c))
+            .collect(Collectors.joining()) + "\\00";
   }
 }

@@ -37,10 +37,10 @@ public class AssignementTest {
     @Test
     public void assignement2() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Affect/testAffect1V.vsl");
-        final String result = "%2.y = alloca i32\n" +
+        final String result = "%b2.y = alloca i32\n" +
                 "%tmp1 = mul i32 4, 7\n" +
                 "%tmp2 = add i32 5, %tmp1\n" +
-                "store i32 %tmp2, i32* %2.y";
+                "store i32 %tmp2, i32* %b2.y";
         Program prog = createParser(vsl);
         assertTrue(prog.toIR().toString().contains(result));
     }
@@ -49,11 +49,11 @@ public class AssignementTest {
     @Test
     public void assignement3() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Affect/testAffect2V.vsl");
-        final String result = "%2.i = alloca i32\n" +
-                "store i32 1, i32* %2.i\n" +
-                "%tmp1 = load i32, i32* %2.i\n" +
+        final String result = "%b2.i = alloca i32\n" +
+                "store i32 1, i32* %b2.i\n" +
+                "%tmp1 = load i32, i32* %b2.i\n" +
                 "%tmp2 = add i32 %tmp1, 1\n" +
-                "store i32 %tmp2, i32* %2.i";
+                "store i32 %tmp2, i32* %b2.i";
         Program prog = createParser(vsl);
         assertTrue(prog.toIR().toString().contains(result));
     }
@@ -62,15 +62,15 @@ public class AssignementTest {
     @Test
     public void assignement4() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Affect/testAffect3V.vsl");
-        final String result = "%2.b = alloca [4 x i32]\n" +
-                "%2.c = alloca i32\n" +
-                "%tmp1 = getelementptr [4 x i32], [4 x i32]* %2.b, i64 0, i32 2\n" +
+        final String result = "%b2.b = alloca [4 x i32]\n" +
+                "%b2.c = alloca i32\n" +
+                "%tmp1 = getelementptr [4 x i32], [4 x i32]* %b2.b, i64 0, i32 2\n" +
                 "store i32 5, i32* %tmp1\n" +
                 // Le out of bound est une erreur d'exécution et pas de compilation
-                "%tmp2 = getelementptr [4 x i32], [4 x i32]* %2.b, i64 0, i32 5\n" +
+                "%tmp2 = getelementptr [4 x i32], [4 x i32]* %b2.b, i64 0, i32 5\n" +
                 "%tmp3 = load i32, i32* %tmp2\n" +
                 "%tmp4 = add i32 %tmp3, 1\n" +
-                "store i32 %tmp4, i32* %2.c";
+                "store i32 %tmp4, i32* %b2.c";
         Program prog = createParser(vsl);
         assertTrue(prog.toIR().toString().contains(result));
     }
@@ -79,10 +79,10 @@ public class AssignementTest {
     @Test
     public void assignement5() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Affect/testAffect4V.vsl");
-        final String result = "%2.c = alloca [5 x i32]\n" +
-                "%3.b = alloca i32\n" +
-                "store i32 4, i32* %3.b\n" +
-                "%tmp1 = getelementptr [5 x i32], [5 x i32]* %2.c, i64 0, i32 4\n" +
+        final String result = "%b2.c = alloca [5 x i32]\n" +
+                "%b3.b = alloca i32\n" +
+                "store i32 4, i32* %b3.b\n" +
+                "%tmp1 = getelementptr [5 x i32], [5 x i32]* %b2.c, i64 0, i32 4\n" +
                 "store i32 4, i32* %tmp1";
         Program prog = createParser(vsl);
         assertTrue(prog.toIR().toString().contains(result));
@@ -100,19 +100,19 @@ public class AssignementTest {
     @Test
     public void assignement7() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Affect/testAffect6V.vsl");
-        final String result = "%2.t = alloca [5 x i32]\n" +
-                "%2.i = alloca i32\n" +
-                "store i32 3, i32* %2.i\n" +
-                "%tmp1 = load i32, i32* %2.i\n" +
+        final String result = "%b2.t = alloca [5 x i32]\n" +
+                "%b2.i = alloca i32\n" +
+                "store i32 3, i32* %b2.i\n" +
+                "%tmp1 = load i32, i32* %b2.i\n" +
                 "%tmp2 = add i32 %tmp1, 1\n" +
-                "%tmp3 = getelementptr [5 x i32], [5 x i32]* %2.t, i64 0, i32 %tmp2\n" +
-                "%tmp4 = load i32, i32* %2.i\n" +
+                "%tmp3 = getelementptr [5 x i32], [5 x i32]* %b2.t, i64 0, i32 %tmp2\n" +
+                "%tmp4 = load i32, i32* %b2.i\n" +
                 "store i32 %tmp4, i32* %tmp3\n" +
-                "%tmp5 = load i32, i32* %2.i\n" +
+                "%tmp5 = load i32, i32* %b2.i\n" +
                 "%tmp6 = add i32 %tmp5, 1\n" +
-                "%tmp7 = getelementptr [5 x i32], [5 x i32]* %2.t, i64 0, i32 %tmp6\n" +
+                "%tmp7 = getelementptr [5 x i32], [5 x i32]* %b2.t, i64 0, i32 %tmp6\n" +
                 "%tmp8 = load i32, i32* %tmp7\n" +
-                "store i32 %tmp8, i32* %2.i";
+                "store i32 %tmp8, i32* %b2.i";
         Program prog = createParser(vsl);
         assertTrue(prog.toIR().toString().contains(result));
     }

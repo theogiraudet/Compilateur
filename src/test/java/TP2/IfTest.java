@@ -31,15 +31,15 @@ public class IfTest {
     @Test
     public void if1() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/If/testIf0V.vsl");
-        final String result = "%2.n = alloca i32\n" +
-                "store i32 1, i32* %2.n\n" +
-                "%tmp1 = load i32, i32* %2.n\n" +
+        final String result = "%b2.n = alloca i32\n" +
+                "store i32 1, i32* %b2.n\n" +
+                "%tmp1 = load i32, i32* %b2.n\n" +
                 "%tmp2 = icmp ne i32 %tmp1, 0\n" +
                 "br i1 %tmp2, label %If1, label %End1\n" +
                 "If1:\n" +
-                "%tmp3 = load i32, i32* %2.n\n" +
+                "%tmp3 = load i32, i32* %b2.n\n" +
                 "%tmp4 = add i32 %tmp3, 1\n" +
-                "store i32 %tmp4, i32* %2.n\n" +
+                "store i32 %tmp4, i32* %b2.n\n" +
                 "End1:";
         Program p = createParser(vsl);
         assertTrue(p.toIR().toString().contains(result));
@@ -73,15 +73,15 @@ public class IfTest {
     @Test
     public void if5() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/If/testIf5V.vsl");
-        final String result = "%2.a = alloca i32\n" +
-                "%tmp1 = load i32, i32* %2.a\n" +
+        final String result = "%b2.a = alloca i32\n" +
+                "%tmp1 = load i32, i32* %b2.a\n" +
                 "%tmp2 = add i32 %tmp1, 1\n" +
                 "%tmp3 = icmp ne i32 %tmp2, 0\n" +
                 "br i1 %tmp3, label %If1, label %End1\n" +
                 "If1:\n" +
-                "%tmp4 = load i32, i32* %2.a\n" +
+                "%tmp4 = load i32, i32* %b2.a\n" +
                 "%tmp5 = add i32 %tmp4, 1\n" +
-                "store i32 %tmp5, i32* %2.a\n" +
+                "store i32 %tmp5, i32* %b2.a\n" +
                 "End1:";
         Program p = createParser(vsl);
         assertTrue(p.toIR().toString().contains(result));
@@ -91,19 +91,19 @@ public class IfTest {
     @Test
     public void if6() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/If/testIf6V.vsl");
-        final String result = "%2.a = alloca i32\n" +
-                "%tmp1 = load i32, i32* %2.a\n" +
+        final String result = "%b2.a = alloca i32\n" +
+                "%tmp1 = load i32, i32* %b2.a\n" +
                 "%tmp2 = icmp ne i32 %tmp1, 0\n" +
                 "br i1 %tmp2, label %If1, label %Else1\n" +
                 "If1:\n" +
-                "%tmp3 = load i32, i32* %2.a\n" +
+                "%tmp3 = load i32, i32* %b2.a\n" +
                 "%tmp4 = add i32 %tmp3, 1\n" +
-                "store i32 %tmp4, i32* %2.a\n" +
+                "store i32 %tmp4, i32* %b2.a\n" +
                 "br label %End1\n" +
                 "Else1:\n" +
-                "%tmp5 = load i32, i32* %2.a\n" +
+                "%tmp5 = load i32, i32* %b2.a\n" +
                 "%tmp6 = sub i32 %tmp5, 1\n" +
-                "store i32 %tmp6, i32* %2.a\n" +
+                "store i32 %tmp6, i32* %b2.a\n" +
                 "End1:";
         Program p = createParser(vsl);
         assertTrue(p.toIR().toString().contains(result));
@@ -113,19 +113,19 @@ public class IfTest {
     @Test
     public void if7() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/If/testIf7V.vsl");
-        final String result = "%2.a = alloca i32\n" +
-                "%tmp1 = load i32, i32* %2.a\n" +
+        final String result = "%b2.a = alloca i32\n" +
+                "%tmp1 = load i32, i32* %b2.a\n" +
                 "%tmp2 = icmp ne i32 %tmp1, 0\n" +
                 "br i1 %tmp2, label %If1, label %Else1\n" +
                 "If1:\n" +
-                "%tmp3 = load i32, i32* %2.a\n" +
+                "%tmp3 = load i32, i32* %b2.a\n" +
                 "%tmp4 = add i32 %tmp3, 1\n" +
-                "store i32 %tmp4, i32* %2.a\n" +
+                "store i32 %tmp4, i32* %b2.a\n" +
                 "br label %End1\n" +
                 "Else1:\n" +
-                "%tmp5 = load i32, i32* %2.a\n" +
+                "%tmp5 = load i32, i32* %b2.a\n" +
                 "%tmp6 = sub i32 %tmp5, 1\n" +
-                "store i32 %tmp6, i32* %2.a\n" +
+                "store i32 %tmp6, i32* %b2.a\n" +
                 "End1:";
         Program p = createParser(vsl);
         assertTrue(p.toIR().toString().contains(result));
@@ -135,19 +135,19 @@ public class IfTest {
     @Test
     public void if8() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/If/testIf8V.vsl");
-        final String result = "%2.a = alloca i32\n" +
-                "%tmp1 = load i32, i32* %2.a\n" +
+        final String result = "%b2.a = alloca i32\n" +
+                "%tmp1 = load i32, i32* %b2.a\n" +
                 "%tmp2 = icmp ne i32 %tmp1, 0\n" +
                 "br i1 %tmp2, label %If1, label %Else1\n" +
                 "If1:\n" +
-                "%tmp3 = load i32, i32* %2.a\n" +
+                "%tmp3 = load i32, i32* %b2.a\n" +
                 "%tmp4 = add i32 %tmp3, 1\n" +
-                "store i32 %tmp4, i32* %2.a\n" +
+                "store i32 %tmp4, i32* %b2.a\n" +
                 "br label %End1\n" +
                 "Else1:\n" +
-                "%tmp5 = load i32, i32* %2.a\n" +
+                "%tmp5 = load i32, i32* %b2.a\n" +
                 "%tmp6 = sub i32 %tmp5, 1\n" +
-                "store i32 %tmp6, i32* %2.a\n" +
+                "store i32 %tmp6, i32* %b2.a\n" +
                 "End1:";
         Program p = createParser(vsl);
         assertTrue(p.toIR().toString().contains(result));
@@ -173,24 +173,24 @@ public class IfTest {
     @Test
     public void if11() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/If/testIf11V.vsl");
-        final String result = "%2.a = alloca i32\n" +
-                "%tmp1 = load i32, i32* %2.a\n" +
+        final String result = "%b2.a = alloca i32\n" +
+                "%tmp1 = load i32, i32* %b2.a\n" +
                 "%tmp2 = icmp ne i32 %tmp1, 0\n" +
                 "br i1 %tmp2, label %If1, label %Else1\n" +
                 "If1:\n" +
-                "%tmp3 = load i32, i32* %2.a\n" +
+                "%tmp3 = load i32, i32* %b2.a\n" +
                 "%tmp4 = add i32 %tmp3, 1\n" +
-                "store i32 %tmp4, i32* %2.a\n" +
+                "store i32 %tmp4, i32* %b2.a\n" +
                 "br label %End1\n" +
                 "Else1:\n" +
-                "%tmp5 = load i32, i32* %2.a\n" +
+                "%tmp5 = load i32, i32* %b2.a\n" +
                 "%tmp6 = add i32 %tmp5, 1\n" +
                 "%tmp7 = icmp ne i32 %tmp6, 0\n" +
                 "br i1 %tmp7, label %If2, label %End2\n" +
                 "If2:\n" +
-                "%tmp8 = load i32, i32* %2.a\n" +
+                "%tmp8 = load i32, i32* %b2.a\n" +
                 "%tmp9 = sub i32 %tmp8, 1\n" +
-                "store i32 %tmp9, i32* %2.a\n" +
+                "store i32 %tmp9, i32* %b2.a\n" +
                 "End2:\n" +
                 "End1:";
         Program p = createParser(vsl);

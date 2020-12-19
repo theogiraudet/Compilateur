@@ -5,6 +5,7 @@ import TP2.IllegalFormatException;
 import TP2.TypeException;
 import TP2.asd.expression.Expression;
 import TP2.asd.type.Printable;
+import TP2.asd.type.StringV;
 import TP2.llvm.Llvm;
 import TP2.utils.Utils;
 
@@ -37,20 +38,24 @@ public class Print implements Statement {
             // Si le type n'est pas affichable, on déclenche une erreur
             if (!(irTmp.type instanceof Printable))
                 throw new TypeException("Type '" + irTmp.type.pp() + "' is not a printable type.", () -> pp(0));
-            str.append(((Printable) irTmp.type).toPrintable());
+            if (!(irTmp.type instanceof StringV)) {
+                str.append(((Printable) irTmp.type).toPrintable());
+                results.add(new Llvm.Variable(irTmp.type.toLlvmType(), irTmp.result));
+            } else
+                str.append(irTmp.result);
             ir.append(irTmp.ir);
-            results.add(new Llvm.Variable(irTmp.type.toLlvmType(), irTmp.result));
         }
 
-        final String label = Utils.newglob(".fmt");
 
+        final String label = Utils.newglob(".fmt");
         Llvm.Instruction ins;
+        final Utils.LLVMStringConstant constant = Utils.stringTransform(str.toString());
 
         /* Formatage du String et création de la constante globale à placer en tête. Si la création renvoie une erreur
            (caractère non affichable différent de '\n'), alors on complète l'erreur et on la remonte
         */
         try {
-            ins = new Llvm.DefineString(label, str.toString());
+            ins = new Llvm.DefineString(label, constant.str, constant.length);
         } catch (IllegalFormatException e) {
             throw new IllegalFormatException(e.getMessage(), () -> pp(0));
         }
@@ -58,7 +63,7 @@ public class Print implements Statement {
         // Ajout du nouveau string en header
         ir.appendHeader(ins);
 
-        final Llvm.Instruction insPrint = new Llvm.Print(new Llvm.StringL(str.length()), str.toString(), results);
+        final Llvm.Instruction insPrint = new Llvm.Print(new Llvm.StringL(constant.length), label, results);
 
         return ir.appendCode(insPrint);
     }

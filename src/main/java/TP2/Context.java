@@ -24,9 +24,31 @@ public class Context {
       this.ident = ident;
     }
 
-    public String getIdent() { return ident; }
+    public String getIdent() {
+      return ident;
+    }
 
-    @Override public String toString() { return getIdent(); }
+    @Override
+    public String toString() {
+      return getIdent();
+    }
+  }
+
+  public static class VariableParamSymbol extends VariableSymbol {
+
+    public VariableParamSymbol(Type type, String ident) {
+      super(type, ident);
+    }
+
+    @Override
+    public String toString() {
+      return "%bp" + super.toString().substring(2);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      return obj instanceof VariableParamSymbol && super.equals(obj);
+    }
   }
 
   public static class VariableSymbol extends Symbol {
@@ -42,7 +64,10 @@ public class Context {
       return type;
     }
 
-    @Override public String toString() { return "%" + block + "." + getIdent(); }
+    @Override
+    public String toString() {
+      return "%b" + block + "." + getIdent();
+    }
 
     @Override public boolean equals(Object obj) {
       if(obj == null) return false;

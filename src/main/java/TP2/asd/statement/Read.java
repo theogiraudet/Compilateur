@@ -11,8 +11,6 @@ import TP2.utils.Tuple;
 import TP2.utils.Tuple2;
 import TP2.utils.Utils;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,10 +57,12 @@ public class Read implements Statement {
         // Paramètres de la fonction scanf
         final List<Llvm.Variable> vars = rExp.stream().map(r -> new Llvm.Variable(r.type.toLlvmType(), r.result)).collect(Collectors.toList());
 
-        final String label = Utils.newlab(".fmt");
-        final Llvm.Instruction insStr = new Llvm.DefineString(label, str);
-        final Llvm.Instruction ins = new Llvm.Read(new Llvm.StringL(str.length()), label, vars);
+        final String label = Utils.newglob(".fmt");
+        final Utils.LLVMStringConstant constant = Utils.stringTransform(str);
+        final Llvm.Instruction insStr = new Llvm.DefineString(label, constant.str, constant.length);
+        final Llvm.IR ins = rExp.stream().map(exp -> exp.ir).reduce(Llvm.IR::append).orElse(new Llvm.IR(Llvm.empty(), Llvm.empty()));
+        ins.appendCode(new Llvm.Read(new Llvm.StringL(constant.length), label, vars));
 
-        return new Llvm.IR(new LinkedList<>(Collections.singletonList(insStr)), new LinkedList<>(Collections.singletonList(ins)));
+        return ins.appendHeader(insStr);
     }
 }

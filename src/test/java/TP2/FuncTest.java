@@ -13,14 +13,13 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class FuncTest {
-    private VSLParser parser;
+class FuncTest {
 
     private Program createParser(String input) throws RecognitionException {
         VSLLexer lexer = new VSLLexer(CharStreams.fromString(input));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-        parser = new VSLParser(tokens);
+        VSLParser parser = new VSLParser(tokens);
 
         Utils.reset();
         return parser.program().out;
@@ -28,11 +27,15 @@ public class FuncTest {
 
     @DisplayName("Fonction simple")
     @Test
-    public void func0() throws IOException {
+    void func0() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc0V.vsl");
-        final String result = "define i32 @aplusb(i32 %1.a, i32 %1.b) {\n"
-                + "%tmp1 = load i32, i32* %1.a\n"
-                + "%tmp2 = load i32, i32* %1.b\n"
+        final String result = "define i32 @aplusb(i32 %a, i32 %b) {\n"
+                + "%b1.a = alloca i32\n"
+                + "%b1.b = alloca i32\n"
+                + "store i32 %a, i32* %b1.a\n"
+                + "store i32 %b, i32* %b1.b\n"
+                + "%tmp1 = load i32, i32* %b1.a\n"
+                + "%tmp2 = load i32, i32* %b1.b\n"
                 + "%tmp3 = add i32 %tmp1, %tmp2\n"
                 + "ret i32 %tmp3\n"
                 + "}";
@@ -42,7 +45,7 @@ public class FuncTest {
 
     @DisplayName("Appel à un paramètre inexistant variable non déclarée")
     @Test
-    public void func1() throws IOException {
+    void func1() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc1F.vsl");
         Program p = createParser(vsl);
         assertThrows(NullPointerException.class, p::toIR);
@@ -50,7 +53,7 @@ public class FuncTest {
 
     @DisplayName("Appel à une fonction non déclarée avant")
     @Test
-    public void func2() throws IOException {
+    void func2() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc2F.vsl");
         Program p = createParser(vsl);
         assertThrows(NullPointerException.class, p::toIR);
@@ -58,20 +61,30 @@ public class FuncTest {
 
     @DisplayName("Appel à une fonction déclarée + aucun return")
     @Test
-    public void func3() throws IOException {
+    void func3() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc3V.vsl");
-        final String result = "define i32 @aplusb(i32 %1.a, i32 %1.b) {\n"
-                + "%tmp1 = load i32, i32* %1.a\n"
-                + "%tmp2 = load i32, i32* %1.b\n"
+        final String result = "define i32 @aplusb(i32 %a, i32 %b) {\n"
+                + "%b1.a = alloca i32\n"
+                + "%b1.b = alloca i32\n"
+                + "store i32 %a, i32* %b1.a\n"
+                + "store i32 %b, i32* %b1.b\n"
+                + "%tmp1 = load i32, i32* %b1.a\n"
+                + "%tmp2 = load i32, i32* %b1.b\n"
                 + "%tmp3 = add i32 %tmp1, %tmp2\n"
                 + "ret i32 %tmp3\n"
                 + "}\n"
-                + "define i32 @somme(i32 %1.c, i32 %1.a, i32 %1.b) {\n"
-                + "%tmp4 = load i32, i32* %1.a\n"
-                + "%tmp5 = load i32, i32* %1.b\n"
+                + "define i32 @somme(i32 %c, i32 %a, i32 %b) {\n"
+                + "%b1.c = alloca i32\n"
+                + "%b1.a = alloca i32\n"
+                + "%b1.b = alloca i32\n"
+                + "store i32 %c, i32* %b1.c\n"
+                + "store i32 %a, i32* %b1.a\n"
+                + "store i32 %b, i32* %b1.b\n"
+                + "%tmp4 = load i32, i32* %b1.a\n"
+                + "%tmp5 = load i32, i32* %b1.b\n"
                 + "%tmp6 = call i32 @aplusb(i32 %tmp4, i32 %tmp5)\n"
-                + "store i32 %tmp6, i32* %1.c\n"
-                + "%tmp7 = load i32, i32* %1.c\n"
+                + "store i32 %tmp6, i32* %b1.c\n"
+                + "%tmp7 = load i32, i32* %b1.c\n"
                 + "ret i32 %tmp7\n"
                 + "}\n";
         Program p = createParser(vsl);
@@ -80,7 +93,7 @@ public class FuncTest {
 
     @DisplayName("Appel à une fonction non déclarée mais prototypée avant")
     @Test
-    public void func4() throws IOException {
+    void func4() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc4V.vsl");
         final String result = "define i32 @a() {\n"
                 + "ret i32 1\n"
@@ -95,7 +108,7 @@ public class FuncTest {
 
     @DisplayName("Appel avec mauvais nombre de paramètres")
     @Test
-    public void func5() throws IOException {
+    void func5() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc5F.vsl");
         Program p = createParser(vsl);
         assertThrows(IllegalArgumentException.class, p::toIR);
@@ -103,7 +116,7 @@ public class FuncTest {
 
     @DisplayName("Déclaration d'un proto après la fonction")
     @Test
-    public void func6() throws IOException {
+    void func6() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc6F.vsl");
         Program p = createParser(vsl);
         assertThrows(IllegalStateException.class, p::toIR);
@@ -111,7 +124,7 @@ public class FuncTest {
 
     @DisplayName("Appel à une fonction non déclarée")
     @Test
-    public void func7() throws IOException {
+    void func7() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc7F.vsl");
         Program p = createParser(vsl);
         assertThrows(NullPointerException.class, p::toIR);
@@ -119,7 +132,7 @@ public class FuncTest {
 
     @DisplayName("Déclaration d'un proto mais fonction jamais déclarée")
     @Test
-    public void func8() throws IOException {
+    void func8() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc8F.vsl");
         Program p = createParser(vsl);
         assertThrows(IllegalStateException.class, p::toIR);
@@ -127,7 +140,7 @@ public class FuncTest {
 
     @DisplayName("Proto avec des param différents de la fonction")
     @Test
-    public void func9() throws IOException {
+    void func9() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc9F.vsl");
         Program p = createParser(vsl);
         assertThrows(NullPointerException.class, p::toIR);

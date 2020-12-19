@@ -18,6 +18,6 @@ public class VariableParam {
     }
 
     public Context.VariableSymbol toVariableSymbol() {
-        return new Context.VariableSymbol(type, ident);
+        return new Context.VariableParamSymbol(type, ident);
     }
 }

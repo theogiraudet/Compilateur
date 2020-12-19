@@ -24,4 +24,9 @@ public class StringV extends Type implements Printable {
     public String toPrintable() {
         return "%s";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof StringV && ((StringV) obj).size == size;
+    }
 }

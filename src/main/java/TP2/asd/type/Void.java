@@ -13,4 +13,9 @@ public class Void extends Type {
     public Llvm.Type toLlvmType() {
         return new Llvm.Void();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Void;
+    }
 }

@@ -15,7 +15,7 @@ public class StringExpression implements Expression {
 
     @Override
     public String pp() {
-        return "\"str\"";
+        return '"' + str + '"';
     }
 
     @Override

@@ -2,9 +2,11 @@ package TP2.asd.function;
 
 import TP2.Context;
 import TP2.TypeException;
+import TP2.asd.statement.Declaration;
 import TP2.asd.statement.Statement;
 import TP2.asd.type.Type;
 import TP2.llvm.Llvm;
+import TP2.utils.Try;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -64,24 +66,47 @@ public class Function implements IFunction {
 
         // Nouvelle table des contextes & ajout des paramètres
         final Context newTable = new Context(table, sym);
-        params.forEach(p -> newTable.addSymbol(p.toVariableSymbol()));
 
-        List<Llvm.Variable> llvmParams = params.stream()
+        final Optional<Try<Llvm.IR>> irParam = params.stream()
+                .map(v -> Try.tryThis(() -> (new Declaration(v.toVariableSymbol().getType(), v.getIdent())).toIR(newTable))) // Délégation à Declaration pour l'ajout à la table des symboles
+                .reduce((acc, ir) -> acc.reduce(ir, Llvm.IR::append)); // Append de tous les IR calculés
+
+        // Gestion des erreurs
+        if (irParam.isPresent() && irParam.get().failed())
+            irParam.get().get();
+
+        // Récupération de tous les VarSymbols associés
+        final List<Context.VariableSymbol> varSymbols = params.stream()
                 .map(p -> newTable.lookupSymbol(p.getIdent()))
                 .filter(Optional::isPresent) // Cas impossible, mais pour éviter un dangerous get
-                .map(o -> (Context.VariableSymbol)o.get())
-                .map(symb -> new Llvm.Variable(symb.getType().toLlvmType(), symb.toString()))
+                .map(o -> (Context.VariableSymbol) o.get())
                 .collect(Collectors.toList());
 
-        final Llvm.IR ir = body.toIr(newTable);
+        // Concaténation des déclarations des paramètres si ils existent
+        final Llvm.IR irFinal = Try.toTry(irParam).flatMap(i -> i)
+                .getOrDefault(new Llvm.IR(Llvm.empty(), Llvm.empty()));
 
-        final Llvm.Instruction ins = new Llvm.Function(ident, llvmParams, returnType.toLlvmType(), ir.getCode());
+
+        final Optional<Llvm.IR> irAssign = varSymbols.stream()
+                .map(v -> new Llvm.Assignment(v.getType().toLlvmType(), "%" + v.getIdent(), v.toString())) // Création de l'affectation
+                .map(i -> new Llvm.IR(Llvm.empty(), new LinkedList<>(Collections.singletonList(i))))
+                .reduce(Llvm.IR::append); // Append de tous les IR calculés
+
+        // Concaténation des affectations
+        irFinal.append(Try.toTry(irAssign).getOrDefault(new Llvm.IR(Llvm.empty(), Llvm.empty())));
+
+        // Transformation en Variable LLVM
+        final List<Llvm.Variable> variables = varSymbols.stream().
+                map(symb -> new Llvm.Variable(symb.getType().toLlvmType(), "%" + symb.getIdent()))
+                .collect(Collectors.toList());
 
 
-        /*if(prototyped)
-            return new Llvm.IR(Collections.singletonList(ins), Collections.emptyList());
-        else*/
-        return new Llvm.IR(ir.getHeader(), new LinkedList<>(Collections.singletonList(ins)));
+        irFinal.append(body.toIr(newTable));
+
+        final Llvm.Instruction ins = new Llvm.Function(ident, variables, returnType.toLlvmType(), irFinal.getCode());
+
+
+        return new Llvm.IR(irFinal.getHeader(), new LinkedList<>(Collections.singletonList(ins)));
     }
 
     @Override
