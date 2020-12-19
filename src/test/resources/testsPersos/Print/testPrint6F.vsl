@@ -1,0 +1,5 @@
+FUNC VOID main() {
+INT x[2]
+x[2]:=4
+PRINT "Je suis un ananas qui a ", x, "ans\n"
+}

@@ -1,0 +1,8 @@
+FUNC INT aplusb(INT a,INT b){
+RETURN a+b
+}
+
+FUNC VOID main() {
+INT x,y[4]
+READ x,aplusb(x,x)
+}

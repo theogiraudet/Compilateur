@@ -1,0 +1,4 @@
+FUNC VOID main() {
+INT x,y,z
+READ x,z
+}
