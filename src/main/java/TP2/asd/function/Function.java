@@ -65,39 +65,7 @@ public class Function implements IFunction {
         // Nouvelle table des contextes & ajout des paramètres
         final Context newTable = new Context(table, sym);
 
-        /*final Optional<Try<Llvm.IR>> irParam = params.stream()
-                .map(v -> Try.tryThis(() -> (new VariableDeclaration(v.toVariableSymbol().getType(), v.getIdent())).toIR(newTable))) // Délégation à Declaration pour l'ajout à la table des symboles
-                .reduce((acc, ir) -> acc.reduce(ir, Llvm.IR::append)); // Append de tous les IR calculés
-
-        // Gestion des erreurs
-        if (irParam.isPresent() && irParam.get().failed())
-            irParam.get().get();
-
-        // Récupération de tous les VarSymbols associés
-        final List<Context.VariableSymbol> varSymbols = params.stream()
-                .map(p -> newTable.lookupSymbol(p.getIdent()))
-                .filter(Optional::isPresent) // Cas impossible, mais pour éviter un dangerous get
-                .map(o -> (Context.VariableSymbol) o.get())
-                .collect(Collectors.toList());*/
-
-        // Concaténation des déclarations des paramètres si ils existent
-        /*final Llvm.IR irFinal = Try.toTry(irParam).flatMap(i -> i)
-                .getOrDefault(new Llvm.IR(Llvm.empty(), Llvm.empty()));
-
-
-        final Optional<Llvm.IR> irAssign = varSymbols.stream()
-                .map(v -> new Llvm.Assignment(v.getType().toLlvmType(), "%" + v.getIdent(), v.toString())) // Création de l'affectation
-                .map(i -> new Llvm.IR(Llvm.empty(), new LinkedList<>(Collections.singletonList(i))))
-                .reduce(Llvm.IR::append); // Append de tous les IR calculés
-
-        // Concaténation des affectations
-        irFinal.append(Try.toTry(irAssign).getOrDefault(new Llvm.IR(Llvm.empty(), Llvm.empty())));
-
-        // Transformation en Variable LLVM
-        final List<Llvm.Variable> variables = varSymbols.stream().
-                map(symb -> new Llvm.Variable(symb.getType().toLlvmType(), "%" + symb.getIdent()))
-                .collect(Collectors.toList());*/
-
+        // Création des instructions
         final Llvm.IR irFinal = params.stream().map(v -> v.toIR(newTable)).reduce(Llvm.IR::append)
                 .orElse(new Llvm.IR(Llvm.empty(), Llvm.empty()));
 
