@@ -55,8 +55,8 @@ listParams [List<FunctionParam> list]
     ;
 
 statement returns  [Statement out]
-    : v = variable AFFECT e = expression { $out = new Assignment($v.out, $e.out); }
-    | b = block { $out = $b.out; }
+    : b = block { $out = $b.out; }
+    | v = variable AFFECT e = expression { $out = new Assignment($v.out, $e.out); }
     | IF e = expression THEN s1 = statement
         ((ELSE s2 = statement  { $out = new If($e.out, $s1.out, $s2.out); } )
         | { $out = new If($e.out, $s1.out) ; } ) FI
@@ -102,16 +102,16 @@ type returns [Type out]
 
 print returns [Print out]
 @init { List<Expression> list = new LinkedList(); }
-    :  PRINT e=printable {list.add($e.out);} (COMMA t=printable {list.add($t.out);})* {$out = new Print(list);}
+    :  PRINT e = printable { list.add($e.out); } (COMMA t = printable { list.add($t.out); })* { $out = new Print(list); }
     ;
 
 printable returns [Expression out]
-    :   (s=TEXT {$out=new StringExpression($s.text);} | e=expression {$out = $e.out;})
+    :   (s = TEXT { $out=new StringExpression($s.text); } | e = expression { $out = $e.out; })
     ;
 
 read returns [Read out]
-@init { List<Reference> list = new LinkedList();}
-    :   READ v=variable {list.add($v.out);} (COMMA r=variable {list.add($r.out);})* {$out = new Read(list);}
+@init { List<Reference> list = new LinkedList(); }
+    :   READ v = variable { list.add($v.out); } (COMMA r = variable { list.add($r.out); })* { $out = new Read(list); }
     ;
 
 expression returns [Expression out]
