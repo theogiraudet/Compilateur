@@ -31,25 +31,25 @@ iFunction returns [List<IFunction> out]
     ;
 
 decFunc returns [IFunction out]
-@init {List<VariableParam> list = new LinkedList();}
+@init {List<FunctionParam> list = new LinkedList();}
     :   FUNC t = retType i = IDENT LP (p = params { list = $p.out; })? RP s = statement { $out = new Function(list, $t.out, $i.text, $s.out); }
     ;
 
 decProto returns [IFunction out]
-@init {List<VariableParam> list = new LinkedList();}
+@init {List<FunctionParam> list = new LinkedList();}
     : PROTO t = retType i = IDENT LP (p = params {list = $p.out; })? RP {$out = new Prototype(list, $t.out, $i.text); }
     ;
 
-params returns [List<VariableParam> out]
-@init { List<VariableParam> list = new LinkedList(); }
-    :  (id = IDENT (LSB i = INTEGER RSB { list.add(new VariableParam(new Array(new Int(), $i.int), $id.text)) ;}
+params returns [List<FunctionParam> out]
+@init { List<FunctionParam> list = new LinkedList(); }
+    :  (id = IDENT (LSB RSB { list.add(new ArrayParam(new Array(new Int()), $id.text)) ;}
                  | { list.add(new VariableParam(new Int(), $id.text)); } )
         (listParams[list])? {$out = list;})
     ;
 
-listParams [List<VariableParam> list]
+listParams [List<FunctionParam> list]
     :  (COMMA id = IDENT
-                      (LSB i = INTEGER RSB { list.add(new VariableParam(new Array(new Int(), $i.int), $id.text)); }
+                      (LSB i = INTEGER RSB { list.add(new ArrayParam(new Array(new Int(), $i.int), $id.text)); }
                       |  { list.add(new VariableParam(new Int(), $id.text)); })
        )+
     ;
@@ -75,15 +75,15 @@ block returns [Block out]
 declaration returns [List<Declaration> out]
 @init { List<Declaration> list = new LinkedList(); }
     : (t = type id = IDENT
-                     ( LSB i = INTEGER RSB { list.add(new Declaration(new Array($t.out, $i.int), $id.text)); }
-                     | {list.add(new Declaration($t.out, $id.text)); } )
+                     ( LSB i = INTEGER RSB { list.add(new ArrayDeclaration(new Array($t.out, $i.int), $id.text)); }
+                     | {list.add(new VariableDeclaration($t.out, $id.text)); } )
       listDeclaration[$t.out, list])? { $out = list; }
     ;
 
 listDeclaration [Type typ, List<Declaration> list] returns [List<Declaration> out]
     :   (COMMA id= IDENT
-               ( LSB i = INTEGER RSB { list.add(new Declaration(new Array(typ, $i.int), $id.text)); }
-               |  { list.add(new Declaration(typ, $id.text)); } )
+               ( LSB i = INTEGER RSB { list.add(new ArrayDeclaration(new Array(typ, $i.int), $id.text)); }
+               |  { list.add(new VariableDeclaration(typ, $id.text)); } )
         )*
     ;
 

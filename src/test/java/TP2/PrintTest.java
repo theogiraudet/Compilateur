@@ -72,13 +72,14 @@ public class PrintTest {
         final String vsl = UtilsFile.getFileContent("testsPersos/Print/testPrint3V.vsl");
         final String result = "@.fmt1 = global [3 x i8] c\"%d\\00\"";
         final String result2 = "define void @main() {\n" +
-                "%b2.a = alloca [5 x i32]\n" +
-                "%tmp1 = getelementptr [5 x i32], [5 x i32]* %b2.a, i64 0, i32 1\n" +
+                "%b2.a$array = alloca [5 x i32]\n" +
+                "%b2.a = bitcast [5 x i32]* %b2.a$array to i32*\n" +
+                "%tmp1 = getelementptr inbounds i32, i32* %b2.a, i32 1\n" +
                 "store i32 0, i32* %tmp1\n" +
-                "%tmp2 = getelementptr [5 x i32], [5 x i32]* %b2.a, i64 0, i32 1\n" +
+                "%tmp2 = getelementptr inbounds i32, i32* %b2.a, i32 1\n" +
                 "%tmp3 = load i32, i32* %tmp2\n" +
                 "call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt1, i64 0, i64 0), i32 %tmp3)\n" +
-                "}";
+                "}\n";
         final String ir = createParser(vsl).toIR().toString();
         assertTrue(ir.contains(result));
         assertTrue(ir.contains(result2));
@@ -91,8 +92,8 @@ public class PrintTest {
         final String result = "@.fmt1 = global [3 x i8] c\"%d\\00\"";
         final String result2 = "define i32 @aplusb(i32 %a, i32 %b) {\n" +
                 "%b1.a = alloca i32\n" +
-                "%b1.b = alloca i32\n" +
                 "store i32 %a, i32* %b1.a\n" +
+                "%b1.b = alloca i32\n" +
                 "store i32 %b, i32* %b1.b\n" +
                 "%tmp1 = load i32, i32* %b1.a\n" +
                 "%tmp2 = load i32, i32* %b1.b\n" +
@@ -103,7 +104,7 @@ public class PrintTest {
                 "%tmp4 = call i32 @aplusb(i32 1, i32 2)\n" +
                 "call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt1, i64 0, i64 0), i32 %tmp4)\n" +
                 "ret void\n" +
-                "}";
+                "}\n";
         final String ir = createParser(vsl).toIR().toString();
         assertTrue(ir.contains(result));
         assertTrue(ir.contains(result2));
@@ -134,11 +135,11 @@ public class PrintTest {
         assertThrows(TypeException.class, p::toIR);
     }
 
-    @DisplayName("print d'une variable avec pour nom 'tmp'")
+    @DisplayName("print d'une variable avec pour nom 'tmp' et d'une constante entière")
     @Test
     void print7() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Print/testPrint7V.vsl");
-        final String result = "@.fmt1 = global [3 x i8] c\"%d\\00\"";
+        final String result = "@.fmt1 = global [5 x i8] c\"%d\\0A5\\00\"";
         final String result2 = "define void @main() {\n" +
                 "%b2.tmp = alloca i32\n" +
                 "%b2.test = alloca i32\n" +
@@ -147,7 +148,7 @@ public class PrintTest {
                 "%tmp2 = add i32 %tmp1, 4\n" +
                 "store i32 %tmp2, i32* %b2.test\n" +
                 "%tmp3 = load i32, i32* %b2.tmp\n" +
-                "call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt1, i64 0, i64 0), i32 %tmp3)\n" +
+                "call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.fmt1, i64 0, i64 0), i32 %tmp3)\n" +
                 "}";
         final String ir = createParser(vsl).toIR().toString();
         System.out.println(ir);

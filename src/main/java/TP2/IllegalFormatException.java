@@ -8,7 +8,4 @@ public class IllegalFormatException extends RuntimeException {
     super(message + "\nat '" + at.get() + "'.");
   }
 
-  public IllegalFormatException(String message) {
-    super(message);
-  }
 }

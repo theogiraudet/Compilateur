@@ -5,7 +5,7 @@ import TP2.TypeException;
 import TP2.asd.type.StringV;
 import TP2.llvm.Llvm;
 
-public class StringExpression implements Expression {
+public class StringExpression implements Expression, Constant {
 
     private final String str;
 

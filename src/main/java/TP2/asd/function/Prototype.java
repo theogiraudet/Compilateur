@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 
 public class Prototype implements IFunction {
 
-    private final List<VariableParam> params;
+    private final List<FunctionParam> params;
     private final Type returnType;
     private final String ident;
 
-    public Prototype(List<VariableParam> params, Type returnType, String ident) {
+    public Prototype(List<FunctionParam> params, Type returnType, String ident) {
         this.params = params;
         this.returnType = returnType;
         this.ident = ident;
@@ -23,7 +23,7 @@ public class Prototype implements IFunction {
     @Override
     public String pp() {
         return "PROTO " + returnType.toString() + " " + ident + "(" +
-                params.stream().map(VariableParam::toString).collect(Collectors.joining(", "))
+                params.stream().map(FunctionParam::toString).collect(Collectors.joining(", "))
                 + ")";
     }
 
@@ -33,7 +33,7 @@ public class Prototype implements IFunction {
             throw new IllegalStateException("Function '" + ident + "' is already prototyped." + "\nat '" + pp() + "'.");
 
         final List<Context.VariableSymbol> symbols = params.stream()
-                .map(VariableParam::toVariableSymbol).collect(Collectors.toList());
+                .map(FunctionParam::toVariableSymbol).collect(Collectors.toList());
         Context.FunctionSymbol funSymbol = new Context.FunctionSymbol(returnType, ident, symbols, false);
         table.addSymbol(funSymbol);
         return new Llvm.IR(Llvm.empty(), Llvm.empty());

@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DeclarationTest {
+public class VariableDeclarationTest {
 
     private VSLParser parser;
 
@@ -33,11 +33,11 @@ public class DeclarationTest {
         final String result = "%b2.a = alloca i32\n" +
                 "%b2.b = alloca i32\n" +
                 "%b2.c = alloca i32\n" +
-                "%b2.d = alloca [5 x i32]\n" +
+                "%b2.d$array = alloca [5 x i32]\n" +
+                "%b2.d = bitcast [5 x i32]* %b2.d$array to i32*\n" +
                 "%b2.e = alloca i32\n" +
                 "%b2.f = alloca i32\n" +
                 "store i32 1, i32* %b2.a";
-
         Program prog = createParser(vsl);
         assertTrue(prog.toIR().toString().contains(result));
     }

@@ -67,13 +67,13 @@ public class FunctionCall implements Statement, Expression {
                     + "expected, found " + params.size() + "\nat '" + pp() + "'.");
 
 
-        final List<Try<RetExpression>> retsTry = params.stream().map(exp -> Try.tryThis(() ->exp.toIR(table))).collect(Collectors.toList());
+        final List<Try<RetExpression>> retsTry = params.stream().map(exp -> Try.tryThis(() -> exp.toIR(table))).collect(Collectors.toList());
 
         // Propagation des exceptions vers le haut
         Optional<Try<RetExpression>> retError = retsTry.stream().filter(Try::failed).findFirst();
         retError.ifPresent(Try::get);
 
-        final List<RetExpression> rets = retsTry.stream().map(exp -> exp.get()).collect(Collectors.toList());
+        final List<RetExpression> rets = retsTry.stream().map(Try::get).collect(Collectors.toList());
 
         // Vérification du bon typage des paramètres
         Optional<Tuple2<Integer, Type>> badTyped = IntStream.range(0, rets.size()) // Récupération du premier élément mal typé
@@ -102,7 +102,6 @@ public class FunctionCall implements Statement, Expression {
         // Ajout de l'appel de fonction
         final Llvm.IR resultIr = fun.orElse(new Llvm.IR(Llvm.empty(), Llvm.empty()));
 
-        //return new RetExpression(resultIr, symbol.getReturnType(), );
         return Tuple.of(ir, resultIr, symbol.getReturnType());
     }
 }

@@ -29,16 +29,16 @@ class FuncTest {
     @Test
     void func0() throws IOException {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc0V.vsl");
-        final String result = "define i32 @aplusb(i32 %a, i32 %b) {\n"
-                + "%b1.a = alloca i32\n"
-                + "%b1.b = alloca i32\n"
-                + "store i32 %a, i32* %b1.a\n"
-                + "store i32 %b, i32* %b1.b\n"
-                + "%tmp1 = load i32, i32* %b1.a\n"
-                + "%tmp2 = load i32, i32* %b1.b\n"
-                + "%tmp3 = add i32 %tmp1, %tmp2\n"
-                + "ret i32 %tmp3\n"
-                + "}";
+        final String result = "define i32 @aplusb(i32 %a, i32 %b) {\n" +
+                "%b1.a = alloca i32\n" +
+                "store i32 %a, i32* %b1.a\n" +
+                "%b1.b = alloca i32\n" +
+                "store i32 %b, i32* %b1.b\n" +
+                "%tmp1 = load i32, i32* %b1.a\n" +
+                "%tmp2 = load i32, i32* %b1.b\n" +
+                "%tmp3 = add i32 %tmp1, %tmp2\n" +
+                "ret i32 %tmp3\n" +
+                "}";
         Program p = createParser(vsl);
         assertTrue(p.toIR().toString().contains(result));
     }
@@ -65,8 +65,8 @@ class FuncTest {
         final String vsl = UtilsFile.getFileContent("testsPersos/Fonction/testFunc3V.vsl");
         final String result = "define i32 @aplusb(i32 %a, i32 %b) {\n"
                 + "%b1.a = alloca i32\n"
-                + "%b1.b = alloca i32\n"
                 + "store i32 %a, i32* %b1.a\n"
+                + "%b1.b = alloca i32\n"
                 + "store i32 %b, i32* %b1.b\n"
                 + "%tmp1 = load i32, i32* %b1.a\n"
                 + "%tmp2 = load i32, i32* %b1.b\n"
@@ -75,10 +75,10 @@ class FuncTest {
                 + "}\n"
                 + "define i32 @somme(i32 %c, i32 %a, i32 %b) {\n"
                 + "%b1.c = alloca i32\n"
-                + "%b1.a = alloca i32\n"
-                + "%b1.b = alloca i32\n"
                 + "store i32 %c, i32* %b1.c\n"
+                + "%b1.a = alloca i32\n"
                 + "store i32 %a, i32* %b1.a\n"
+                + "%b1.b = alloca i32\n"
                 + "store i32 %b, i32* %b1.b\n"
                 + "%tmp4 = load i32, i32* %b1.a\n"
                 + "%tmp5 = load i32, i32* %b1.b\n"

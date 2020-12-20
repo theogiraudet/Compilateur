@@ -48,8 +48,9 @@ class ReadTest {
         final String vsl = UtilsFile.getFileContent("testsPersos/Read/testRead1V.vsl");
         final String result = "@.fmt1 = global [3 x i8] c\"%d\\00\"";
         final String result2 = "define void @main() {\n" +
-                "%b2.x = alloca [2 x i32]\n" +
-                "%tmp1 = getelementptr [2 x i32], [2 x i32]* %b2.x, i64 0, i32 1\n" +
+                "%b2.x$array = alloca [2 x i32]\n" +
+                "%b2.x = bitcast [2 x i32]* %b2.x$array to i32*\n" +
+                "%tmp1 = getelementptr inbounds i32, i32* %b2.x, i32 1\n" +
                 "call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt1, i64 0, i64 0), i32* %tmp1)\n" +
                 "}\n";
         final String ir = createParser(vsl).toIR().toString();

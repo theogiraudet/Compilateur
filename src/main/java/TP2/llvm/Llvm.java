@@ -1,12 +1,8 @@
 package TP2.llvm;
 
-import TP2.IllegalFormatException;
-
-import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 // This file contains a simple LLVM IR representation
@@ -110,13 +106,36 @@ public class Llvm {
       this.size = size;
     }
 
-    public String toString() { return "[" + size + " x " + type.toString() + "]"; }
+    public String toString() {
+      return "[" + size + " x " + type.toString() + "]";
+    }
 
     @Override
     public boolean equals(Object o) {
-      if(o instanceof Array) {
+      if (o instanceof Array) {
         Array array = (Array) o;
-        return array.size == size && array.type.equals(type);
+        return array.type.equals(type);
+      }
+      return false;
+    }
+  }
+
+  static public class Pointer extends Type {
+    private final Type type;
+
+    public Pointer(Type type) {
+      this.type = type;
+    }
+
+    public String toString() {
+      return type.toString() + "*";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (o instanceof Array) {
+        Array array = (Array) o;
+        return array.type.equals(type);
       }
       return false;
     }
@@ -222,14 +241,31 @@ public class Llvm {
     }
   }
 
+  static public class Bitcast extends Instruction {
+    private final String dest;
+    private final Array array;
+    private final String src;
+
+    public Bitcast(String dest, Array array, String src) {
+      this.dest = dest;
+      this.array = array;
+      this.src = src;
+    }
+
+    @Override
+    public String toString() {
+      return dest + " = bitcast " + array.toString() + "* " + src + " to i32*\n";
+    }
+  }
+
   static public class GetElementPtr extends Instruction {
 
-    private final Array type;
+    private final Type type;
     private final String position;
     private final String source;
     private final String destination;
 
-    public GetElementPtr(Array type, String position, String source, String destination) {
+    public GetElementPtr(Type type, String position, String source, String destination) {
       this.type = type;
       this.position = position;
       this.source = source;
@@ -238,7 +274,25 @@ public class Llvm {
 
     @Override
     public String toString() {
-      return destination + " = getelementptr " + type.toString() + ", " + type.toString() + "* " + source + ", i64 0, i32 " + position + "\n";
+      return destination + " = getelementptr inbounds " + type.toString() + ", " + type.toString() + "* " + source + ", i32 " + position + "\n";
+    }
+  }
+
+  static public class CopyPtr extends Instruction {
+
+    private final Type type;
+    private final String source;
+    private final String destination;
+
+    public CopyPtr(Type type, String source, String destination) {
+      this.type = type;
+      this.source = source;
+      this.destination = destination;
+    }
+
+    @Override
+    public String toString() {
+      return destination + " = getelementptr inbounds " + type.toString() + ", " + type.toString() + "* " + source + "\n";
     }
   }
 
@@ -448,20 +502,4 @@ public class Llvm {
     }
   }
 
-
-  /**
-   * @param str un string à convertir
-   * @return un string formaté pour LLVM
-   * @throws IllegalFormatException si le string possède un caractère non affichable différent de '\n'
-   */
-  public static String formatString(String str) {
-    // Transformation de tous les caractères inférieurs à 32 en hexadécimal
-    final OptionalInt badFormat = CharBuffer.wrap(str.toCharArray()).chars().filter(c -> c < 32 && c != '\n').findFirst();
-    if (badFormat.isPresent())
-      throw new IllegalFormatException("String only accept printable character and '\n'. " + "\\u" + Integer.toHexString(badFormat.getAsInt()) + " is not allowed.");
-
-    return CharBuffer.wrap(str.toCharArray()).chars()
-            .mapToObj(c -> c < 32 ? '\\' + String.format("%02X", c).replace("u", "") : Character.toString((char) c))
-            .collect(Collectors.joining()) + "\\00";
-  }
 }

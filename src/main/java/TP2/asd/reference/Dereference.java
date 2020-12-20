@@ -2,6 +2,7 @@ package TP2.asd.reference;
 
 import TP2.Context;
 import TP2.asd.expression.Expression;
+import TP2.asd.type.Array;
 import TP2.llvm.Llvm;
 import TP2.utils.Utils;
 
@@ -13,7 +14,9 @@ public class Dereference implements Expression {
         this.reference = reference;
     }
 
-    public String pp() { return reference.pp(); }
+    public String pp() {
+        return reference.pp();
+    }
 
     /**
      * @param table une table de symboles
@@ -23,8 +26,12 @@ public class Dereference implements Expression {
         // On délègue l'obtention du pointeur vers la valeur à Reference
         final Expression.RetExpression ret = reference.toIR(table);
         final String dest = Utils.newtmp();
-        // On déréférence de pointeur obtenu
-        final Llvm.Instruction instruction = new Llvm.Load(ret.type.toLlvmType(), dest, ret.result);
+        // On déréférence le pointeur obtenu
+        Llvm.Instruction instruction;
+        if (ret.type instanceof Array)
+            instruction = new Llvm.GetElementPtr(((Array) ret.type).getType().toLlvmType(), "0", ret.result, dest);
+        else
+            instruction = new Llvm.Load(ret.type.toLlvmType(), dest, ret.result);
         ret.ir.appendCode(instruction);
         return new Expression.RetExpression(ret.ir, ret.type, dest);
     }

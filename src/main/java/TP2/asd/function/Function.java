@@ -2,11 +2,9 @@ package TP2.asd.function;
 
 import TP2.Context;
 import TP2.TypeException;
-import TP2.asd.statement.Declaration;
 import TP2.asd.statement.Statement;
 import TP2.asd.type.Type;
 import TP2.llvm.Llvm;
-import TP2.utils.Try;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -16,12 +14,12 @@ import java.util.stream.Collectors;
 
 public class Function implements IFunction {
 
-    private final List<VariableParam> params;
+    private final List<FunctionParam> params;
     private final Type returnType;
     private final String ident;
     private final Statement body;
 
-    public Function(List<VariableParam> params, Type returnType, String ident, Statement body) {
+    public Function(List<FunctionParam> params, Type returnType, String ident, Statement body) {
         this.params = params;
         this.returnType = returnType;
         this.ident = ident;
@@ -31,7 +29,7 @@ public class Function implements IFunction {
     @Override
     public String pp() {
         return "FUNC " + returnType.toString() + " " + ident + "(" +
-                params.stream().map(VariableParam::toString).collect(Collectors.joining(", "))
+                params.stream().map(FunctionParam::toString).collect(Collectors.joining(", "))
                 + ")";
     }
 
@@ -41,7 +39,7 @@ public class Function implements IFunction {
 
         // Création du nouveau symbole
         List<Context.VariableSymbol> symbols = params.stream()
-                .map(VariableParam::toVariableSymbol).collect(Collectors.toList());
+                .map(FunctionParam::toVariableSymbol).collect(Collectors.toList());
         final Context.FunctionSymbol sym = new Context.FunctionSymbol(returnType, ident, symbols, true);
 
         // Si un symbole du même nom est déjà déclaré
@@ -67,8 +65,8 @@ public class Function implements IFunction {
         // Nouvelle table des contextes & ajout des paramètres
         final Context newTable = new Context(table, sym);
 
-        final Optional<Try<Llvm.IR>> irParam = params.stream()
-                .map(v -> Try.tryThis(() -> (new Declaration(v.toVariableSymbol().getType(), v.getIdent())).toIR(newTable))) // Délégation à Declaration pour l'ajout à la table des symboles
+        /*final Optional<Try<Llvm.IR>> irParam = params.stream()
+                .map(v -> Try.tryThis(() -> (new VariableDeclaration(v.toVariableSymbol().getType(), v.getIdent())).toIR(newTable))) // Délégation à Declaration pour l'ajout à la table des symboles
                 .reduce((acc, ir) -> acc.reduce(ir, Llvm.IR::append)); // Append de tous les IR calculés
 
         // Gestion des erreurs
@@ -80,10 +78,10 @@ public class Function implements IFunction {
                 .map(p -> newTable.lookupSymbol(p.getIdent()))
                 .filter(Optional::isPresent) // Cas impossible, mais pour éviter un dangerous get
                 .map(o -> (Context.VariableSymbol) o.get())
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
 
         // Concaténation des déclarations des paramètres si ils existent
-        final Llvm.IR irFinal = Try.toTry(irParam).flatMap(i -> i)
+        /*final Llvm.IR irFinal = Try.toTry(irParam).flatMap(i -> i)
                 .getOrDefault(new Llvm.IR(Llvm.empty(), Llvm.empty()));
 
 
@@ -98,10 +96,20 @@ public class Function implements IFunction {
         // Transformation en Variable LLVM
         final List<Llvm.Variable> variables = varSymbols.stream().
                 map(symb -> new Llvm.Variable(symb.getType().toLlvmType(), "%" + symb.getIdent()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
 
+        final Llvm.IR irFinal = params.stream().map(v -> v.toIR(newTable)).reduce(Llvm.IR::append)
+                .orElse(new Llvm.IR(Llvm.empty(), Llvm.empty()));
 
         irFinal.append(body.toIr(newTable));
+
+        // Transformation en Variable LLVM
+        final List<Llvm.Variable> variables = params.stream()
+                .map(p -> newTable.lookupSymbol(p.getIdent()))
+                .filter(Optional::isPresent) // Cas impossible, mais pour éviter un dangerous get
+                .map(o -> (Context.VariableSymbol) o.get())
+                .map(symb -> new Llvm.Variable(symb.getType().toLlvmType(), "%" + symb.getIdent()))
+                .collect(Collectors.toList());
 
         final Llvm.Instruction ins = new Llvm.Function(ident, variables, returnType.toLlvmType(), irFinal.getCode());
 

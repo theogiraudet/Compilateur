@@ -14,9 +14,9 @@ public class Block implements Statement {
     private final List<Statement> statements;
     private final List<Declaration> declarations;
 
-    public Block(List<Declaration> declarations, List<Statement> statements) {
+    public Block(List<Declaration> ceclarations, List<Statement> statements) {
         this.statements = statements;
-        this.declarations = declarations;
+        this.declarations = ceclarations;
     }
 
     @Override

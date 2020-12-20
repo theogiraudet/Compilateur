@@ -61,8 +61,8 @@ public class Utils {
 
   // Return type of stringTransform
   public static class LLVMStringConstant {
-    public String str;
-    public int length;
+    public final String str;
+    public final int length;
 
     LLVMStringConstant(String str, int length) {
       this.str = str;

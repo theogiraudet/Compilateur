@@ -5,16 +5,16 @@ import TP2.asd.type.Int;
 import TP2.llvm.Llvm;
 
 // Concrete class for Expression: constant (integer) case
-  public class IntegerExpression implements Expression {
+public class IntegerExpression implements Expression, Constant {
 
     private final int value;
 
     public IntegerExpression(int value) {
-      this.value = value;
+        this.value = value;
     }
 
     public String pp() {
-      return "" + value;
+        return "" + value;
     }
 
     public RetExpression toIR(Context table) {

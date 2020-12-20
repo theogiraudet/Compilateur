@@ -40,10 +40,10 @@ public class ArrayElementReference extends Reference {
         final Llvm.IR ir = ret.ir;
         final String dest = Utils.newtmp();
 
-        final Llvm.GetElementPtr instruction = new Llvm.GetElementPtr((Llvm.Array) var.getType().toLlvmType(), ret.result, var.toString(), dest);
+        final Llvm.GetElementPtr instruction = new Llvm.GetElementPtr(ret.type.toLlvmType(), ret.result, var.toString(), dest);
 
         // Le type de la variable correspond au type dont le tableau est un agrégat
-        return new Expression.RetExpression(ir.appendCode(instruction), ((Array)var.getType()).getType(), dest);
+        return new Expression.RetExpression(ir.appendCode(instruction), ret.type, dest);
     }
 
     private Context.VariableSymbol isValid(Optional<Context.Symbol> symbol) {

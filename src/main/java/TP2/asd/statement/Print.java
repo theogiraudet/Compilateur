@@ -3,9 +3,9 @@ package TP2.asd.statement;
 import TP2.Context;
 import TP2.IllegalFormatException;
 import TP2.TypeException;
+import TP2.asd.expression.Constant;
 import TP2.asd.expression.Expression;
 import TP2.asd.type.Printable;
-import TP2.asd.type.StringV;
 import TP2.llvm.Llvm;
 import TP2.utils.Utils;
 
@@ -38,7 +38,7 @@ public class Print implements Statement {
             // Si le type n'est pas affichable, on déclenche une erreur
             if (!(irTmp.type instanceof Printable))
                 throw new TypeException("Type '" + irTmp.type.pp() + "' is not a printable type.", () -> pp(0));
-            if (!(irTmp.type instanceof StringV)) {
+            if (!(p instanceof Constant)) {
                 str.append(((Printable) irTmp.type).toPrintable());
                 results.add(new Llvm.Variable(irTmp.type.toLlvmType(), irTmp.result));
             } else
